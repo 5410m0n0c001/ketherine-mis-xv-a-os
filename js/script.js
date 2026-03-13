@@ -146,6 +146,51 @@ const btnCamera = document.getElementById('btn-camera');
 const photoInput = document.getElementById('photo-input');
 const uploadStatus = document.getElementById('upload-status');
 const uploadSuccess = document.getElementById('upload-success');
+const photoGallery = document.getElementById('photo-gallery');
+
+// Load saved photos from localStorage
+function getSavedPhotos() {
+    try {
+        return JSON.parse(localStorage.getItem('boda_photos') || '[]');
+    } catch { return []; }
+}
+
+function savePhoto(url) {
+    const photos = getSavedPhotos();
+    photos.unshift(url); // newest first
+    if (photos.length > 20) photos.pop(); // keep max 20
+    localStorage.setItem('boda_photos', JSON.stringify(photos));
+}
+
+function renderGallery() {
+    const photos = getSavedPhotos();
+    if (photos.length === 0) {
+        photoGallery.innerHTML = '';
+        return;
+    }
+
+    let html = '';
+
+    // Latest photo - large
+    html += `<div class="photo-gallery-latest">
+        <span class="photo-badge">Recién subida</span>
+        <img src="${photos[0]}" alt="Última foto compartida" loading="lazy">
+    </div>`;
+
+    // Older photos - small grid
+    if (photos.length > 1) {
+        html += '<div class="photo-gallery-grid">';
+        for (let i = 1; i < Math.min(photos.length, 9); i++) {
+            html += `<img src="${photos[i]}" alt="Foto compartida" loading="lazy">`;
+        }
+        html += '</div>';
+    }
+
+    photoGallery.innerHTML = html;
+}
+
+// Render gallery on page load
+renderGallery();
 
 btnCamera.addEventListener('click', () => {
     photoInput.click();
@@ -172,11 +217,18 @@ photoInput.addEventListener('change', async (e) => {
         });
 
         if (res.ok) {
-            // Upload success
+            const data = await res.json();
+            // Use Cloudinary auto-optimized URL
+            const photoUrl = data.secure_url.replace('/upload/', '/upload/w_800,q_auto,f_auto/');
+
+            // Save and render in gallery
+            savePhoto(photoUrl);
+            renderGallery();
+
+            // Show success
             uploadStatus.style.display = 'none';
             uploadSuccess.style.display = 'flex';
 
-            // Reset after 3 seconds to allow another upload
             setTimeout(() => {
                 uploadSuccess.style.display = 'none';
                 btnCamera.style.display = 'flex';
