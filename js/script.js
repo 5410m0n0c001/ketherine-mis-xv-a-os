@@ -348,71 +348,49 @@ if (photoInput) {
         }
     });
 }
-// QR CODE GENERATION & SHARING
+// QR CODE SHARING (Using static image)
 function initQRCode() {
-    const qrContainer = document.getElementById('qrcode');
     const btnShareQr = document.getElementById('btn-share-qr');
+    const qrImage = document.getElementById('qr-image');
     
-    if (!qrContainer) return;
-
-    // PRODUCCIÓN: Cambia esta URL por la URL pública de tu invitación
-    const BASE_URL = 'https://5410m0n0c001.github.io/invitacion-demo/smartlanding.html';
-    
-    // Create the URL
-    let qrUrl = new URL(BASE_URL);
-
-    // Generate QR
-    new QRCode(qrContainer, {
-        text: qrUrl.toString(),
-        width: 180,
-        height: 180,
-        colorDark: "#556B2F", // Primary Color
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
+    if (!btnShareQr || !qrImage) return;
 
     // Share QR Button
-    if (btnShareQr) {
-        btnShareQr.addEventListener('click', async () => {
-            const qrCanvas = qrContainer.querySelector('canvas');
-            if (!qrCanvas) {
-                // Fallback for sharing the link if canvas isn't ready
-                if (navigator.share) {
-                    await navigator.share({
-                        title: 'Comparte tus momentos',
-                        text: 'Escanea este código para subir tus fotos a nuestro álbum.',
-                        url: qrUrl.toString()
-                    });
-                }
-                return;
+    btnShareQr.addEventListener('click', async () => {
+        try {
+            // Fetch the image to share as a file
+            const response = await fetch('qr.png');
+            const blob = await response.blob();
+            const file = new File([blob], "codigo-qr-boda.png", { type: "image/png" });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: 'Código QR de Nuestra Boda',
+                    text: 'Escanea este código para compartir tus fotos con nosotros.'
+                });
+            } else if (navigator.share) {
+                // Fallback for browsers that don't support file sharing but do support text/url
+                await navigator.share({
+                    title: 'Código QR de Nuestra Boda',
+                    text: 'Escanea este código para compartir tus fotos con nosotros.',
+                    url: window.location.origin + window.location.pathname + 'qr.png'
+                });
+            } else {
+                alert('Tu navegador no soporta la función de compartir.');
             }
-
-            // Convert canvas to blob for native share
-            qrCanvas.toBlob(async (blob) => {
-                const file = new File([blob], "codigo-qr-boda.png", { type: "image/png" });
-                
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    try {
-                        await navigator.share({
-                            files: [file],
-                            title: 'Código QR de Nuestra Boda',
-                            text: 'Escanea este código para compartir tus fotos con nosotros.'
-                        });
-                    } catch (err) {
-                        console.error('Error sharing file:', err);
-                    }
-                } else if (navigator.share) {
-                    await navigator.share({
-                        title: 'Código QR de Nuestra Boda',
-                        text: 'Escanea este código para compartir tus fotos con nosotros.',
-                        url: qrUrl.toString()
-                    });
-                } else {
-                    alert('Tu navegador no soporta la función de compartir.');
-                }
-            });
-        });
-    }
+        } catch (err) {
+            console.error('Error sharing QR:', err);
+            // Fallback for sharing the link if fetching the image fails
+            if (navigator.share) {
+                await navigator.share({
+                    title: 'Comparte tus momentos',
+                    text: 'Usa este código para subir tus fotos a nuestro álbum.',
+                    url: window.location.origin + window.location.pathname + 'smartlanding.html'
+                });
+            }
+        }
+    });
 }
 
 // HANDLE URL ACTIONS (Like auto-triggering camera)
