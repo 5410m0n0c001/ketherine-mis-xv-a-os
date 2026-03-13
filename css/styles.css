@@ -218,9 +218,9 @@ ul {
     100% { transform: scale(0); opacity: 0; }
 }
 
-/* Card slides up — starts AFTER flap is fully open */
+/* Card slides up — starts AFTER user sees the open envelope */
 .card-group {
-    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1) 1.3s;
+    transition: transform 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 2s;
 }
 
 .envelope-svg.opening .card-group {

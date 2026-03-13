@@ -11,7 +11,7 @@ envelopeScreen.addEventListener('click', () => {
         const cardGroup = document.getElementById('card-group');
         const sealGroup = document.getElementById('seal-group');
         envelopeSvg.insertBefore(cardGroup, sealGroup);
-    }, 1200);
+    }, 1900);
     
     // After full animation plays, fade out the entire envelope screen
     setTimeout(() => {
@@ -26,12 +26,12 @@ envelopeScreen.addEventListener('click', () => {
             icon.classList.remove('bx-volume-full');
             icon.classList.add('bx-volume-mute');
         }).catch(e => console.log('Audio autoplay blocked:', e));
-    }, 3000);
+    }, 4200);
 
     // Remove from DOM after transition completes
     setTimeout(() => {
         envelopeScreen.style.display = 'none';
-    }, 3800);
+    }, 5000);
 });
 
 // SCROLL REVEAL ANIMATION
