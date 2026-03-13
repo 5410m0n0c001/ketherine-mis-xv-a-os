@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparte tu momento - C & D</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/smartlanding.css">
+</head>
+<body>
+    <div class="landing-container">
+        <div class="glass-card reveal">
+            <header class="text-center">
+                <h1 class="names">C & D</h1>
+                <p class="subtitle">¡Captura y comparte este momento especial!</p>
+            </header>
+
+            <main class="upload-area mt-4">
+                <button class="btn-camera" id="btn-camera" aria-label="Tomar foto">
+                    <div class="icon-circle">
+                        <i class='bx bx-camera'></i>
+                    </div>
+                    <span>Subir Foto</span>
+                </button>
+                <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none;">
+                
+                <div class="status-container">
+                    <div class="upload-status" id="upload-status" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>Subiendo tu recuerdo...</p>
+                    </div>
+                    
+                    <div class="upload-success" id="upload-success" style="display:none;">
+                        <i class='bx bx-check-circle animate-pop'></i>
+                        <p>¡Gracias por compartir!</p>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="mt-5 text-center">
+                <p class="gallery-title">Fotos del evento</p>
+                <div class="photo-gallery" id="photo-gallery">
+                    <!-- Preview grid -->
+                </div>
+                
+                <a href="index.html" class="btn-secondary mt-4">
+                    <i class='bx bx-left-arrow-alt'></i> Ver Invitación
+                </a>
+            </footer>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="js/smartlanding.js"></script>
+</body>
+</html>

@@ -348,3 +348,107 @@ if (photoInput) {
         }
     });
 }
+// QR CODE GENERATION & SHARING
+function initQRCode() {
+    const qrContainer = document.getElementById('qrcode');
+    const btnShareQr = document.getElementById('btn-share-qr');
+    
+    if (!qrContainer) return;
+
+    // PRODUCCIÓN: Cambia esta URL por la URL pública de tu invitación
+    const BASE_URL = 'https://primaveraeventsgroup.com/invitacion/smartlanding.html';
+    
+    // Create the URL
+    let qrUrl = new URL(BASE_URL);
+
+    // Generate QR
+    new QRCode(qrContainer, {
+        text: qrUrl.toString(),
+        width: 180,
+        height: 180,
+        colorDark: "#556B2F", // Primary Color
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    // Share QR Button
+    if (btnShareQr) {
+        btnShareQr.addEventListener('click', async () => {
+            const qrCanvas = qrContainer.querySelector('canvas');
+            if (!qrCanvas) {
+                // Fallback for sharing the link if canvas isn't ready
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'Comparte tus momentos',
+                        text: 'Escanea este código para subir tus fotos a nuestro álbum.',
+                        url: qrUrl.toString()
+                    });
+                }
+                return;
+            }
+
+            // Convert canvas to blob for native share
+            qrCanvas.toBlob(async (blob) => {
+                const file = new File([blob], "codigo-qr-boda.png", { type: "image/png" });
+                
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Código QR de Nuestra Boda',
+                            text: 'Escanea este código para compartir tus fotos con nosotros.'
+                        });
+                    } catch (err) {
+                        console.error('Error sharing file:', err);
+                    }
+                } else if (navigator.share) {
+                    await navigator.share({
+                        title: 'Código QR de Nuestra Boda',
+                        text: 'Escanea este código para compartir tus fotos con nosotros.',
+                        url: qrUrl.toString()
+                    });
+                } else {
+                    alert('Tu navegador no soporta la función de compartir.');
+                }
+            });
+        });
+    }
+}
+
+// HANDLE URL ACTIONS (Like auto-triggering camera)
+function handleUrlActions() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+
+    if (action === 'take-photo') {
+        const overlay = document.getElementById('qr-camera-overlay');
+        const btnTakePhoto = document.getElementById('btn-qr-take-photo');
+        const btnSkip = document.getElementById('btn-qr-skip');
+        const btnCameraReal = document.getElementById('btn-camera');
+
+        if (overlay) {
+            overlay.style.display = 'flex';
+            
+            // If they want to take the photo
+            btnTakePhoto.addEventListener('click', () => {
+                overlay.style.display = 'none';
+                const fotosSection = document.getElementById('fotos');
+                if (fotosSection) {
+                    fotosSection.scrollIntoView({ behavior: 'auto' });
+                    if (btnCameraReal) btnCameraReal.click();
+                }
+            });
+
+            // If they just want to see the invitation
+            btnSkip.addEventListener('click', () => {
+                overlay.style.display = 'none';
+            });
+        }
+    }
+}
+
+// Initialize on Load
+window.addEventListener('load', () => {
+    initQRCode();
+    handleUrlActions();
+});

@@ -359,6 +359,12 @@
                         <i class='bx bx-check-circle'></i>
                         <p>¡Foto compartida con éxito!</p>
                     </div>
+                    <div class="qr-container-wrapper mt-4">
+                        <div id="qrcode" class="qr-code-box"></div>
+                        <button class="btn-share-qr mt-3" id="btn-share-qr">
+                            <i class='bx bx-share-alt'></i> Compartir QR
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -390,6 +396,20 @@
 
     </main>
 
+    <!-- Smart Landing Overlay for QR -->
+    <div id="qr-camera-overlay" class="qr-overlay-screen" style="display:none;">
+        <div class="qr-overlay-content">
+            <h1 class="names">C & D</h1>
+            <p>¡Ayúdanos a capturar este momento!</p>
+            <button id="btn-qr-take-photo" class="btn-camera mt-4">
+                <i class='bx bx-camera'></i> Abrir Cámara
+            </button>
+            <button id="btn-qr-skip" class="btn-skip mt-3">Ver Invitación</button>
+        </div>
+    </div>
+    
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- JS Scripts -->
     <script src="js/script.js"></script>
 </body>
