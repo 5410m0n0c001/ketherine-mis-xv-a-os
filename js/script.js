@@ -35,19 +35,26 @@ envelopeScreen.addEventListener('click', () => {
 });
 
 // SCROLL REVEAL ANIMATION
-const revealElements = document.querySelectorAll('.reveal');
+const revealElements = document.querySelectorAll('.reveal, .reveal-fold, .fade-slide-in');
 
 const revealCallback = (entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('active');
-            // observer.unobserve(entry.target); // Uncomment to hide again on scroll up
+            
+            // Stagger internal elements if the target is a reveal-fold container
+            if (entry.target.classList.contains('reveal-fold')) {
+                const subElements = entry.target.querySelectorAll('.reveal, .fade-slide-in, .venue-card, .gift-card, .padrino-item');
+                subElements.forEach((el, index) => {
+                    setTimeout(() => el.classList.add('active'), index * 150);
+                });
+            }
         }
     });
 };
 
 const revealOptions = {
-    threshold: 0.15,
+    threshold: 0.1,
     rootMargin: "0px 0px -50px 0px"
 };
 
