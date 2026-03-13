@@ -141,6 +141,7 @@ function copyToClipboard(text) {
 // PHOTO UPLOAD TO CLOUDINARY
 const CLOUD_NAME = 'dkozw2kmy';
 const UPLOAD_PRESET = 'unsigned_boda';
+const PHOTO_TAG = 'boda-fotos';
 
 const btnCamera = document.getElementById('btn-camera');
 const photoInput = document.getElementById('photo-input');
@@ -148,63 +149,70 @@ const uploadStatus = document.getElementById('upload-status');
 const uploadSuccess = document.getElementById('upload-success');
 const photoGallery = document.getElementById('photo-gallery');
 
-// In-memory photo list (primary) + localStorage (backup)
-let uploadedPhotos = [];
-
-// Try to load from localStorage on init
-try {
-    const saved = JSON.parse(localStorage.getItem('boda_photos') || '[]');
-    if (Array.isArray(saved)) uploadedPhotos = saved;
-} catch(e) { console.log('localStorage read error', e); }
-
-function addPhoto(url) {
-    uploadedPhotos.unshift(url);
-    if (uploadedPhotos.length > 20) uploadedPhotos.pop();
+// Robust fetching from Cloudinary Resource List
+async function fetchCloudinaryGallery() {
     try {
-        localStorage.setItem('boda_photos', JSON.stringify(uploadedPhotos));
-    } catch(e) { console.log('localStorage save error', e); }
+        console.log('Fetching Cloudinary gallery...');
+        // The Resource List JSON is cached by Cloudinary for a short time, 
+        // add a timestamp to force fresh data if needed, or rely on normal TTL
+        const res = await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${PHOTO_TAG}.json?t=${Date.now()}`);
+        if (!res.ok) {
+            console.log('No photos found or listing disabled yet');
+            return;
+        }
+        const data = await res.json();
+        renderCloudinaryGallery(data.resources);
+    } catch (err) {
+        console.error('Error fetching gallery:', err);
+    }
 }
 
-function renderGallery() {
-    if (!photoGallery || uploadedPhotos.length === 0) {
+function renderCloudinaryGallery(resources) {
+    if (!photoGallery || !resources || resources.length === 0) {
         if (photoGallery) photoGallery.innerHTML = '';
         return;
     }
 
+    // Sort by version (newest first)
+    resources.sort((a, b) => b.version - a.version);
+
     let html = '';
 
     // Latest photo - large with badge
+    const latest = resources[0];
+    const latestUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_800,q_auto,f_auto/v${latest.version}/${latest.public_id}.${latest.format}`;
+    
     html += '<div class="photo-gallery-latest">';
     html += '  <span class="photo-badge">Recién subida</span>';
-    html += '  <img src="' + uploadedPhotos[0] + '" alt="Última foto">';
+    html += '  <img src="' + latestUrl + '" alt="Última foto">';
     html += '</div>';
 
     // Older photos - small grid
-    if (uploadedPhotos.length > 1) {
+    if (resources.length > 1) {
         html += '<div class="photo-gallery-grid">';
-        var limit = Math.min(uploadedPhotos.length, 9);
+        var limit = Math.min(resources.length, 9);
         for (var i = 1; i < limit; i++) {
-            html += '<img src="' + uploadedPhotos[i] + '" alt="Foto compartida">';
+            const r = resources[i];
+            const thumbUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/w_200,h_200,c_fill,q_auto,f_auto/v${r.version}/${r.public_id}.${r.format}`;
+            html += '<img src="' + thumbUrl + '" alt="Foto compartida">';
         }
         html += '</div>';
     }
 
     photoGallery.innerHTML = html;
-    console.log('Gallery rendered with', uploadedPhotos.length, 'photos');
 }
 
 // Render on page load
-renderGallery();
+fetchCloudinaryGallery();
 
 btnCamera.addEventListener('click', function() {
     photoInput.click();
 });
 
-photoInput.addEventListener('change', function(e) {
+photoInput.addEventListener('change', async function(e) {
     var file = e.target.files[0];
     if (!file) return;
 
-    // Show spinner, hide button
     btnCamera.style.display = 'none';
     uploadStatus.style.display = 'flex';
     uploadSuccess.style.display = 'none';
@@ -213,39 +221,39 @@ photoInput.addEventListener('change', function(e) {
     formData.append('file', file);
     formData.append('upload_preset', UPLOAD_PRESET);
     formData.append('folder', 'boda-carolina-daniel');
+    formData.append('tags', PHOTO_TAG); // Ensure new uploads have the tag
 
-    fetch('https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload', {
-        method: 'POST',
-        body: formData
-    })
-    .then(function(res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res.json();
-    })
-    .then(function(data) {
-        console.log('Upload response:', data);
-        var photoUrl = data.secure_url;
-        console.log('Photo URL:', photoUrl);
+    try {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+            method: 'POST',
+            body: formData
+        });
 
-        // Add to gallery and render
-        addPhoto(photoUrl);
-        renderGallery();
+        if (!res.ok) throw new Error('Upload failed');
+
+        const data = await res.json();
+        console.log('Upload success:', data);
 
         // Show success
         uploadStatus.style.display = 'none';
         uploadSuccess.style.display = 'flex';
+
+        // Refresh gallery after a small delay to let Cloudinary update the JSON list
+        setTimeout(() => {
+            fetchCloudinaryGallery();
+        }, 1500);
 
         setTimeout(function() {
             uploadSuccess.style.display = 'none';
             btnCamera.style.display = 'flex';
             photoInput.value = '';
         }, 3000);
-    })
-    .catch(function(err) {
+
+    } catch (err) {
         console.error('Upload error:', err);
         uploadStatus.style.display = 'none';
         btnCamera.style.display = 'flex';
         photoInput.value = '';
         alert('Error al subir la foto. Intenta de nuevo.');
-    });
+    }
 });
