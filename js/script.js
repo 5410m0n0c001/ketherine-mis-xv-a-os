@@ -148,56 +148,60 @@ const uploadStatus = document.getElementById('upload-status');
 const uploadSuccess = document.getElementById('upload-success');
 const photoGallery = document.getElementById('photo-gallery');
 
-// Load saved photos from localStorage
-function getSavedPhotos() {
-    try {
-        return JSON.parse(localStorage.getItem('boda_photos') || '[]');
-    } catch { return []; }
-}
+// In-memory photo list (primary) + localStorage (backup)
+let uploadedPhotos = [];
 
-function savePhoto(url) {
-    const photos = getSavedPhotos();
-    photos.unshift(url); // newest first
-    if (photos.length > 20) photos.pop(); // keep max 20
-    localStorage.setItem('boda_photos', JSON.stringify(photos));
+// Try to load from localStorage on init
+try {
+    const saved = JSON.parse(localStorage.getItem('boda_photos') || '[]');
+    if (Array.isArray(saved)) uploadedPhotos = saved;
+} catch(e) { console.log('localStorage read error', e); }
+
+function addPhoto(url) {
+    uploadedPhotos.unshift(url);
+    if (uploadedPhotos.length > 20) uploadedPhotos.pop();
+    try {
+        localStorage.setItem('boda_photos', JSON.stringify(uploadedPhotos));
+    } catch(e) { console.log('localStorage save error', e); }
 }
 
 function renderGallery() {
-    const photos = getSavedPhotos();
-    if (photos.length === 0) {
-        photoGallery.innerHTML = '';
+    if (!photoGallery || uploadedPhotos.length === 0) {
+        if (photoGallery) photoGallery.innerHTML = '';
         return;
     }
 
     let html = '';
 
-    // Latest photo - large
-    html += `<div class="photo-gallery-latest">
-        <span class="photo-badge">Recién subida</span>
-        <img src="${photos[0]}" alt="Última foto compartida" loading="lazy">
-    </div>`;
+    // Latest photo - large with badge
+    html += '<div class="photo-gallery-latest">';
+    html += '  <span class="photo-badge">Recién subida</span>';
+    html += '  <img src="' + uploadedPhotos[0] + '" alt="Última foto">';
+    html += '</div>';
 
     // Older photos - small grid
-    if (photos.length > 1) {
+    if (uploadedPhotos.length > 1) {
         html += '<div class="photo-gallery-grid">';
-        for (let i = 1; i < Math.min(photos.length, 9); i++) {
-            html += `<img src="${photos[i]}" alt="Foto compartida" loading="lazy">`;
+        var limit = Math.min(uploadedPhotos.length, 9);
+        for (var i = 1; i < limit; i++) {
+            html += '<img src="' + uploadedPhotos[i] + '" alt="Foto compartida">';
         }
         html += '</div>';
     }
 
     photoGallery.innerHTML = html;
+    console.log('Gallery rendered with', uploadedPhotos.length, 'photos');
 }
 
-// Render gallery on page load
+// Render on page load
 renderGallery();
 
-btnCamera.addEventListener('click', () => {
+btnCamera.addEventListener('click', function() {
     photoInput.click();
 });
 
-photoInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
+photoInput.addEventListener('change', function(e) {
+    var file = e.target.files[0];
     if (!file) return;
 
     // Show spinner, hide button
@@ -205,43 +209,43 @@ photoInput.addEventListener('change', async (e) => {
     uploadStatus.style.display = 'flex';
     uploadSuccess.style.display = 'none';
 
-    const formData = new FormData();
+    var formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', UPLOAD_PRESET);
     formData.append('folder', 'boda-carolina-daniel');
 
-    try {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-            method: 'POST',
-            body: formData
-        });
+    fetch('https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+    })
+    .then(function(data) {
+        console.log('Upload response:', data);
+        var photoUrl = data.secure_url;
+        console.log('Photo URL:', photoUrl);
 
-        if (res.ok) {
-            const data = await res.json();
-            // Use Cloudinary auto-optimized URL
-            const photoUrl = data.secure_url.replace('/upload/', '/upload/w_800,q_auto,f_auto/');
+        // Add to gallery and render
+        addPhoto(photoUrl);
+        renderGallery();
 
-            // Save and render in gallery
-            savePhoto(photoUrl);
-            renderGallery();
+        // Show success
+        uploadStatus.style.display = 'none';
+        uploadSuccess.style.display = 'flex';
 
-            // Show success
-            uploadStatus.style.display = 'none';
-            uploadSuccess.style.display = 'flex';
-
-            setTimeout(() => {
-                uploadSuccess.style.display = 'none';
-                btnCamera.style.display = 'flex';
-                photoInput.value = '';
-            }, 3000);
-        } else {
-            throw new Error('Upload failed');
-        }
-    } catch (err) {
+        setTimeout(function() {
+            uploadSuccess.style.display = 'none';
+            btnCamera.style.display = 'flex';
+            photoInput.value = '';
+        }, 3000);
+    })
+    .catch(function(err) {
         console.error('Upload error:', err);
         uploadStatus.style.display = 'none';
         btnCamera.style.display = 'flex';
         photoInput.value = '';
         alert('Error al subir la foto. Intenta de nuevo.');
-    }
+    });
 });
