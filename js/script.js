@@ -57,29 +57,50 @@ revealElements.forEach(el => {
     revealObserver.observe(el);
 });
 
-// COUNTDOWN TIMER
-const weddingDateList = new Date('Nov 15, 2026 16:00:00').getTime();
+// COUNTDOWN TIMER (1-minute demo mode)
+let countdownTime = 60; // 60 seconds
+const countdownContainer = document.querySelector('.countdown-container');
+const celebrationSound = document.getElementById('celebration-sound');
+const balloonsContainer = document.getElementById('balloons-container');
+
+function triggerCelebration() {
+    if (celebrationSound) celebrationSound.play().catch(e => console.log('Audio error:', e));
+    if (balloonsContainer) {
+        balloonsContainer.classList.add('active');
+        spawnBalloons();
+    }
+}
+
+function spawnBalloons() {
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            const balloon = document.createElement('img');
+            balloon.src = 'globos.png';
+            balloon.className = 'balloon-img';
+            balloon.style.left = Math.random() * 90 + '%';
+            balloon.style.animationDelay = Math.random() * 5 + 's';
+            balloon.style.width = (40 + Math.random() * 60) + 'px';
+            balloonsContainer.appendChild(balloon);
+        }, i * 300);
+    }
+}
 
 const countdown = setInterval(() => {
-    const now = new Date().getTime();
-    const distance = weddingDateList - now;
+    countdownTime--;
+    
+    const minutes = Math.floor(countdownTime / 60);
+    const seconds = countdownTime % 60;
 
-    // Calculate time left
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    // Update DOM
-    document.getElementById('days').innerText = days.toString().padStart(2, '0');
-    document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+    // Update DOM (showing as 00:00:mm:ss for consistency)
+    document.getElementById('days').innerText = "00";
+    document.getElementById('hours').innerText = "00";
     document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
     document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
 
-    // Upon expiration
-    if (distance < 0) {
+    if (countdownTime <= 0) {
         clearInterval(countdown);
-        document.querySelector('.countdown-container').innerHTML = "<h3>¡El Gran Día ha llegado!</h3>";
+        countdownContainer.innerHTML = "<h3>¡El Gran Día ha llegado!</h3>";
+        triggerCelebration();
     }
 }, 1000);
 
