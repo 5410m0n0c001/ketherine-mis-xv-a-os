@@ -451,10 +451,16 @@ ul {
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.rsvp-img-btn {
+.rsvp-img-btn, .ubica-btn-img {
     width: 100%;
     height: auto;
     cursor: pointer;
+}
+
+.location-btn-img {
+    display: inline-block;
+    max-width: 220px;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .zoom-hover:hover {
@@ -794,6 +800,46 @@ ul {
     font-weight: bold;
 }
 
+/* FLOATING BUTTONS */
+.audio-btn, .share-btn {
+    position: fixed;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.audio-btn { bottom: 20px; }
+.share-btn { bottom: 75px; }
+
+.audio-btn i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.share-icon-img {
+    width: 25px;
+    height: auto;
+}
+
+.audio-btn:hover, .share-btn:hover {
+    transform: scale(1.1);
+    background: var(--primary-color);
+}
+
+.audio-btn:hover i { color: white; }
+.share-btn:hover .share-icon-img { filter: brightness(0) invert(1); }
+
+/* SECTIONS ======================================== */
 /* PADRINOS SECTION ======================================== */
 .padrinos-grid {
     display: grid;

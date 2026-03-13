@@ -137,10 +137,31 @@ function copyToClipboard(text) {
         console.error('Failed to copy: ', err);
     });
 }
-
-// CALENDAR INTEGRATION
+// SHARING & CALENDAR INTEGRATION
 const calendarBtn = document.getElementById('calendar-btn');
 const calendarOptions = document.getElementById('calendar-options');
+const shareBtn = document.getElementById('share-btn');
+
+if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Invitación a la Boda de Carolina & Daniel',
+                    text: '¡Acompáñanos a celebrar nuestra unión matrimonial!',
+                    url: window.location.href
+                });
+            } catch (err) {
+                console.error('Error sharing:', err);
+            }
+        } else {
+            // Fallback: Copy URL to clipboard
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Enlace de invitación copiado al portapapeles.');
+            });
+        }
+    });
+}
 
 if (calendarBtn && calendarOptions) {
     calendarBtn.addEventListener('click', function(e) {
