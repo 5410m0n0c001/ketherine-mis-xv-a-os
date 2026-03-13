@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Boda</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Meta tags SEO / Compartir -->
+    <meta property="og:title" content="¡Estás Invitado a Nuestra Boda!">
+    <meta property="og:description" content="Acompáñanos a celebrar nuestro gran día.">
+    <meta property="og:image" content="Invitación Virtual Boda Fotográfico Verde y Blanco.png">
+</head>
+<body>
+
+    <!-- SOBRE DE CARTA - Pantalla de entrada -->
+    <div class="envelope-screen" id="envelope-screen">
+        <p class="envelope-hint">Toca para abrir</p>
+        <svg class="envelope-svg" id="envelope-svg" viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg">
+            <!-- Sombra del sobre -->
+            <defs>
+                <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+                    <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,0.25)"/>
+                </filter>
+                <linearGradient id="envelopeGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#e8e3d3"/>
+                    <stop offset="100%" stop-color="#d1cda8"/>
+                </linearGradient>
+                <linearGradient id="flapGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#d1cda8"/>
+                    <stop offset="100%" stop-color="#c5c19a"/>
+                </linearGradient>
+                <linearGradient id="innerGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#f2f0e6"/>
+                    <stop offset="100%" stop-color="#e8e3d3"/>
+                </linearGradient>
+                <radialGradient id="sealGrad" cx="50%" cy="45%" r="50%">
+                    <stop offset="0%" stop-color="#6b8a3a"/>
+                    <stop offset="70%" stop-color="#556B2F"/>
+                    <stop offset="100%" stop-color="#3d4f1f"/>
+                </radialGradient>
+                <clipPath id="envelopeClip">
+                    <rect x="60" y="-200" width="480" height="640" rx="8"/>
+                </clipPath>
+            </defs>
+
+            <!-- Cuerpo del sobre -->
+            <rect class="envelope-body" x="60" y="140" width="480" height="300" rx="8" fill="url(#envelopeGrad)" filter="url(#shadow)"/>
+            
+            <!-- Interior del sobre (visible al abrir) -->
+            <rect x="60" y="140" width="480" height="300" rx="8" fill="url(#innerGrad)"/>
+
+            <!-- Triángulos internos decorativos -->
+            <polygon points="60,140 300,310 540,140" fill="#c5c19a" opacity="0.5"/>
+            <polygon points="60,440 300,310 60,200" fill="#bdb99a" opacity="0.3"/>
+            <polygon points="540,440 300,310 540,200" fill="#bdb99a" opacity="0.3"/>
+
+            <!-- Cuerpo frontal del sobre (tapa el interior) -->
+            <rect class="envelope-front" x="60" y="140" width="480" height="300" rx="8" fill="url(#envelopeGrad)"/>
+            
+            <!-- Pliegue inferior del sobre -->
+            <polygon class="envelope-bottom-fold" points="60,440 300,310 540,440" fill="#c5c19a" stroke="#bdb99a" stroke-width="0.5"/>
+            
+            <!-- Pliegues laterales -->
+            <polygon class="envelope-left-fold" points="60,140 300,310 60,440" fill="#d6d2b8" stroke="#c5c19a" stroke-width="0.5"/>
+            <polygon class="envelope-right-fold" points="540,140 300,310 540,440" fill="#ccc8a8" stroke="#c5c19a" stroke-width="0.5"/>
+
+            <!-- Solapa superior (se abre con animación) -->
+            <g class="flap-group" id="flap-group">
+                <polygon class="envelope-flap" points="60,140 300,310 540,140" fill="url(#flapGrad)" stroke="#bdb99a" stroke-width="0.5"/>
+            </g>
+
+            <!-- Carta / tarjeta que sale del sobre (ENCIMA de los pliegues) -->
+            <g class="card-group" id="card-group" clip-path="url(#envelopeClip)">
+                <rect class="card" x="100" y="160" width="400" height="280" rx="6" fill="#ffffff" stroke="#d1cda8" stroke-width="1.5"/>
+                <!-- Texto posicionado para quedar visible ENCIMA del sobre al animar -->
+                <text x="300" y="310" text-anchor="middle" font-family="'Playfair Display', serif" font-size="22" fill="#556B2F" font-style="italic">Estás Invitado</text>
+                <line x1="180" y1="330" x2="420" y2="330" stroke="#d1cda8" stroke-width="1" opacity="0.5"/>
+                <line x1="200" y1="350" x2="400" y2="350" stroke="#d1cda8" stroke-width="1" opacity="0.3"/>
+            </g>
+
+            <!-- Sello de cera con iniciales -->
+            <g class="seal-group" id="seal-group">
+                <circle cx="300" cy="260" r="42" fill="url(#sealGrad)" filter="url(#shadow)"/>
+                <circle cx="300" cy="260" r="38" fill="none" stroke="#3d4f1f" stroke-width="1" opacity="0.3"/>
+                <circle cx="300" cy="260" r="34" fill="none" stroke="#d1cda8" stroke-width="0.8" opacity="0.5"/>
+                <!-- Bordes decorativos del sello -->
+                <circle cx="300" cy="260" r="40" fill="none" stroke="#6b8a3a" stroke-width="2" stroke-dasharray="3 3" opacity="0.4"/>
+                <!-- Iniciales C & D -->
+                <text x="300" y="256" text-anchor="middle" font-family="'Playfair Display', serif" font-size="26" fill="#d1cda8" font-weight="600" letter-spacing="2">C</text>
+                <text x="300" y="270" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="10" fill="#d1cda8" opacity="0.9">&amp;</text>
+                <text x="300" y="286" text-anchor="middle" font-family="'Playfair Display', serif" font-size="26" fill="#d1cda8" font-weight="600" letter-spacing="2">D</text>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Navegación Flotante -->
+    <nav class="floating-nav">
+        <ul>
+            <li><a href="#hero" class="active"><i class='bx bx-home-heart'></i></a></li>
+            <li><a href="#fecha"><i class='bx bx-calendar-event'></i></a></li>
+            <li><a href="#ubicacion"><i class='bx bx-map'></i></a></li>
+            <li><a href="#codigo-vestimenta"><i class='bx bx-closet' ></i></a></li>
+            <li><a href="#padrinos"><i class='bx bx-group'></i></a></li>
+            <li><a href="#mesa-regalos"><i class='bx bx-gift'></i></a></li>
+        </ul>
+    </nav>
+
+    <!-- Reproductor de Audio -->
+    <button class="audio-btn" id="audio-btn" aria-label="Reproducir música">
+        <i class='bx bx-volume-full'></i>
+    </button>
+    <audio id="bg-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Hojas decorativas flotantes -->
+    <div class="leaf leaf-1"></div>
+    <div class="leaf leaf-2"></div>
+    <div class="leaf leaf-3"></div>
+
+    <main>
+        <!-- SECCIÓN 1: HERO / PORTADA -->
+        <section id="hero" class="hero-section">
+            <div class="paper-texture-top"></div>
+
+            <!-- Esquinas decorativas a nivel de sección -->
+            <img src="esquina1.png" alt="Decoración esquina" class="corner-img corner-top-left animate-corner-tl">
+            <img src="esquina2.png" alt="Decoración esquina" class="corner-img corner-bottom-right animate-corner-br">
+            
+            <div class="hero-video-container reveal">
+                <!-- Video de portada -->
+                <video class="hero-video" autoplay loop muted playsinline>
+                    <source src="contexto.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="hero-content text-center reveal">
+                <p class="subtitle mt-3">¡NOS CASAMOS!</p>
+                <h1 class="names">Carolina & Daniel</h1>
+                <p class="date-txt">Te invitamos a celebrar nuestra unión</p>
+                
+                <div class="date-highlight mt-2">
+                    <span class="day">15</span>
+                    <span class="month-year">Noviembre<br>2026</span>
+                </div>
+            </div>
+            
+            <div class="paper-texture-bottom"></div>
+        </section>
+
+        <!-- SECCIÓN 2: CUENTA REGRESIVA -->
+        <section id="fecha" class="countdown-section py-5">
+            <div class="container text-center reveal">
+                <h2 class="section-title">Faltan</h2>
+                <div class="countdown-container">
+                    <div class="time-box">
+                        <span id="days" class="number">00</span>
+                        <span class="label">Días</span>
+                    </div>
+                    <span class="colon">:</span>
+                    <div class="time-box">
+                        <span id="hours" class="number">00</span>
+                        <span class="label">Horas</span>
+                    </div>
+                    <span class="colon">:</span>
+                    <div class="time-box">
+                        <span id="minutes" class="number">00</span>
+                        <span class="label">Minutos</span>
+                    </div>
+                    <span class="colon">:</span>
+                    <div class="time-box">
+                        <span id="seconds" class="number">00</span>
+                        <span class="label">Segundos</span>
+                    </div>
+                </div>
+
+                <a href="#" class="btn-primary mt-4 btn-add-calendar">
+                    <i class='bx bx-calendar-plus'></i> Agendar Día
+                </a>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: UBICACIÓN -->
+        <section id="ubicacion" class="location-section py-5 bg-light-green">
+            <div class="paper-rip-top"></div>
+            <div class="container text-center reveal">
+                <h2 class="section-title">Dónde y Cuándo</h2>
+                
+                <div class="location-cards mt-4">
+                    <!-- Ceremonia -->
+                    <div class="card event-card reveal sequence-1">
+                        <div class="card-icon"><i class='bx bx-church'></i></div>
+                        <h3>Ceremonia Religiosa</h3>
+                        <p class="time">16:00 HRS</p>
+                        <p class="place">Parroquia de San Miguel Arcángel</p>
+                        <p class="address">Av. Principal #123, Centro Histórico</p>
+                        <a href="https://maps.google.com" target="_blank" class="btn-secondary mt-2">
+                            <i class='bx bx-map-alt'></i> Ver en Google Maps
+                        </a>
+                    </div>
+
+                    <!-- Recepción -->
+                    <div class="card event-card reveal sequence-2">
+                        <div class="card-icon"><i class='bx bx-glass'></i></div>
+                        <h3>Recepción</h3>
+                        <p class="time">18:30 HRS</p>
+                        <p class="place">Hacienda Santa Mónica</p>
+                        <p class="address">Carretera Norte Km 5.5</p>
+                        <a href="https://maps.google.com" target="_blank" class="btn-secondary mt-2">
+                            <i class='bx bx-map-alt'></i> Ver en Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="paper-rip-bottom"></div>
+        </section>
+
+        <!-- SECCIÓN 4: CÓDIGO DE VESTIMENTA -->
+        <section id="codigo-vestimenta" class="dresscode-section py-5">
+            <div class="container text-center reveal">
+                <h2 class="section-title">Código de Vestimenta</h2>
+                <div class="dresscode-icon animate-dresscode-icon">
+                    <img src="icono.png" alt="Código de Vestimenta" class="dresscode-icon-img">
+                </div>
+                <h3 class="dresscode-type mt-2">Formal / Rigurosa Etiqueta</h3>
+                <p class="mt-2 text-muted">Agradecemos respetar nuestra paleta de colores reservando el blanco exclusivo para la novia.</p>
+                
+                <div class="color-palette mt-3">
+                    <div class="color-swatch" style="background-color: #2F4F4F;"></div>
+                    <div class="color-swatch" style="background-color: #000000;"></div>
+                    <div class="color-swatch" style="background-color: #556B2F;"></div>
+                    <div class="color-swatch" style="background-color: #BDB76B;"></div>
+                    <div class="color-swatch no-color" style="background-color: #FFFFFF; border: 2px dashed #ff4d4d;">
+                        <span class="no-text text-danger"><i class='bx bx-x' ></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: PADRINOS -->
+        <section id="padrinos" class="padrinos-section py-5 bg-light-green">
+             <div class="paper-rip-top"></div>
+             <div class="container text-center reveal">
+                <h2 class="section-title">Padrinos</h2>
+                <p class="subtitle text-sm mb-4">Agradecemos a quienes nos acompañan en este paso tan importante.</p>
+
+                <div class="padrinos-grid">
+                    <div class="padrino-item reveal sequence-1">
+                        <h4>De Velación</h4>
+                        <p>Sr. Arturo López<br>Sra. María Elena</p>
+                    </div>
+                    <div class="padrino-item reveal sequence-2">
+                        <h4>De Lazo</h4>
+                        <p>Fernando Gómez<br>Laura Martínez</p>
+                    </div>
+                    <div class="padrino-item reveal sequence-3">
+                        <h4>De Arras</h4>
+                        <p>Alejandro Fernández</p>
+                    </div>
+                    <div class="padrino-item reveal sequence-4">
+                        <h4>De Anillos</h4>
+                        <p>Sofia Cárdenas</p>
+                    </div>
+                </div>
+             </div>
+             <div class="paper-rip-bottom"></div>
+        </section>
+
+        <!-- SECCIÓN 6: MESA DE REGALOS -->
+        <section id="mesa-regalos" class="gifts-section py-5 text-center">
+            <div class="container reveal">
+                <div class="icon-large mb-3"><i class='bx bx-gift' style="font-size: 3rem; color: var(--primary-color);"></i></div>
+                <h2 class="section-title">Mesa de Regalos</h2>
+                <p class="mt-3">Su presencia es nuestro mejor regalo, pero si desean tener un detalle con nosotros, pueden hacerlo a través de:</p>
+                
+                <div class="gift-options mt-4">
+                    <div class="gift-card reveal sequence-1">
+                        <h4>Transferencia Bancaria</h4>
+                        <div class="account-details">
+                            <p><strong>Banco:</strong> BBVA</p>
+                            <p><strong>Cuenta:</strong> 1234 5678 9012 3456</p>
+                            <p><strong>CLABE:</strong> 012345678901234567</p>
+                            <p><strong>A nombre de:</strong> Daniel Vargas</p>
+                        </div>
+                        <button class="btn-copy btn-secondary btn-sm mt-2" onclick="copyToClipboard('1234 5678 9012 3456')">
+                            <i class='bx bx-copy'></i> Copiar N° Cuenta
+                        </button>
+                    </div>
+
+                    <div class="gift-card reveal sequence-2">
+                        <h4>Tiendas Departamentales</h4>
+                        <div class="store-links mt-3">
+                            <a href="#" class="store-btn">Liverpool (Evento #12345)</a>
+                            <a href="#" class="store-btn">Palacio de Hierro (Evento #67890)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: ASISTENCIA (RSVP) -->
+        <section id="rsvp" class="rsvp-section footer-section py-5 bg-dark">
+            <div class="container text-center reveal text-white">
+                <h2 class="section-title title-light">Confirma tu Asistencia</h2>
+                <p class="mt-3 mb-4">Por favor envíanos un mensaje antes del 1° de Noviembre para reservar tu lugar.</p>
+                
+                <a href="https://wa.me/1234567890?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." target="_blank" class="btn-primary btn-whatsapp mb-4">
+                    <i class='bx bxl-whatsapp'></i> Confirmar por WhatsApp
+                </a>
+
+                <div class="footer-names mt-5">
+                    <h3>C & D</h3>
+                    <p class="text-sm mt-2 text-muted-light">¡Te esperamos para celebrar el amor!</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JS Scripts -->
+    <script src="js/script.js"></script>
+</body>
+</html>
