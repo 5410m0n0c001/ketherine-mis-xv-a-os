@@ -10,13 +10,24 @@ if (envelopeVideo) {
     }, { once: true });
 }
 
-envelopeScreen.addEventListener('click', () => {
+const handleEnvelopeClick = () => {
     if (envelopeVideo) {
+        // Prevent multiple clicks
+        if (!envelopeVideo.paused) return;
+
         // Hide hint
         if (envelopeHint) envelopeHint.style.display = 'none';
         
-        // Play video
-        envelopeVideo.play().catch(e => console.log('Video play failed:', e));
+        // Ensure video is at start and play
+        envelopeVideo.currentTime = 0;
+        envelopeVideo.play().then(() => {
+            console.log('Video playing...');
+        }).catch(e => {
+            console.log('Video play failed:', e);
+            // Fallback: just open if video fails
+            envelopeScreen.classList.add('hidden');
+            setTimeout(() => { envelopeScreen.style.display = 'none'; }, 1000);
+        });
         
         // When video ends, fade out screen
         envelopeVideo.onended = () => {
@@ -42,7 +53,15 @@ envelopeScreen.addEventListener('click', () => {
             }, 1600);
         };
     }
-});
+};
+
+if (envelopeScreen) {
+    envelopeScreen.addEventListener('click', handleEnvelopeClick);
+    envelopeScreen.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        handleEnvelopeClick();
+    }, { passive: false });
+}
 
 // SCROLL REVEAL ANIMATION
 const revealElements = document.querySelectorAll('.reveal, .card-flip-up, .scale-pulse, .text-reveal, .slide-left, .slide-right, .btn-bounce');
