@@ -23,6 +23,21 @@ html, body {
     width: 100vw; /* Exact viewport width */
     position: relative;
     max-width: 100%;
+    -webkit-overflow-scrolling: touch; /* Smooth momentum scroll on iOS */
+}
+
+/* CRITICAL: Prevent images/videos/elements from blocking scroll */
+img, video, .corner-img, .hero-video, .gift-logo, .dresscode-icon-img,
+.rsvp-img-btn, .ubica-btn-img, .qr-code-img, .photo-gallery-latest,
+.photo-gallery-grid img, .store-btn-logo, .album-visor-container {
+    touch-action: pan-y !important; /* Allow vertical scroll through these elements */
+    -webkit-user-drag: none; /* Prevent drag on desktop */
+    user-select: none;
+}
+
+/* Ensure video containers don't trap scroll */
+video {
+    pointer-events: none; /* Video is decorative, let scroll pass through */
 }
 
 body {
@@ -30,6 +45,7 @@ body {
     background-color: var(--bg-color-main);
     color: var(--text-color);
     line-height: 1.6;
+    touch-action: pan-y; /* Ensure scroll always works */
 }
 
 h1, h2, h3, h4, .names, .section-title {
