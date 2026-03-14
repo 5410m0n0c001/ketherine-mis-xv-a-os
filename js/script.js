@@ -478,3 +478,14 @@ window.addEventListener('load', () => {
     initQRCode();
     handleUrlActions();
 });
+
+// Horizontal Background Drift on Scroll
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const speed = 0.08;
+    // Drift every section slightly horizontally
+    document.querySelectorAll('section').forEach(section => {
+        const xPos = (scrolled * speed) % 100;
+        section.style.backgroundPosition = `${50 + (xPos * 0.2)}% 50%`;
+    });
+});

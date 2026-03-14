@@ -1396,8 +1396,16 @@ ul {
     margin: 0;
 }
 
-.text-muted-light {
-    color: rgba(255, 255, 255, 0.6);
+/* Horizontal Background Drift Animation */
+section {
+    background-attachment: fixed;
+    background-position: 50% 0;
+    transition: background-position 0.2s ease-out;
+}
+
+/* Specific background movement on scroll handled via JS for horizontal effect */
+.bg-drift {
+    background-size: 110% auto !important; /* Slightly larger to allow drift */
 }
 
 
