@@ -260,9 +260,9 @@ ul {
 /* AUDIO BUTTON ======================================== */
 /* AUDIO PLAYER ======================================== */
 /* FLOATING ACTION BUTTONS (Audio & Share) */
-.audio-btn, .share-btn {
+.audio-btn, .share-btn-sticky {
     position: fixed;
-    top: 20px;
+    right: 20px;
     width: 48px;
     height: 48px;
     background-color: var(--white);
@@ -277,7 +277,8 @@ ul {
     border: 2px solid var(--primary-color);
 }
 
-.audio-btn { right: 20px; }
+.audio-btn { top: 20px; }
+.share-btn-sticky { top: 80px; } /* Positioned below audio */
 
 .audio-btn i {
     font-size: 1.6rem !important;
@@ -413,7 +414,7 @@ ul {
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: center 10%; /* Keep heads visible */
+    object-position: center top !important; /* Force priority to head area */
     transition: opacity 1.5s ease;
     border-radius: 0 !important;
 }

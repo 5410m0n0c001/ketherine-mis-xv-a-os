@@ -41,7 +41,7 @@ const handleEnvelopeClick = () => {
                 bgMusic.play().then(() => {
                     audioBtn.classList.add('playing');
                     if (icon) {
-                        icon.className = 'bx bx-volume-high'; // Show waves
+                        icon.className = 'bx bx-volume-high'; // Standard waves icon
                         icon.style.color = 'white';
                     }
                 }).catch(e => console.log('Audio autoplay blocked:', e));
@@ -213,7 +213,7 @@ if (audioBtn && bgMusic) {
             bgMusic.play().then(() => {
                 audioBtn.classList.add('playing');
                 if (iconElement) {
-                    iconElement.className = 'bx bx-volume-high';
+                    iconElement.className = 'bx bx-volume-high'; 
                     iconElement.style.color = 'white';
                 }
                 audioBtn.setAttribute('aria-label', "Pausar música");
