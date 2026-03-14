@@ -33,6 +33,9 @@ const handleEnvelopeClick = () => {
         envelopeVideo.onended = () => {
             envelopeScreen.classList.add('hidden');
             
+            // Start countdown only after opening
+            startCountdown();
+
             // Start bg music
             const bgMusic = document.getElementById('bg-music');
             const audioBtn = document.getElementById('audio-btn');
@@ -41,8 +44,7 @@ const handleEnvelopeClick = () => {
                 bgMusic.play().then(() => {
                     audioBtn.classList.add('playing');
                     if (icon) {
-                        icon.className = 'bx bx-volume-high'; // Standard waves icon
-                        icon.style.color = 'white';
+                        icon.className = 'bx bx-volume-full'; // Standard full icon
                     }
                 }).catch(e => console.log('Audio autoplay blocked:', e));
             }
@@ -121,6 +123,26 @@ const countdownContainer = document.querySelector('.countdown-container');
 const celebrationSound = document.getElementById('celebration-sound');
 const balloonsContainer = document.getElementById('balloons-container');
 
+function startCountdown() {
+    const countdown = setInterval(() => {
+        countdownTime--;
+        
+        const minutes = Math.floor(countdownTime / 60);
+        const seconds = countdownTime % 60;
+
+        // Update DOM (showing as 00:00:mm:ss for consistency)
+        if (document.getElementById('days')) document.getElementById('days').innerText = "00";
+        if (document.getElementById('hours')) document.getElementById('hours').innerText = "00";
+        if (document.getElementById('minutes')) document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+        if (document.getElementById('seconds')) document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+
+        if (countdownTime <= 0) {
+            clearInterval(countdown);
+            if (countdownContainer) countdownContainer.innerHTML = "<h3>¡El Gran Día ha llegado!</h3>";
+            triggerCelebration();
+        }
+    }, 1000);
+}
 // Sound loop counter
 let soundPlayCount = 0;
 const maxSoundPlays = 4;
@@ -156,6 +178,7 @@ function triggerCelebration() {
 
 function spawnBalloons() {
     // Strictly 3 balloons for a clean, premium look, moving ONLY UPward
+    if (!balloonsContainer) return;
     balloonsContainer.innerHTML = '';
     for (let i = 0; i < 3; i++) {
         setTimeout(() => {
@@ -166,25 +189,6 @@ function spawnBalloons() {
         }, i * 3000); // 3-second stagger for a majestic ascending loop
     }
 }
-
-const countdown = setInterval(() => {
-    countdownTime--;
-    
-    const minutes = Math.floor(countdownTime / 60);
-    const seconds = countdownTime % 60;
-
-    // Update DOM (showing as 00:00:mm:ss for consistency)
-    document.getElementById('days').innerText = "00";
-    document.getElementById('hours').innerText = "00";
-    document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
-    document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
-
-    if (countdownTime <= 0) {
-        clearInterval(countdown);
-        countdownContainer.innerHTML = "<h3>¡El Gran Día ha llegado!</h3>";
-        triggerCelebration();
-    }
-}, 1000);
 
 // FLOATING NAV ACTIVE STATE (Optimized with IntersectionObserver)
 const sections = document.querySelectorAll('section');
@@ -218,7 +222,6 @@ sections.forEach(section => {
 // AUDIO PLAYER
 const audioBtn = document.getElementById('audio-btn');
 const bgMusic = document.getElementById('bg-music');
-const icon = audioBtn.querySelector('i');
 
 if (audioBtn && bgMusic) {
     audioBtn.addEventListener('click', (e) => {
@@ -228,13 +231,12 @@ if (audioBtn && bgMusic) {
         if (bgMusic.paused) {
             bgMusic.play().then(() => {
                 audioBtn.classList.add('playing');
-                if (iconElement) iconElement.className = 'bx bx-volume-high';
+                if (iconElement) iconElement.className = 'bx bx-volume-full';
                 audioBtn.setAttribute('aria-label', "Pausar música");
             }).catch(err => {
                 console.warn("Audio blocked:", err);
-                // Forced UI toggle for feedback
                 audioBtn.classList.add('playing');
-                if (iconElement) iconElement.className = 'bx bx-volume-high';
+                if (iconElement) iconElement.className = 'bx bx-volume-full';
             });
         } else {
             bgMusic.pause();
