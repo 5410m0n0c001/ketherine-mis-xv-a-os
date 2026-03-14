@@ -41,8 +41,8 @@ const handleEnvelopeClick = () => {
                 bgMusic.play().then(() => {
                     audioBtn.classList.add('playing');
                     if (icon) {
-                        icon.classList.remove('bx-volume-full');
-                        icon.classList.add('bx-volume-mute');
+                        icon.className = 'bx bx-volume-high'; // Show active waves
+                        icon.style.color = 'white';
                     }
                 }).catch(e => console.log('Audio autoplay blocked:', e));
             }
