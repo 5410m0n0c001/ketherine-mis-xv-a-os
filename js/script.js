@@ -73,10 +73,12 @@ const revealCallback = (entries, observer) => {
         if (entry.isIntersecting) {
             const el = entry.target;
             
-            // Handle Typing Effect
-            if (el.classList.contains('typing-container') && !el.dataset.typed) {
-                typeEffect(el);
-                el.dataset.typed = "true";
+            // Handle Typing Effect - Fixed visibility conflict
+            if (el.classList.contains('typing-container')) {
+                if (!el.dataset.typed) {
+                    typeEffect(el);
+                    el.dataset.typed = "true";
+                }
             } else {
                 el.classList.add('active');
             }
@@ -480,7 +482,8 @@ function initQRCode() {
                 await navigator.share({
                     files: [file],
                     title: 'Código QR de Nuestra Boda',
-                    text: 'Escanea este código para compartir tus fotos con nosotros.'
+                    text: 'Escanea este código para compartir tus fotos con nosotros.',
+                    url: window.location.href // Also include URL for context
                 });
             } else if (navigator.share) {
                 await navigator.share({
