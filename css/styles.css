@@ -392,16 +392,33 @@ ul {
 
 /* Button & Legend styles */
 .btn-legend {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     display: block;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: var(--primary-color);
-    font-weight: 600;
-    margin-top: 12px;
-    font-style: italic;
-    opacity: 1;
-    letter-spacing: 0.8px;
-    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
-    text-align: center; /* Guarantee centering of legend text */
+    font-weight: 700;
+    margin: 0;
+    font-style: normal;
+    letter-spacing: 0.5px;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 6px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.3);
+    white-space: nowrap;
+    opacity: 0.95;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.rsvp-custom-btn .btn-legend {
+    bottom: 20px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border-color: rgba(255,255,255,0.2);
 }
 
 /* HERO SECTION ======================================== */
@@ -558,17 +575,19 @@ ul {
 
 /* RSVP IMPROVED */
 .rsvp-custom-btn, .location-btn-img {
+    position: relative;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     margin: 20px auto !important;
     text-align: center !important;
+    width: fit-content !important;
 }
 
 .rsvp-img-btn, .ubica-btn-img {
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
     height: auto;
     cursor: pointer;
 }
@@ -848,13 +867,20 @@ ul {
 
 /* LOCATION SECTION ======================================== */
 .location-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 30px;
-    justify-content: center; /* Force grid items to center if they don't fill */
-    max-width: 900px; /* Tighter container for better visual balance */
-    margin-left: auto;
-    margin-right: auto;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1000px;
+    margin: 40px auto 0;
+}
+
+.card.event-card {
+    flex: 1;
+    min-width: 300px;
+    max-width: 450px;
 }
 
 .event-card {

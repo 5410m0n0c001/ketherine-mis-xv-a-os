@@ -130,6 +130,9 @@ function triggerCelebration() {
     if (isCelebrating) return;
     isCelebrating = true;
     
+    // Clear and reset to ensure exactly 3 balloons
+    if (balloonsContainer) balloonsContainer.innerHTML = '';
+    
     if (celebrationSound && soundPlayCount < maxSoundPlays) {
         celebrationSound.play()
             .then(() => {
