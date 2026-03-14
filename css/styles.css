@@ -473,11 +473,11 @@ ul {
 }
 
 .hero-video-container {
-    width: 100% !important;
-    height: 100% !important;
     position: absolute;
     top: 0;
     left: 0;
+    width: 100% !important;
+    height: 100% !important;
     overflow: hidden;
     z-index: 1;
     border-radius: 0 !important;
@@ -511,9 +511,13 @@ ul {
 /* Desktop refinements */
 @media (min-width: 992px) {
     .hero-content {
-        padding: 40px 50px;
-        max-width: 650px; /* Reduced for elegance */
-        background: rgba(255, 255, 255, 0.65);
+        padding: 50px 40px;
+        max-width: 600px;
+        min-height: 400px; /* Ensure space for text to breathe */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.6);
     }
 }
 
@@ -635,7 +639,7 @@ ul {
 /* Desktop reduction for rsvp */
 @media (min-width: 992px) {
     .rsvp-img-btn {
-        max-width: 180px !important; /* Even more elegant */
+        max-width: 150px !important; /* Elegant size */
     }
 }
 
