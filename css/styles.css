@@ -990,6 +990,60 @@ ul {
     100% { transform: scale(1); }
 }
 
+/* ALBUM DINÁMICO (VISOR DE VIDEO) ======================================== */
+.album-section {
+    background: linear-gradient(180deg, #f2f5ef 0%, var(--bg-color-main) 100%);
+}
+
+.album-visor-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15), 0 5px 15px rgba(85, 107, 47, 0.1);
+    border: 3px solid rgba(85, 107, 47, 0.15);
+}
+
+.album-video {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    max-height: 65vh;
+}
+
+.album-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 25px 15px 20px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+    text-align: center;
+}
+
+.album-overlay-text {
+    font-family: var(--font-head);
+    font-size: 1.8rem;
+    color: var(--white);
+    letter-spacing: 3px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    margin: 0;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .album-visor-container {
+        max-width: calc(100% - 30px);
+        border-radius: 15px;
+    }
+    .album-overlay-text {
+        font-size: 1.4rem;
+    }
+}
+
 /* PHOTOS SECTION ======================================== */
 .photo-gallery {
     display: flex;

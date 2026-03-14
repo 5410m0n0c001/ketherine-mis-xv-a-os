@@ -186,14 +186,17 @@ const bgMusic = document.getElementById('bg-music');
 const icon = audioBtn.querySelector('i');
 
 if (audioBtn && bgMusic) {
-    audioBtn.addEventListener('click', () => {
+    audioBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         if (bgMusic.paused) {
-            bgMusic.play().catch(e => console.log("Can't play audio automatically without user interaction."));
-            audioBtn.classList.add('playing');
-            if (icon) {
-                icon.classList.remove('bx-volume-full');
-                icon.classList.add('bx-volume-mute');
-            }
+            bgMusic.play().then(() => {
+                audioBtn.classList.add('playing');
+                if (icon) {
+                    icon.classList.remove('bx-volume-full');
+                    icon.classList.add('bx-volume-mute');
+                }
+            }).catch(e => console.log("Can't play audio:", e));
         } else {
             bgMusic.pause();
             audioBtn.classList.remove('playing');
