@@ -79,9 +79,10 @@ const revealCallback = (entries, observer) => {
                     typeEffect(el);
                     el.dataset.typed = "true";
                 }
-            } else {
-                el.classList.add('active');
             }
+            
+            // ALWAYS add active class for .reveal compatibility and opacity
+            el.classList.add('active');
             
             // Optional: unobserve standard reveals to save resources, 
             // but keep for repeatable animations if desired.

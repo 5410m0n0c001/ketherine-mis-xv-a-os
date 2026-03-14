@@ -479,12 +479,10 @@ ul {
 
 .hero-video-container {
     width: 100% !important;
-    height: 100% !important; /* Adapt to section height */
-    min-height: 100vh;
+    height: 100vh !important;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
     overflow: hidden;
     z-index: 1;
     border-radius: 0 !important;
@@ -501,15 +499,6 @@ ul {
     object-position: center;
     transition: opacity 1.5s ease;
     border-radius: 0 !important;
-}
-
-@media (max-width: 768px) {
-    .hero-video {
-        width: 150%; /* Increase width to allow better coverage on narrow viewports */
-        height: 100%;
-        left: -25%; /* Center the viewport */
-        position: relative;
-    }
 }
 
 .hero-content {
@@ -646,9 +635,17 @@ ul {
 
 .rsvp-img-btn, .ubica-btn-img {
     width: 100%;
-    max-width: 280px;
+    max-width: 450px; /* Great size for mobile */
     height: auto;
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Desktop reduction for rsvp */
+@media (min-width: 992px) {
+    .rsvp-img-btn {
+        max-width: 280px !important;
+    }
 }
 
 .location-btn-img {
