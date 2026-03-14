@@ -70,7 +70,15 @@ const revealCallback = (entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('active');
-            // Observer no longer needs to track this element once active
+            
+            // Re-enable staggering for internal elements
+            const subElements = entry.target.querySelectorAll('.reveal, .text-reveal, .scale-pulse, .card-flip-up, .venue-card, .gift-card, .padrino-item, .color-swatch');
+            if (subElements.length > 0) {
+                subElements.forEach((el, index) => {
+                    setTimeout(() => el.classList.add('active'), index * 150);
+                });
+            }
+
             observer.unobserve(entry.target);
         }
     });
