@@ -63,17 +63,48 @@ if (envelopeScreen) {
     }, { passive: false });
 }
 
-// SCROLL REVEAL ANIMATION
-const revealElements = document.querySelectorAll('.reveal, .card-flip-up, .scale-pulse, .text-reveal, .slide-left, .slide-right, .btn-bounce');
+// SCROLL REVEAL & ANIMATIONS UNIFIED
+const revealElements = document.querySelectorAll('.reveal, .card-flip-up, .scale-pulse, .text-reveal, .slide-in-left, .slide-in-right, .btn-zoom-pulse, .typing-container');
 
 const revealCallback = (entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-            observer.unobserve(entry.target);
+            const el = entry.target;
+            
+            // Handle Typing Effect
+            if (el.classList.contains('typing-container') && !el.dataset.typed) {
+                typeEffect(el);
+                el.dataset.typed = "true";
+            } else {
+                el.classList.add('active');
+            }
+            
+            // Optional: unobserve standard reveals to save resources, 
+            // but keep for repeatable animations if desired.
+            if (!el.classList.contains('typing-container')) {
+                // observer.unobserve(el); // Keep observed if we want repeat, but user didn't ask
+            }
         }
     });
 };
+
+function typeEffect(element) {
+    const text = element.textContent;
+    element.textContent = "";
+    element.classList.add('typing-cursor-blink');
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+        } else {
+            clearInterval(interval);
+            setTimeout(() => {
+                element.classList.remove('typing-cursor-blink');
+            }, 600); // Faster cursor removal
+        }
+    }, 60); // Faster typing
+}
 
 const revealOptions = {
     threshold: 0.1,
@@ -154,27 +185,10 @@ const countdown = setInterval(() => {
 const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('.floating-nav ul li a');
 
-const sectionObserverOptions = {
-    threshold: 0.3, // 30% of the section visible
-    rootMargin: "-20% 0px -20% 0px" // Focus on the middle of the screen
-};
-
-const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const current = entry.target.getAttribute('id');
-            // Debounced update to avoid layout flickering
-            requestAnimationFrame(() => {
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').includes(current)) {
-                        link.classList.add('active');
-                    }
-                });
-            });
-        }
-    });
-}, sectionObserverOptions);
+// Observe children of reveal containers that might have typing
+document.querySelectorAll('.typing-container').forEach(el => {
+    revealObserver.observe(el);
+});
 
 sections.forEach(section => {
     sectionObserver.observe(section);
@@ -193,16 +207,16 @@ if (audioBtn && bgMusic) {
             bgMusic.play().then(() => {
                 audioBtn.classList.add('playing');
                 if (icon) {
-                    icon.classList.remove('bx-volume-full');
-                    icon.classList.add('bx-volume-mute');
+                    icon.className = 'bx bx-volume-high'; // High fidelity icon
+                    icon.style.color = 'white'; // Direct contrast force
                 }
             }).catch(e => console.log("Can't play audio:", e));
         } else {
             bgMusic.pause();
             audioBtn.classList.remove('playing');
             if (icon) {
-                icon.classList.remove('bx-volume-mute');
-                icon.classList.add('bx-volume-full');
+                icon.className = 'bx bx-volume-mute';
+                icon.style.color = 'var(--primary-color)';
             }
         }
     });

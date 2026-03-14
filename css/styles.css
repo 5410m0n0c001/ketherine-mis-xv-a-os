@@ -33,9 +33,14 @@ img, video, .corner-img, .hero-video, .gift-logo, .dresscode-icon-img,
     touch-action: pan-y !important; /* Allow vertical scroll through these elements */
     -webkit-user-drag: none; /* Prevent drag on desktop */
     user-select: none;
+    pointer-events: auto; /* Allow clicks, but pan-y ensures scroll works too */
 }
 
-/* Ensure video containers don't trap scroll */
+/* Decorative non-interactive elements should NOT block scroll or clicks below them */
+.corner-img, .leaf, .balloons-container, .hero-video {
+    pointer-events: none !important;
+}
+
 video {
     pointer-events: none; /* Video is decorative, let scroll pass through */
 }
@@ -253,41 +258,131 @@ ul {
 }
 
 /* AUDIO BUTTON ======================================== */
+/* AUDIO PLAYER ======================================== */
 .audio-btn {
     position: fixed;
     top: 20px;
     right: 20px;
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
+    background-color: var(--white);
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(5px);
-    border: none;
-    color: var(--primary-color);
-    font-size: 1.2rem;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    z-index: 1000;
-    transition: var(--transition);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    z-index: 99999;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid var(--primary-color);
 }
 
-.audio-btn:hover {
-    transform: scale(1.1);
+.audio-btn i {
+    font-size: 1.6rem !important;
+    color: var(--primary-color) !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: none;
 }
 
 .audio-btn.playing {
     background-color: var(--primary-color);
-    color: var(--white);
-    animation: pulse 2s infinite;
+    animation: pulseLoop 4s infinite;
 }
 
-@keyframes pulse {
+.audio-btn.playing i {
+    color: var(--white) !important;
+}
+
+.audio-btn:hover {
+    transform: scale(1.15) rotate(5deg);
+}
+
+/* FORCED AUDIO ICON VISIBILITY */
+.audio-btn i {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    line-height: inherit !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+@keyframes pulseLoop {
     0% { box-shadow: 0 0 0 0 rgba(85, 107, 47, 0.4); }
     70% { box-shadow: 0 0 0 10px rgba(85, 107, 47, 0); }
     100% { box-shadow: 0 0 0 0 rgba(85, 107, 47, 0); }
+}
+
+/* Typing Effect styles */
+.typing-container {
+    display: inline-block;
+    position: relative;
+    border-right: 3px solid var(--primary-color);
+    white-space: pre-wrap;
+    overflow: hidden;
+}
+
+.typing-cursor-blink {
+    animation: cursorBlink 0.8s infinite;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { border-color: transparent; }
+    50% { border-color: var(--primary-color); }
+}
+
+/* Slide-In Animations */
+.slide-in-left {
+    opacity: 0;
+    transform: translateX(-100px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.slide-in-right {
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.active.slide-in-left, .active.slide-in-right {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Zoom-Pulse Animation */
+.btn-zoom-pulse {
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.active.btn-zoom-pulse {
+    opacity: 1;
+    transform: scale(1);
+    animation: pulseVibrate 2.5s infinite 1s;
+}
+
+@keyframes pulseVibrate {
+    0%, 100% { transform: scale(1); }
+    10% { transform: scale(1.05); }
+    20% { transform: scale(1); }
+    30% { transform: scale(1.03); }
+    40% { transform: scale(1); }
+}
+
+/* Button & Legend styles */
+.btn-legend {
+    display: block;
+    font-size: 0.95rem; /* Larger */
+    color: var(--primary-color); /* More visible */
+    font-weight: 600;
+    margin-top: 12px;
+    font-style: italic;
+    opacity: 1;
+    letter-spacing: 0.8px;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
 }
 
 /* HERO SECTION ======================================== */
@@ -298,23 +393,52 @@ ul {
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 0;
+    padding: 0 !important;
+    margin: 0 !important;
     overflow: hidden;
+    background: #000;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 100vh !important; /* Force full screen height on mobile */
+    }
 }
 
 .hero-video-container {
-    width: 100%;
-    margin: 0 auto;
-    position: relative;
+    width: 100% !important;
+    height: 100vh !important;
+    position: absolute;
+    top: 0;
+    left: 0;
     overflow: hidden;
+    z-index: 1;
+    border-radius: 0 !important; /* KILL THE BOX */
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .hero-video {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
     object-fit: cover;
-    border-radius: inherit;
+    transition: opacity 1.5s ease;
+    border-radius: 0 !important;
+}
+
+/* Desktop CINEMA mode */
+@media (min-width: 992px) {
+    .hero-content {
+        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.7); /* More contrast */
+        backdrop-filter: blur(12px);
+        padding: 40px 60px;
+        border-radius: 40px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        z-index: 10;
+    }
 }
 
 /* Corner decorative images — positioned on the hero section */
@@ -481,25 +605,18 @@ ul {
     }
 
     .hero-section {
-        min-height: auto;
-        padding-top: 40px; /* More space for top rip */
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
-    .hero-video-container {
-        width: calc(100% - 20px);
-        margin: 0 auto 20px auto;
-        aspect-ratio: 9/16; /* Force vertical look */
-        max-height: 60vh;
-        overflow: hidden;
-        border-radius: 12px;
-        background: #000;
-    }
-
-    .hero-video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Cover for vertical container */
-        object-position: center;
+    .hero-content {
+        width: 90%;
+        margin: 0 auto;
+        padding: 30px 15px;
+        position: relative;
+        z-index: 10;
     }
 
     .corner-img {
@@ -714,13 +831,14 @@ ul {
 }
 
 .event-card {
-    background: var(--white);
-    padding: 40px 30px;
-    border-radius: 15px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+    background: transparent !important;
+    padding: 30px 20px;
+    border-radius: 0 !important;
+    box-shadow: none !important;
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    color: var(--text-color);
 }
 
 .event-card::before {
@@ -830,77 +948,7 @@ ul {
     font-weight: bold;
 }
 
-/* FLOATING BUTTONS */
-.audio-btn, .share-btn {
-    position: fixed;
-    right: 20px;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-}
-
-/* BALLOONS ANIMATION */
-.balloons-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 500; /* Behind main content and nav */
-    overflow: hidden;
-    display: none;
-}
-
-.balloons-container.active {
-    display: block;
-}
-
-.balloon-img {
-    position: absolute;
-    bottom: -300px;
-    width: 250px;
-    height: auto;
-    animation: floatBalloons 12s linear infinite;
-    opacity: 0.5;
-}
-
-@keyframes floatBalloons {
-    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-    10% { opacity: 0.5; }
-    90% { opacity: 0.5; }
-    100% { transform: translateY(-150vh) rotate(20deg); opacity: 0; }
-}
-
-.audio-btn { bottom: 20px; }
-.share-btn { bottom: 75px; }
-
-.audio-btn i {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-}
-
-.share-icon-img {
-    width: 25px;
-    height: auto;
-}
-
-.audio-btn:hover, .share-btn:hover {
-    transform: scale(1.1);
-    background: var(--primary-color);
-}
-
-.audio-btn:hover i { color: white; }
-.share-btn:hover .share-icon-img { filter: brightness(0) invert(1); }
+/* REDUNDANT BLOCK REMOVED */
 
 /* SECTIONS ======================================== */
 /* PADRINOS SECTION ======================================== */
@@ -1217,11 +1265,10 @@ ul {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    border: 1px solid rgba(85, 107, 47, 0.1);
+    background: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .qr-code-img {
@@ -1232,8 +1279,18 @@ ul {
 
 .qr-code-box {
     padding: 15px;
-    background: white;
+    background: transparent; /* Fix background mismatch */
     border-radius: 12px;
+}
+
+@media (min-width: 992px) {
+    .qr-container-wrapper {
+        max-width: 280px; /* Smaller QR on desktop */
+        margin: 0 auto;
+    }
+    .qr-code-img {
+        max-width: 200px;
+    }
 }
 
 .btn-share-qr {
@@ -1383,4 +1440,26 @@ ul {
 @keyframes drift {
     0% { transform: translateY(-50px) rotate(0deg); }
     100% { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* Celebration Elements */
+.balloons-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none !important;
+    z-index: -1 !important; /* Move to VERY back */
+    overflow: hidden;
+}
+
+.event-card, .qr-container-wrapper {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.ubica-btn-img, .rsvp-img-btn, .qr-code-img {
+    mix-blend-mode: multiply !important;
 }
