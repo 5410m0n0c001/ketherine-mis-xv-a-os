@@ -230,6 +230,17 @@ ul {
     width: fit-content;
     max-width: 90vw; /* Tighten for small screens */
     border: 1px solid rgba(85, 107, 47, 0.2);
+    /* Initial state: Hidden until envelope opens */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+.ui-visible .floating-nav {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .floating-nav ul {
@@ -273,8 +284,19 @@ ul {
     cursor: pointer;
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     z-index: 99999;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1s ease, visibility 1s ease;
     border: 2px solid var(--primary-color);
+    /* Initial state: Hidden */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.ui-visible .audio-btn, 
+.ui-visible .share-btn-sticky {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
 }
 
 .audio-btn { 
@@ -303,6 +325,7 @@ ul {
     box-shadow: none !important;
     padding: 0;
     z-index: 9995; /* Just below floating-nav but above content */
+    /* Initial state hidden via shared selector above */
 }
 
 .share-icon-img {
@@ -314,6 +337,13 @@ ul {
 }
 
 @media (max-width: 768px) {
+    .audio-btn {
+        width: 98px; /* ~50% of 195px */
+        height: 63px; /* ~50% of 126px */
+        top: 15px;
+        right: 15px;
+    }
+    
     .share-icon-img {
         width: 125px; /* Stay same (Large) on mobile */
         height: 125px;

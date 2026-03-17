@@ -40,10 +40,17 @@ const handleEnvelopeClick = () => {
             const bgMusic = document.getElementById('bg-music');
             const audioBtn = document.getElementById('audio-btn');
             const bgMusicVideo = document.getElementById('audio-btn-video');
+            
+            // Show UI elements (Nav and Audio button)
+            document.body.classList.add('ui-visible');
+
             if (bgMusic && audioBtn) {
                 bgMusic.play().then(() => {
                     audioBtn.classList.add('playing');
-                    if (bgMusicVideo) bgMusicVideo.play();
+                    if (bgMusicVideo) {
+                        bgMusicVideo.currentTime = 0;
+                        bgMusicVideo.play();
+                    }
                 }).catch(e => console.log('Audio autoplay blocked:', e));
             }
 
@@ -434,6 +441,7 @@ if (audioBtn && bgMusic) {
                 audioBtn.setAttribute('aria-label', "Pausar música");
             }).catch(err => {
                 console.warn("Audio blocked:", err);
+                // Even if audio fails, toggle the UI for user feedback
                 audioBtn.classList.add('playing');
                 if (bgMusicVideo) bgMusicVideo.play();
             });
@@ -444,6 +452,16 @@ if (audioBtn && bgMusic) {
             audioBtn.setAttribute('aria-label', "Reproducir música");
         }
     });
+    
+    // Safety sync: Ensure video matches audio state if changed programmatically
+    bgMusic.onplay = () => {
+        audioBtn.classList.add('playing');
+        if (bgMusicVideo) bgMusicVideo.play();
+    };
+    bgMusic.onpause = () => {
+        audioBtn.classList.remove('playing');
+        if (bgMusicVideo) bgMusicVideo.pause();
+    };
 }
 
 // CLIPBOARD COPY
