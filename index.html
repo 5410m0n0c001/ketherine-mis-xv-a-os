@@ -37,7 +37,7 @@
     <!-- SOBRE DE CARTA - Pantalla de entrada -->
     <div class="envelope-screen" id="envelope-screen">
         <p class="envelope-hint">Toca para abrir</p>
-        <video id="envelope-video" class="envelope-video" muted playsinline preload="auto">
+        <video id="envelope-video" class="envelope-video" muted playsinline preload="auto" poster="sobre.png">
             <source src="sobre.mp4" type="video/mp4">
         </video>
     </div>
@@ -481,6 +481,9 @@
                 <h2 class="section-title">Clima en Temixco</h2>
                 <p class="mt-3 mb-4 text-muted">Acompaña a los novios en su gran día. Consulta el clima para Temixco, Morelos.</p>
                 <div class="weather-container mt-4">
+                    <div class="weather-overlay-scroll" id="weather-overlay" onclick="this.style.display='none'">
+                        <span>Toca para interactuar con el mapa</span>
+                    </div>
                     <iframe 
                         class="windy-widget"
                         src="https://embed.windy.com/embed2.html?lat=18.852&lon=-99.224&zoom=11&level=surface&overlay=wind&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" 

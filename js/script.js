@@ -83,6 +83,15 @@ function startGuidedTour() {
         allowClose: true,
         animate: true,
         popoverClass: 'custom-driver-popover',
+        onHighlightStarted: (element) => {
+            // Auto-play music when tour starts if not playing
+            if (bgMusic && bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    if (audioBtn) audioBtn.classList.add('playing');
+                    if (bgMusicVideo) bgMusicVideo.play();
+                }).catch(e => console.log("Audio auto-play blocked:", e));
+            }
+        },
         steps: [
             {
                 popover: {
@@ -429,6 +438,10 @@ const sectionCallback = (entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const id = entry.target.getAttribute('id');
+            // Check if there's already an active link to avoid double highlights
+            const currentActive = document.querySelector('.floating-nav ul li a.active');
+            if (currentActive && currentActive.getAttribute('href') === `#${id}`) return;
+
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href') === `#${id}`) {
