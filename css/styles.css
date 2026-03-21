@@ -2011,8 +2011,8 @@ section {
 
 @media (max-width: 768px) {
     .custom-driver-popover {
-        max-width: 300px !important;
-        padding: 15px !important;
+        max-width: 260px !important;
+        padding: 12px !important;
     }
     .custom-driver-popover .driver-popover-title {
         font-size: 1.2rem !important;
