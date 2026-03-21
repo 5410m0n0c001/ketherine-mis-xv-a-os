@@ -158,8 +158,8 @@ function startGuidedTour() {
             {
                 element: '#clima',
                 popover: {
-                    title: 'Consultar el clima',
-                    description: '<b>Interactúa con el mapa</b> para ver el pronóstico en tiempo real y prepararte para el evento.',
+                    title: 'Pronóstico del Tiempo',
+                    description: 'Haz clic en el botón para ver el <b>mapa interactivo de Windy</b> en pantalla completa y conocer el pronóstico exacto.',
                     side: "top",
                     align: 'center'
                 }

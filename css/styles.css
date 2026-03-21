@@ -1551,65 +1551,24 @@ section {
     overflow: hidden;
 }
 
-.weather-container {
-    width: 100%;
-    max-width: 950px; /* Wider for better usability */
-    margin: 0 auto;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+/* WEATHER CARD STYLES */
+.weather-card {
+    background: white;
+    padding: 40px 20px;
+    border-radius: 30px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.05);
     border: 1px solid rgba(85, 107, 47, 0.1);
-    background: #fff;
-    height: 600px; /* Taller to show forecast table */
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
 }
 
-.windy-widget {
-    width: 100%;
-    height: 100%;
+.weather-info h3 {
+    margin-top: 15px;
+    color: var(--primary-color);
 }
 
-.weather-overlay-scroll {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.1);
-    z-index: 5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    backdrop-filter: blur(2px);
-    transition: var(--transition);
-}
-
-.weather-overlay-scroll span {
-    background: var(--primary-color);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.weather-overlay-scroll:hover {
-    background: rgba(0,0,0,0.2);
-}
-
-@media (min-width: 992px) {
-    .weather-overlay-scroll {
-        display: none; /* Only needed on touch devices/mobile */
-    }
-}
-
-@media (max-width: 768px) {
-    .weather-container {
-        height: 500px; /* Still taller on mobile */
-    }
-}
-
-/* ITINERARIO (TIMELINE) = :root variables already defined */
+/* ITINERARIO (TIMELINE) */
 .itinerario-section {
     position: relative;
     padding: 80px 0;
@@ -1617,7 +1576,7 @@ section {
 
 .timeline {
     position: relative;
-    max-width: 1000px; /* Increased for better web display */
+    max-width: 1000px; /* Optimized for web */
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -1686,40 +1645,45 @@ section {
     transform: translateX(0);
 }
 
+.timeline-item.active .timeline-dot {
+    background: var(--accent-color);
+    box-shadow: 0 0 20px var(--accent-color);
+    transform: translateX(-50%) scale(1.5);
+}
+
 /* MOBILE NAV REFINEMENTS */
 @media (max-width: 768px) {
     .floating-nav {
-        width: 95%;
+        width: 98% !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
         bottom: 10px;
-        padding: 5px 10px;
+        padding: 4px 8px;
     }
     .floating-nav ul {
-        gap: 5px; /* Reduced gap to fit all 11 icons */
-        justify-content: space-between;
+        gap: 2px !important;
+        justify-content: center !important;
     }
-    .floating-nav ul li a {
-        font-size: 1.2rem; /* Slightly larger as requested */
-        padding: 5px;
+    .floating-nav a {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 0.95rem !important;
     }
-}
-
-@media (max-width: 480px) {
-    .floating-nav ul {
-        gap: 2px;
+    
+    .timeline::before {
+        left: 30px;
     }
-    .floating-nav ul li a {
-        font-size: 1.1rem;
+    .timeline-dot {
+        left: 30px;
     }
-}
-
-/* ITINERARIO WEB OPTIMIZATION */
-.itinerario-section .container {
-    max-width: 1000px; /* Ensure it doesn't cut on wider screens */
-}
-
-@media (min-width: 1200px) {
     .timeline-content {
-        padding: 30px; /* Better spacing on large screens */
+        width: calc(100% - 60px);
+        margin-left: 60px !important;
+        transform: translateX(50px) !important;
+        text-align: left !important;
+    }
+    .timeline-item.active .timeline-content {
+        transform: translateX(0) !important;
     }
 }
 

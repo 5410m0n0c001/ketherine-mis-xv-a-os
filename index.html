@@ -480,17 +480,16 @@
             <div class="container text-center reveal">
                 <h2 class="section-title">Clima en Temixco</h2>
                 <p class="mt-3 mb-4 text-muted">Acompaña a los novios en su gran día. Consulta el clima para Temixco, Morelos.</p>
-                <div class="weather-container mt-4">
-                    <div class="weather-overlay-scroll" id="weather-overlay" onclick="this.style.display='none'">
-                        <span>Toca para interactuar con el mapa</span>
+                <div class="weather-card mt-4 reveal">
+                    <div class="weather-info">
+                        <i class='bx bx-cloud-sun' style="font-size: 3rem; color: var(--primary-color);"></i>
+                        <h3>Consulta el Clima en Tiempo Real</h3>
+                        <p>Hemos preparado un mapa detallado de Windy para que planees tu visita a Temixco, Morelos.</p>
+                        <a href="https://www.windy.com/18.852/-99.224?18.852,-99.224,11" target="_blank" class="btn-primary mt-3">
+                            <i class='bx bx-map-alt'></i> Ver Mapa Interactivo
+                        </a>
+                        <p class="text-xs mt-3 text-muted">* Se abrirá en una nueva pestaña para tu comodidad.</p>
                     </div>
-                    <iframe 
-                        class="windy-widget"
-                        src="https://embed.windy.com/embed2.html?lat=18.852&lon=-99.224&zoom=11&level=surface&overlay=wind&menu=true&message=true&marker=true&calendar=now&pressure=true&type=map&location=coordinates&detail=true&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1" 
-                        frameborder="0"
-                        loading="lazy"
-                        title="Clima en Temixco">
-                    </iframe>
                 </div>
             </div>
             <div class="paper-rip-bottom"></div>
