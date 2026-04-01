@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestra Boda</title>
+    <title>Angela - Mis XV Años</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -20,16 +20,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
     
     <!-- Meta tags SEO / Compartir -->
-    <meta property="og:title" content="¡Estás Invitado a Nuestra Boda!">
-    <meta property="og:description" content="Acompáñanos a celebrar nuestro gran día.">
+    <meta property="og:title" content="¡Mis XV Años! - Angela Alegría">
+    <meta property="og:description" content="Te invito a celebrar conmigo este día tan especial.">
     <meta property="og:image" content="sobre.png">
     <meta property="og:url" content="https://5410m0n0c001.github.io/invitacion-demo/">
     <meta property="og:type" content="website">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="¡Estás Invitado a Nuestra Boda!">
-    <meta name="twitter:description" content="Acompáñanos a celebrar nuestro gran día.">
+    <meta name="twitter:title" content="¡Mis XV Años! - Angela Alegría">
+    <meta name="twitter:description" content="Te invito a celebrar conmigo este día tan especial.">
     <meta name="twitter:image" content="https://5410m0n0c001.github.io/invitacion-demo/sobre.png">
 </head>
 <body>
@@ -80,6 +80,7 @@
 
     <!-- Celebration Elements -->
     <div id="balloons-container" class="balloons-container"></div>
+    <div class="sakura-container" id="sakura-container"></div>
     <audio id="celebration-sound">
         <source src="sonido.mp3" type="audio/mpeg">
     </audio>
@@ -101,13 +102,13 @@
             </div>
 
             <div class="hero-content text-center reveal">
-                <p class="subtitle mt-3 text-reveal"><span class="typing-container">¡NOS CASAMOS!</span></p>
-                <h1 class="names text-reveal"><span class="typing-container">Carolina & Daniel</span></h1>
-                <p class="date-txt text-reveal"><span class="typing-container">Te invitamos a celebrar nuestra unión</span></p>
+                <p class="subtitle mt-3 text-reveal"><span class="typing-container">MIS XV AÑOS</span></p>
+                <h1 class="names text-reveal"><span class="typing-container">Angela Alegría Becerra</span></h1>
+                <p class="date-txt text-reveal"><span class="typing-container">Te invito a celebrar conmigo este sueño</span></p>
                 
                 <div class="date-highlight mt-2 reveal">
-                    <span class="day">15</span>
-                    <span class="month-year">Noviembre<br>2026</span>
+                    <span class="day">18</span>
+                    <span class="month-year">Julio<br>2026</span>
                 </div>
             </div>
             
@@ -160,31 +161,21 @@
                 <h2 class="section-title text-reveal">Dónde y Cuándo</h2>
                 
                 <div class="location-cards mt-4">
-                    <!-- Ceremonia -->
-                    <div class="card event-card card-flip-up slide-in-left">
-                        <div class="card-icon"><i class='bx bx-church'></i></div>
-                        <h3 class="text-reveal">Ceremonia Religiosa</h3>
-                        <p class="time text-reveal">16:00 HRS</p>
-                        <p class="place text-reveal">Parroquia de San Miguel Arcángel</p>
-                        <p class="address text-reveal">Av. Principal #123, Centro Histórico</p>
-                        <a href="https://maps.app.goo.gl/dFwnr9tEpqTaKP7G9" target="_blank" class="location-btn-img reveal mt-2">
-                            <img src="ubica.png" alt="Ubica la Ceremonia" class="ubica-btn-img zoom-hover scale-pulse">
-                            <span class="btn-legend">Haz clic para visualizar Google Maps</span>
-                        </a>
-                    </div>
-
-                    <!-- Recepción -->
                     <div class="card event-card card-flip-up slide-in-right">
-                        <div class="card-icon"><i class='bx bx-glass'></i></div>
+                        <div class="card-icon"><i class='bx bx-party'></i></div>
                         <h3 class="text-reveal">Recepción</h3>
-                        <p class="time text-reveal">18:30 HRS</p>
-                        <p class="place text-reveal">Hacienda Santa Mónica</p>
-                        <p class="address text-reveal">Carretera Norte Km 5.5</p>
-                        <a href="https://maps.app.goo.gl/dFwnr9tEpqTaKP7G9" target="_blank" class="location-btn-img reveal mt-2">
-                            <img src="ubica.png" alt="Ubica la Recepción" class="ubica-btn-img zoom-hover scale-pulse">
-                            <span class="btn-legend">Haz clic para visualizar Google Maps</span>
+                        <p class="time text-reveal">15:00 a 01:00 HRS</p>
+                        <p class="place text-reveal">Jardín Villa Leona</p>
+                        <p class="address text-reveal">C. San Luis 100, 62555 Jiutepec, Mor.</p>
+                        
+                        <!-- Mapa Google Maps (Imagen ubica.png) -->
+                        <a href="https://maps.app.goo.gl/q9dAEyYGvqGTy2ja6?g_st=ac" target="_blank" class="location-btn-img reveal mt-4" style="text-decoration:none;">
+                            <img src="ubica.png" alt="Ver Ubicación" class="ubica-btn-img zoom-hover" style="max-width: 140px; height: auto; display: block; margin: 0 auto;">
+                            <span class="btn-legend">Toca para ver dirección</span>
                         </a>
-                        <a href="mapa.html" class="btn-secondary btn-zoom-pulse mt-2" style="background: var(--primary-color); color: white; border: none;">
+
+                        <!-- Ubica tu mesa (mapa.html) -->
+                        <a href="mapa.html" class="btn-secondary btn-zoom-pulse mt-4 reveal" style="background: var(--primary-color); color: white; border: none; display: inline-flex; align-items: center; gap: 8px; padding: 10px 25px; border-radius: 30px;">
                             <i class='bx bx-cube-alt'></i> Ubica tu mesa
                         </a>
                     </div>
@@ -206,7 +197,7 @@
                         <div class="timeline-content">
                             <i class='bx bx-church event-icon'></i>
                             <span class="time-tag">16:00 HRS</span>
-                            <h3 class="event-title">Ceremonia Religiosa</h3>
+                            <h3 class="event-title">Misa de Acción de Gracias</h3>
                             <p class="event-desc">Parroquia de San Miguel Arcángel. Puntualidad recomendada.</p>
                         </div>
                     </div>
@@ -228,8 +219,8 @@
                         <div class="timeline-content">
                             <i class='bx bx-star event-icon'></i>
                             <span class="time-tag">18:30 HRS</span>
-                            <h3 class="event-title">Entrada de los Novios</h3>
-                            <p class="event-desc">Momento de recibir a los recién casados en la recepción.</p>
+                            <h3 class="event-title">Entrada de la Quinceañera</h3>
+                            <p class="event-desc">Momento de recibir a Angela en su gran noche.</p>
                         </div>
                     </div>
 
@@ -250,8 +241,8 @@
                         <div class="timeline-content">
                             <i class='bx bx-music event-icon'></i>
                             <span class="time-tag">21:30 HRS</span>
-                            <h3 class="event-title">Primer Baile & Fiesta</h3>
-                            <p class="event-desc">Apertura de la pista y celebración continua hasta el amanecer.</p>
+                            <h3 class="event-title">Vals & Fiesta</h3>
+                            <p class="event-desc">Apertura de la pista con el tradicional vals y mucha diversión.</p>
                         </div>
                     </div>
                 </div>
@@ -266,7 +257,7 @@
                     <img src="icono.png" alt="Código de Vestimenta" class="dresscode-icon-img scale-pulse">
                 </div>
                 <h3 class="dresscode-type mt-2">Formal / Rigurosa Etiqueta</h3>
-                <p class="mt-2 text-muted">Agradecemos respetar nuestra paleta de colores reservando el blanco exclusivo para la novia.</p>
+                <p class="mt-2 text-muted">Agradecemos respetar nuestra paleta de colores reservando el rosa exclusivo para la quinceañera.</p>
                 
                 <div class="color-palette mt-3 reveal">
                     <div class="color-swatch text-reveal" style="background-color: #2F4F4F;"></div>
@@ -285,7 +276,7 @@
              <div class="paper-rip-top"></div>
              <div class="container text-center reveal-fold">
                 <h2 class="section-title">Padrinos</h2>
-                <p class="subtitle text-sm mb-4">Agradecemos a quienes nos acompañan en este paso tan importante.</p>
+                <p class="subtitle text-sm mb-4">Con amor y gratitud a quienes me han acompañado en este camino.</p>
 
                 <div class="padrinos-grid">
                     <div class="padrino-item reveal sequence-1">
@@ -474,21 +465,20 @@
                 </div>
             </div>
         </section>
-        <!-- SECCIÓN: CLIMA EN TEMIXCO -->
+        <!-- SECCIÓN: CLIMA DEL EVENTO -->
         <section id="clima" class="weather-section py-5 bg-light-green">
             <div class="paper-rip-top"></div>
             <div class="container text-center reveal">
-                <h2 class="section-title">Clima en Temixco</h2>
-                <p class="mt-3 mb-4 text-muted">Acompaña a los novios en su gran día. Consulta el clima para Temixco, Morelos.</p>
+                <h2 class="section-title">Clima del Evento</h2>
+                <p class="mt-3 mb-4 text-muted">Consulta el clima para que vengas preparada.</p>
                 <div class="weather-card mt-4 reveal">
                     <div class="weather-info">
                         <i class='bx bx-cloud-sun' style="font-size: 3rem; color: var(--primary-color);"></i>
-                        <h3>Consulta el Clima en Tiempo Real</h3>
-                        <p>Hemos preparado un mapa detallado de Windy para que planees tu visita a Temixco, Morelos.</p>
-                        <a href="clima.html" target="_self" class="btn-primary mt-3">
-                            <i class='bx bx-map-alt'></i> Ver Mapa Interactivo
+                        <h3>¿Cómo estará el tiempo?</h3>
+                        <p>Haz clic para ver el pronóstico detallado en Windy.</p>
+                        <a href="https://www.windy.com/18.882/-99.177?18.284,-99.177,8,m:eewac50" target="_blank" class="btn-primary mt-3">
+                            <i class='bx bx-map-alt'></i> Ver Clima del Evento
                         </a>
-                        <p class="text-xs mt-3 text-muted">* Se abrirá en una nueva pestaña para tu comodidad.</p>
                     </div>
                 </div>
             </div>
@@ -499,7 +489,7 @@
         <section id="rsvp" class="rsvp-section footer-section py-5 bg-dark">
             <div class="container text-center reveal text-white">
                 <h2 class="section-title title-light">Confirma tu Asistencia</h2>
-                <p class="mt-3 mb-4">Por favor envíanos un mensaje antes del 1° de Noviembre para reservar tu lugar.</p>
+                <p class="mt-3 mb-4">Por favor envíanos un mensaje antes del 1° de Julio para confirmar tu lugar.</p>
                         <div class="rsvp-btn-container mt-4 mb-4">
                             <a href="https://primaveraeventsgroup.com/invitacion/" target="_blank" class="rsvp-custom-btn">
                                 <img src="confirma.png" alt="Confirmar Asistencia" class="rsvp-img-btn zoom-hover scale-pulse">
@@ -509,8 +499,8 @@
                 </div>
 
                 <div class="footer-names mt-5">
-                    <h3>C & D</h3>
-                    <p class="text-sm mt-2 text-muted-light">¡Te esperamos para celebrar el amor!</p>
+                    <h3>Angela</h3>
+                    <p class="text-sm mt-2 text-muted-light">¡Te espero para celebrar mis XV!</p>
                 </div>
 
                 <div class="footer-coordination mt-5 pt-4" style="border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.95rem; background: rgba(0,0,0,0.45); padding: 25px 15px; border-radius: 20px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); margin: 0 10px;">
@@ -534,7 +524,7 @@
     <!-- Smart Landing Overlay for QR -->
     <div id="qr-camera-overlay" class="qr-overlay-screen" style="display:none;">
         <div class="qr-overlay-content">
-            <h1 class="names">C & D</h1>
+            <h1 class="names">Angela</h1>
             <p>¡Ayúdanos a capturar este momento!</p>
             <button id="btn-qr-take-photo" class="btn-camera mt-4">
                 <i class='bx bx-camera'></i> Abrir Cámara

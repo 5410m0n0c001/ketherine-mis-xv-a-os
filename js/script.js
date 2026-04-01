@@ -58,6 +58,9 @@ const handleEnvelopeClick = () => {
             setTimeout(() => {
                 envelopeScreen.style.display = 'none';
                 
+                // Start Sakura petals
+                initSakura();
+
                 // Start Guided Tour after card is visible
                 startGuidedTour();
             }, 1600);
@@ -98,8 +101,8 @@ function startGuidedTour() {
         steps: [
             {
                 popover: {
-                    title: '¡Hola y Bienvenidos!',
-                    description: 'Esta invitación es interactiva. Te guiaremos rápidamente para que no te pierdas ningún detalle de nuestro gran día. <br><br><i>Puedes saltar este paso en cualquier momento tocando la "X" o "¡Comenzar!".</i>',
+                    title: '¡Bienvenida a mis XV Años!',
+                    description: 'Esta invitación es interactiva. Te guiaré rápidamente para que no te pierdas ningún detalle de mi gran día. <br><br><i>Puedes saltar este paso en cualquier momento tocando la "X" o "¡Comenzar!".</i>',
                     side: "center",
                     align: 'center'
                 }
@@ -108,7 +111,7 @@ function startGuidedTour() {
                 element: '#hero',
                 popover: {
                     title: 'Portada',
-                    description: 'Esta es la parte donde viene la información: los nombres de los novios, la fecha, y con el espacio para personalizar con el contenido que desees (foto, video, etc.).',
+                    description: 'Aquí encontrarás mi nombre y la fecha de la celebración.',
                     side: "bottom",
                     align: 'center'
                 }
@@ -144,7 +147,7 @@ function startGuidedTour() {
                 element: '.countdown-container',
                 popover: {
                     title: 'Contador Regresivo',
-                    description: 'Marca el tiempo que falta para que llegue el gran momento. Además, como se muestra en esta demostración, falta sólo 1 minuto en la demostración. Al término de la demostración notarás que existe una alerta animada que indicará que es el gran día, como fuegos artificiales y globos.',
+                    description: 'Falta muy poco para que llegue el gran momento de celebrar juntos.',
                     side: "left",
                     align: 'center'
                 }
@@ -364,31 +367,63 @@ revealElements.forEach(el => {
     revealObserver.observe(el);
 });
 
-// COUNTDOWN TIMER (1-minute demo mode)
-let countdownTime = 60; // 60 seconds
+// COUNTDOWN TIMER (Live mode targeting July 18, 2026)
+const targetDate = new Date("July 18, 2026 15:00:00").getTime();
 const countdownContainer = document.querySelector('.countdown-container');
 const celebrationSound = document.getElementById('celebration-sound');
 const balloonsContainer = document.getElementById('balloons-container');
 
 function startCountdown() {
     const countdown = setInterval(() => {
-        countdownTime--;
+        const now = new Date().getTime();
+        const distance = targetDate - now;
         
-        const minutes = Math.floor(countdownTime / 60);
-        const seconds = countdownTime % 60;
+        if (distance < 0) {
+            clearInterval(countdown);
+            if (countdownContainer) countdownContainer.innerHTML = "<h3>¡El gran día ha llegado!</h3>";
+            triggerCelebration();
+            return;
+        }
 
-        // Update DOM (showing as 00:00:mm:ss for consistency)
-        if (document.getElementById('days')) document.getElementById('days').innerText = "00";
-        if (document.getElementById('hours')) document.getElementById('hours').innerText = "00";
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        if (document.getElementById('days')) document.getElementById('days').innerText = days.toString().padStart(2, '0');
+        if (document.getElementById('hours')) document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
         if (document.getElementById('minutes')) document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
         if (document.getElementById('seconds')) document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
-
-        if (countdownTime <= 0) {
-            clearInterval(countdown);
-            if (countdownContainer) countdownContainer.innerHTML = "<h3>¡El Gran Día ha llegado!</h3>";
-            triggerCelebration();
-        }
     }, 1000);
+}
+
+// SAKURA ANIMATION
+function initSakura() {
+    const container = document.getElementById('sakura-container');
+    if (!container) return;
+
+    for (let i = 0; i < 30; i++) {
+        createPetal(container);
+    }
+}
+
+function createPetal(container) {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    
+    const size = Math.random() * 10 + 10 + 'px';
+    petal.style.width = size;
+    petal.style.height = size;
+    
+    petal.style.left = Math.random() * 100 + '%';
+    petal.style.animationDuration = Math.random() * 3 + 4 + 's';
+    petal.style.animationDelay = Math.random() * 5 + 's';
+    
+    container.appendChild(petal);
+    
+    petal.addEventListener('animationiteration', () => {
+        petal.style.left = Math.random() * 100 + '%';
+    });
 }
 // Sound loop counter
 let soundPlayCount = 0;
@@ -525,8 +560,8 @@ const shareBtn = document.getElementById('share-btn-sticky');
 if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
         const shareData = {
-            title: 'Invitación a la Boda de Carolina & Daniel',
-            text: '¡Acompáñanos a celebrar nuestra unión matrimonial!',
+            title: 'Invitación a los XV Años de Angela Alegría',
+            text: '¡Acompáñame a celebrar mis XV años! Te espero con mucha ilusión.',
             url: window.location.href.split('?')[0] // Clean URL
         };
 
@@ -561,11 +596,11 @@ if (calendarBtn && calendarOptions) {
     });
 
     const eventDetails = {
-        title: "Boda de Carolina y Daniel",
-        description: "Acompáñanos a celebrar nuestra unión matrimonial. ¡Te esperamos!",
-        location: "Hacienda Santa Mónica, Carretera Norte Km 5.5",
-        start: "20261115T160000",
-        end: "20261116T020000"
+        title: "XV Años de Angela Alegría",
+        description: "Te invito a celebrar mis XV años en este sueño hecho realidad.",
+        location: "Jardín Villa Leona, C. San Luis 100, 62555 Jiutepec, Mor.",
+        start: "20260718T150000",
+        end: "20260719T010000"
     };
 
     // Google Calendar Link
@@ -601,7 +636,7 @@ if (calendarBtn && calendarOptions) {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'boda-carolina-daniel.ics');
+        link.setAttribute('download', 'xv-angela-alegria.ics');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -703,8 +738,8 @@ if (photoInput) {
         var formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', UPLOAD_PRESET);
-        formData.append('folder', 'boda-carolina-daniel');
-        formData.append('tags', PHOTO_TAG);
+        formData.append('folder', 'xv-angela-alegria');
+        formData.append('tags', 'xv-angela');
         try {
             const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, { method: 'POST', body: formData });
             if (!res.ok) throw new Error('Upload failed');
@@ -736,19 +771,19 @@ function initQRCode() {
             const qrUrl = window.location.origin + window.location.pathname.replace('index.html', '') + 'qr.png';
             const response = await fetch(qrUrl);
             const blob = await response.blob();
-            const file = new File([blob], "codigo-qr-boda.png", { type: "image/png" });
+            const file = new File([blob], "codigo-qr-xv-angela.png", { type: "image/png" });
             
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
                     files: [file],
-                    title: 'Código QR de Nuestra Boda',
-                    text: 'Escanea este código para compartir tus fotos con nosotros.',
+                    title: 'Código QR de mis XV Años',
+                    text: 'Escanea este código para compartir tus fotos conmigo.',
                     url: window.location.href // Also include URL for context
                 });
             } else if (navigator.share) {
                 await navigator.share({
-                    title: 'Código QR de Nuestra Boda',
-                    text: 'Escanea este código para compartir tus fotos con nosotros.',
+                    title: 'Código QR de mis XV Años',
+                    text: 'Escanea este código para compartir tus fotos conmigo.',
                     url: qrUrl
                 });
             } else {
@@ -760,8 +795,8 @@ function initQRCode() {
             // Simple link fallback
             if (navigator.share) {
                 await navigator.share({
-                    title: 'Álbum de Fotos de la Boda',
-                    text: 'Sube tus fotos aquí!',
+                    title: 'Álbum de Fotos de los XV Años',
+                    text: '¡Sube tus fotos aquí!',
                     url: window.location.origin + window.location.pathname.replace('index.html', '') + 'smartlanding.html'
                 });
             }

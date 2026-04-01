@@ -1,15 +1,16 @@
 /* VARIABLES ======================================== */
 :root {
-    --primary-color: #556B2F; /* Dark Olive Green */
-    --secondary-color: #4a5d23;
-    --accent-color: #d1cda8; /* Gold/Beige */
-    --bg-color-main: #f9f9f9;
-    --text-color: #2F4F4F; /* Dark Slate Gray */
-    --text-light: #555555;
+    --primary-color: #ec4899; /* Vivid Pink/Magenta from Video */
+    --secondary-color: #fbdce2; /* Soft Pink from Video */
+    --accent-color: #3e2723; /* Bronze/Warm Brown from Video */
+    --bg-color-main: #fffafb; /* Very light pink/white */
+    --text-color: #3e2723; /* Matching Bronze for text */
+    --text-light: #7a6e6c;
     --white: #ffffff;
     
-    --font-head: 'Playfair Display', serif;
+    --font-head: 'Great Vibes', cursive;
     --font-body: 'Montserrat', sans-serif;
+    --font-accent: 'Crimson Pro', serif;
     
     --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -47,7 +48,7 @@ video {
 
 body {
     font-family: var(--font-body);
-    background-color: var(--bg-color-main);
+    background: linear-gradient(135deg, #fff5f7 0%, #fbdce2 100%);
     color: var(--text-color);
     line-height: 1.6;
     touch-action: pan-y; /* Ensure scroll always works */
@@ -407,9 +408,35 @@ ul {
     animation: cursorBlink 0.8s infinite;
 }
 
-/* Hide cursor when typing is done or not active */
-.typing-container.done::after {
-    display: none;
+/* SAKURA PETAL ANIMATION ======================================== */
+.sakura-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    overflow: hidden;
+}
+
+.petal {
+    position: absolute;
+    background: #fbdce2;
+    border-radius: 150% 0 150% 0;
+    opacity: 0.7;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        top: -10%;
+        transform: translateX(0) rotate(0deg);
+    }
+    100% {
+        top: 110%;
+        transform: translateX(100px) rotate(360deg);
+    }
 }
 
 /* Slide-In Animations */
@@ -453,26 +480,24 @@ ul {
 
 /* Button & Legend styles */
 .btn-legend {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative; /* Changed from absolute to flow better with image button */
     display: block;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--primary-color);
     font-weight: 700;
-    margin: 0;
-    font-style: normal;
+    margin: 10px auto 0;
+    font-style: italic;
     letter-spacing: 0.5px;
-    background: rgba(255, 255, 255, 0.85);
-    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 4px 15px;
     border-radius: 20px;
     backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid var(--secondary-color);
     white-space: nowrap;
-    opacity: 0.95;
+    opacity: 0.9;
     pointer-events: none;
     z-index: 5;
+    width: fit-content;
 }
 
 .rsvp-custom-btn .btn-legend {
@@ -526,17 +551,17 @@ ul {
 }
 
 .hero-content {
-    background: rgba(255, 255, 255, 0.4); 
-    backdrop-filter: blur(18px); /* Even stronger blur */
-    -webkit-backdrop-filter: blur(18px);
-    padding: 30px 25px;
-    border-radius: 35px;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+    background: rgba(255, 255, 255, 0.2); 
+    backdrop-filter: blur(25px); /* Stronger blur for dreamy look */
+    -webkit-backdrop-filter: blur(25px);
+    padding: 40px 30px;
+    border-radius: 40px;
+    box-shadow: 0 20px 60px rgba(236, 72, 153, 0.15);
     z-index: 10;
     width: 90%;
     max-width: 550px;
     margin: 15px;
-    border: 1px solid rgba(255,255,255,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     text-align: center;
 }
 
