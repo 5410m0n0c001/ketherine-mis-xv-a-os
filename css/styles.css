@@ -670,7 +670,8 @@ body.ui-visible .floating-nav {
 
 @keyframes slideDownAnchor {
     0% { top: 30%; opacity: 0; transform: translate(-50%, -50%); }
-    100% { top: 50%; opacity: 1; transform: translate(-50%, -50%); }
+    /* Anchors exactly at the borderline between hero and countdown */
+    100% { top: 100%; opacity: 1; transform: translate(-50%, -50%); }
 }
 
 @media (max-width: 768px) {
@@ -687,8 +688,8 @@ body.ui-visible .floating-nav {
     }
     @keyframes slideDownAnchorMobile {
         0% { top: 30%; opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
-        /* Forces absolute centering at all times during the animation */
-        100% { top: 50%; opacity: 1; transform: translate(-50%, -50%) scale(0.85); }
+        /* Anchors exactly at the borderline between hero and countdown */
+        100% { top: 100%; opacity: 1; transform: translate(-50%, -50%) scale(0.85); }
     }
 }
 
