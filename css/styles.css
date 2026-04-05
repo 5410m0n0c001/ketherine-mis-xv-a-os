@@ -1015,20 +1015,7 @@ body.ui-visible .floating-nav {
         margin: 0 auto;
     }
 
-    .hero-section {
-        min-height: 80vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
 
-    .hero-content {
-        width: 90%;
-        margin: 0 auto;
-        padding: 30px 15px;
-        position: relative;
-        z-index: 10;
-    }
 
     .corner-img {
         width: 50px;
