@@ -20,28 +20,26 @@ const handleEnvelopeClick = () => {
         
         // Ensure video is at start and play
         envelopeVideo.currentTime = 0;
-        envelopeVideo.play().then(() => {
-            console.log('Envelope video playing...');
-            
-            // PREEMPTIVE PLAY: Start background media immediately upon the FIRST user click
-            // to ensure mobile browsers (Safari/GitHub Pages) allow the playback.
-            const heroVideo = document.getElementById('hero-video');
-            if (heroVideo) {
-                // Ensure it's muted (already is in HTML) and play it while still under the envelope
-                heroVideo.play().catch(e => console.log('Hero video pre-play failed:', e));
-            }
-            
-            const bgMusicVideo = document.getElementById('audio-btn-video');
-            if (bgMusicVideo) {
-                bgMusicVideo.play().catch(e => console.log('Audio button video pre-play failed:', e));
-            }
+        
+        // MOBILE SYNC: Play all media SIMULTANEOUSLY inside the click event
+        // This is the most robust way to ensure mobile browsers (Safari/Chrome) allow all playbacks.
+        envelopeVideo.play();
+        
+        const heroVideo = document.getElementById('hero-video');
+        if (heroVideo) heroVideo.play().catch(e => console.log('Hero video sync-play failed:', e));
+        
+        const bgMusic = document.getElementById('bg-music');
+        const audioBtn = document.getElementById('audio-btn');
+        const bgMusicVideo = document.getElementById('audio-btn-video');
+        
+        if (bgMusic) {
+            bgMusic.play().then(() => {
+                if (audioBtn) audioBtn.classList.add('playing');
+                if (bgMusicVideo) bgMusicVideo.play();
+            }).catch(e => console.log('Bg music sync-play failed:', e));
+        }
 
-        }).catch(e => {
-            console.log('Video play failed:', e);
-            // Fallback: just open if video fails
-            envelopeScreen.classList.add('hidden');
-            setTimeout(() => { envelopeScreen.style.display = 'none'; }, 1000);
-        });
+        console.log('Synchronous media playback triggered...');
         
         // When video ends, fade out screen
         envelopeVideo.onended = () => {
@@ -58,12 +56,8 @@ const handleEnvelopeClick = () => {
             // Show UI elements (Nav and Audio button)
             document.body.classList.add('ui-visible');
 
-            if (bgMusic && audioBtn) {
-                bgMusic.play().then(() => {
-                    audioBtn.classList.add('playing');
-                    // Note: bgMusicVideo play was handled preemptively in handleEnvelopeClick
-                }).catch(e => console.log('Audio autoplay blocked:', e));
-            }
+            // NOTE: Media playbacks (heroVideo, bgMusic) were initiated synchronously
+            // in handleEnvelopeClick to guarantee mobile compatibility.
 
             // Remove from DOM after fade
             setTimeout(() => {
