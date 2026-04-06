@@ -3,6 +3,9 @@ const envelopeScreen = document.getElementById('envelope-screen');
 const envelopeVideo = document.getElementById('envelope-video');
 const envelopeHint = document.querySelector('.envelope-hint');
 
+// State control for opening
+let isEnvelopeOpened = false;
+
 // Force first frame rendering
 if (envelopeVideo) {
     envelopeVideo.addEventListener('loadedmetadata', () => {
@@ -14,62 +17,77 @@ const handleEnvelopeClick = () => {
     if (isEnvelopeOpened) return;
     isEnvelopeOpened = true; 
 
+    // Visual feedback: Hide hint immediately
+    if (envelopeHint) envelopeHint.style.display = 'none';
+
+    // FALLBACK: Emergency opening if video is stuck or fails (1.5s)
+    const emergencyTimeout = setTimeout(() => {
+        if (envelopeScreen && !envelopeScreen.classList.contains('hidden')) {
+            console.log('Emergency open triggered...');
+            openInvitation();
+        }
+    }, 1500);
+
+    const openInvitation = () => {
+        if (isEnvelopeOpened === 'fully_done') return;
+        isEnvelopeOpened = 'fully_done';
+        
+        clearTimeout(emergencyTimeout);
+        if (envelopeScreen) {
+            envelopeScreen.classList.add('hidden');
+            
+            // Start secondary visuals after a slight delay to sync with fade
+            setTimeout(() => {
+                envelopeScreen.style.display = 'none';
+                
+                // Start Sakura petals
+                if (typeof initSakura === 'function') initSakura();
+
+                // Start Butterflies
+                if (typeof initButterflies === 'function') initButterflies();
+
+                // Start Typing
+                if (typeof startHeroTyping === 'function') startHeroTyping();
+            }, 1000);
+        }
+        
+        // Start countdown
+        if (typeof startCountdown === 'function') startCountdown();
+        
+        // Final UI visibility check
+        document.body.classList.add('ui-visible');
+    };
+
     if (envelopeVideo) {
         const heroVideo = document.getElementById('hero-video');
         const bgMusic = document.getElementById('bg-music');
         const audioBtn = document.getElementById('audio-btn');
         const bgMusicVideo = document.getElementById('audio-btn-video');
         
-        // Hide hint
-        if (envelopeHint) envelopeHint.style.display = 'none';
-
-        envelopeVideo.play().catch(e => console.log('Envelope play failed:', e));
+        // SYNC: Play media simultaneously inside the click event
+        envelopeVideo.play().catch(e => {
+            console.log('Envelope play failed, opening manually:', e);
+            openInvitation();
+        });
+        
         if (heroVideo) heroVideo.play().catch(e => console.log('Hero video sync-play failed:', e));
         
         if (bgMusic) {
             bgMusic.play().then(() => {
                 if (audioBtn) audioBtn.classList.add('playing');
-                if (bgMusicVideo) bgMusicVideo.play();
+                if (bgMusicVideo) bgMusicVideo.play().catch(e => console.log('Music video play failed:', e));
             }).catch(e => console.log('Bg music sync-play failed:', e));
         }
 
-        console.log('Synchronous media playback triggered...');
-        
-        // When video ends, fade out screen
+        // When video ends normally, use the standard opening
         envelopeVideo.onended = () => {
-            envelopeScreen.classList.add('hidden');
-            
-            // Start countdown only after opening
-            startCountdown();
-
-            // Start bg music
-            const bgMusic = document.getElementById('bg-music');
-            const audioBtn = document.getElementById('audio-btn');
-            const bgMusicVideo = document.getElementById('audio-btn-video');
-            
-            // Show UI elements (Nav and Audio button)
-            document.body.classList.add('ui-visible');
-
-            // NOTE: Media playbacks (heroVideo, bgMusic) were initiated synchronously
-            // in handleEnvelopeClick to guarantee mobile compatibility.
-
-            // Remove from DOM after fade
-            setTimeout(() => {
-                envelopeScreen.style.display = 'none';
-                
-                // Start Sakura petals
-                initSakura();
-
-                // Start Butterflies
-                initButterflies();
-
-                // Start Typing
-                startHeroTyping();
-            }, 1600);
+            openInvitation();
         };
+    } else {
+        // No video element at all? Open anyway
+        openInvitation();
     }
 };
-
 
 
 if (envelopeScreen) {
