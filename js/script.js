@@ -17,24 +17,35 @@ const handleEnvelopeClick = () => {
     if (isEnvelopeOpened) return;
     isEnvelopeOpened = true; 
 
+    // VISUAL PRIORITY: Immediately start envelope animation
+    if (envelopeVideo) {
+        envelopeVideo.play().catch(e => {
+            console.log('Envelope animation play failed, opening manually:', e);
+            openInvitation();
+        });
+
+        // Completion logic
+        envelopeVideo.onended = () => {
+            openInvitation();
+        };
+    } else {
+        openInvitation();
+    }
+
+    // AUDIO CONTEXT: Try to play music in parallel after animation starts
     const bgMusic = document.getElementById('bg-music');
-    const heroVideo = document.getElementById('hero-video');
     const audioBtn = document.getElementById('audio-btn');
     const bgMusicVideo = document.getElementById('audio-btn-video');
 
-    // CRITICAL: Synchronous gesture-locked playback starts here
-    // Try both Audio and Hero video immediately to capture the user interaction context
     if (bgMusic) {
+        // We trigger play() now that we have a user gesture context
         bgMusic.play().then(() => {
             if (audioBtn) audioBtn.classList.add('playing');
             if (bgMusicVideo) bgMusicVideo.play().catch(e => console.log('Music video play failed:', e));
-        }).catch(e => console.log('Bg music sync-play failed:', e));
-    }
-
-    if (heroVideo) {
-        // Force reset and play to overcome "reload" issues or suspended states
-        heroVideo.currentTime = 0; 
-        heroVideo.play().catch(e => console.log('Hero video sync-play failed:', e));
+        }).catch(err => {
+            console.log('Background music failed to trigger:', err);
+            // Don't interrupt visuals if audio is blocked
+        });
     }
 
     // Visual feedback: Hide hint immediately
@@ -77,25 +88,7 @@ const handleEnvelopeClick = () => {
         // Final UI visibility check
         document.body.classList.add('ui-visible');
     };
-
-    if (envelopeVideo) {
-        // Start envelope animation
-        envelopeVideo.play().catch(e => {
-            console.log('Envelope play failed, opening manually:', e);
-            openInvitation();
-        });
-
-        // When video ends normally, use the standard opening
-        envelopeVideo.onended = () => {
-            openInvitation();
-        };
-    } else {
-        // No video element at all? Open anyway
-        openInvitation();
-    }
 };
-
-
 
 if (envelopeScreen) {
     const handleInteraction = (e) => {
@@ -109,6 +102,7 @@ if (envelopeScreen) {
     envelopeScreen.addEventListener('click', handleInteraction);
     envelopeScreen.addEventListener('touchend', handleInteraction, { passive: false });
 }
+
 
 // SCROLL REVEAL & ANIMATIONS UNIFIED
 const revealElements = document.querySelectorAll('.reveal, .card-flip-up, .scale-pulse, .text-reveal, .slide-in-left, .slide-in-right, .btn-zoom-pulse, .typing-container, .timeline-item');
