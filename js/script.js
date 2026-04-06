@@ -21,7 +21,21 @@ const handleEnvelopeClick = () => {
         // Ensure video is at start and play
         envelopeVideo.currentTime = 0;
         envelopeVideo.play().then(() => {
-            console.log('Video playing...');
+            console.log('Envelope video playing...');
+            
+            // PREEMPTIVE PLAY: Start background media immediately upon the FIRST user click
+            // to ensure mobile browsers (Safari/GitHub Pages) allow the playback.
+            const heroVideo = document.getElementById('hero-video');
+            if (heroVideo) {
+                // Ensure it's muted (already is in HTML) and play it while still under the envelope
+                heroVideo.play().catch(e => console.log('Hero video pre-play failed:', e));
+            }
+            
+            const bgMusicVideo = document.getElementById('audio-btn-video');
+            if (bgMusicVideo) {
+                bgMusicVideo.play().catch(e => console.log('Audio button video pre-play failed:', e));
+            }
+
         }).catch(e => {
             console.log('Video play failed:', e);
             // Fallback: just open if video fails
@@ -44,19 +58,10 @@ const handleEnvelopeClick = () => {
             // Show UI elements (Nav and Audio button)
             document.body.classList.add('ui-visible');
 
-            // Explicitly play hero video for GitHub Pages / Mobile compatibility
-            const heroVideo = document.getElementById('hero-video');
-            if (heroVideo) {
-                heroVideo.play().catch(e => console.log('Hero video autoplay blocked or failed:', e));
-            }
-
             if (bgMusic && audioBtn) {
                 bgMusic.play().then(() => {
                     audioBtn.classList.add('playing');
-                    if (bgMusicVideo) {
-                        bgMusicVideo.currentTime = 0;
-                        bgMusicVideo.play();
-                    }
+                    // Note: bgMusicVideo play was handled preemptively in handleEnvelopeClick
                 }).catch(e => console.log('Audio autoplay blocked:', e));
             }
 
