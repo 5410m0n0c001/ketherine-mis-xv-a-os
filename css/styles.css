@@ -301,11 +301,16 @@ body.ui-visible .floating-nav {
 @media (max-width: 768px) {
     .floating-nav {
         bottom: 10px;
-        padding: 4px 8px;
+        padding: 4px 6px;
+    }
+    .floating-nav ul {
+        gap: 2px;
     }
     .floating-nav ul li a {
-        font-size: 1.2rem;
-        padding: 8px;
+        font-size: 1rem;
+        padding: 5px;
+        width: 30px;
+        height: 30px;
     }
 }
 
