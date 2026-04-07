@@ -1041,9 +1041,15 @@ body.ui-visible .floating-nav {
     }
 
     .floating-nav a {
-        width: 32px;
-        height: 32px;
-        font-size: 0.9rem;
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
+    }
+
+    .floating-nav ul {
+        gap: 1px;
+        padding: 0;
+        margin: 0;
     }
 
     /* SPECIFIC MOBILE FIXES FOR QR AND VISOR */
