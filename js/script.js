@@ -517,7 +517,7 @@ if (calendarBtn && calendarOptions) {
         description: "Te invito a celebrar mis XV años en este sueño hecho realidad.",
         location: "Jardín Villa Leona, C. San Luis 100, 62555 Jiutepec, Mor.",
         start: "20260718T150000",
-        end: "20260719T010000"
+        end: "20260719T000000"
     };
 
     // Google Calendar Link

@@ -49,14 +49,11 @@
     <nav class="floating-nav">
         <ul>
             <li><a href="#hero" class="active" title="Inicio"><i class='bx bx-home-heart'></i></a></li>
-            <li><a href="#clima" title="Clima"><i class='bx bx-cloud-snow'></i></a></li>
             <li><a href="#itinerario" title="Itinerario"><i class='bx bx-time-five'></i></a></li>
             <li><a href="#ubicacion" title="Ubicación"><i class='bx bx-map'></i></a></li>
-            <li><a href="#menus" title="Menús"><i class='bx bx-dish'></i></a></li>
             <li><a href="#codigo-vestimenta" title="Código"><i class='bx bx-closet' ></i></a></li>
             <li><a href="#padrinos" title="Padrinos"><i class='bx bx-group'></i></a></li>
             <li><a href="#mesa-regalos" title="Regalos"><i class='bx bx-gift'></i></a></li>
-            <li><a href="#fotos" title="Fotos"><i class='bx bx-camera'></i></a></li>
             <li><a href="#rsvp" title="Asistencia"><i class='bx bx-check-double'></i></a></li>
         </ul>
     </nav>
@@ -176,7 +173,7 @@
                     <div class="card event-card card-flip-up slide-in-right">
                         <div class="card-icon"><i class='bx bx-party'></i></div>
                         <h3 class="text-reveal">Recepción</h3>
-                        <p class="time text-reveal">16:00 a 01:00 HRS</p>
+                        <p class="time text-reveal">15:00 a 00:00 HRS</p>
                         <p class="place text-reveal">Jardín Villa Leona</p>
                         <p class="address text-reveal">C. San Luis 100, 62555 Jiutepec, Mor.</p>
                         
@@ -217,8 +214,8 @@
                         <div class="timeline-content">
                             <i class='bx bx-church event-icon'></i>
                             <span class="time-tag">15:00 HRS</span>
-                            <h3 class="event-title">Misa de Acción de Gracias</h3>
-                            <p class="event-desc">Ceremonia religiosa en el jardín. Puntualidad recomendada.</p>
+                            <h3 class="event-title">Ceremonia Religiosa</h3>
+                            <p class="event-desc">Misa de Acción de Gracias. Puntualidad recomendada.</p>
                         </div>
                     </div>
 
@@ -228,7 +225,7 @@
                         <div class="timeline-content">
                             <i class='bx bx-glass event-icon'></i>
                             <span class="time-tag">16:00 HRS</span>
-                            <h3 class="event-title">Horario del Evento</h3>
+                            <h3 class="event-title">Cóctel de Bienvenida</h3>
                             <p class="event-desc">Recepción y brindis de bienvenida en Jardín Villa Leona.</p>
                         </div>
                     </div>
@@ -238,7 +235,7 @@
                         <div class="timeline-dot"></div>
                         <div class="timeline-content">
                             <i class='bx bx-restaurant event-icon'></i>
-                            <span class="time-tag">18:00 HRS</span>
+                            <span class="time-tag">17:00 HRS</span>
                             <h3 class="event-title">Banquete</h3>
                             <p class="event-desc">Degustación de nuestro menú seleccionado.</p>
                         </div>
@@ -293,93 +290,19 @@
 
                 <div class="padrinos-grid">
                     <div class="padrino-item reveal sequence-1">
-                        <h4>Mami</h4>
-                        <p>Nancy Becerra Rodriguez</p>
+                        <h4>Padrino</h4>
+                        <p>Guadalupe Becerra Rodriguez</p>
                     </div>
                     <div class="padrino-item reveal sequence-2">
-                        <h4>Abuelos</h4>
-                        <p>Juan Becerra Castañeda<br>Elia Rodriguez Suarez</p>
+                        <h4>Padrino</h4>
+                        <p>Maximino Quiñonez</p>
                     </div>
                     <div class="padrino-item reveal sequence-3">
-                        <h4>Padrinos</h4>
-                        <p>Edimael Becerra Rodriguez<br>Guadalupe Becerra Rodriguez</p>
+                        <h4>Padrino</h4>
+                        <p>Edimael Becerra Rodriguez</p>
                     </div>
                 </div>
              </div>
-        </section>
-
-        <!-- SECCIÓN: MENÚS -->
-        <section id="menus" class="menus-section py-5" style="position: relative;">
-            <div class="section-corner-container">
-                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
-                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
-                <img src="esquina1.png" alt="" class="section-corner corner-bl">
-                <img src="esquina2.png" alt="" class="section-corner corner-br">
-            </div>
-            <div class="container text-center reveal">
-                <h2 class="section-title">Nuestra Propuesta Gastronómica</h2>
-                <p class="mt-3 text-muted">Hemos seleccionado cada detalle para deleitar tu paladar.</p>
-                
-                <div class="menu-btn-container">
-                    <button class="btn-menu-toggle active" id="btn-menu-foods">
-                        <i class='bx bx-restaurant'></i> Banquete
-                    </button>
-                    <button class="btn-menu-toggle" id="btn-menu-drinks">
-                        <i class='bx bx-drink'></i> Bebidas y Coctelería
-                    </button>
-                </div>
-
-                <!-- Menú Alimentos -->
-                <div class="menu-display active" id="menu-foods">
-                    <div class="menu-category">
-                        <h4>Entradas</h4>
-                        <div class="menu-item">
-                            <strong>Crema de Tres Quesos</strong>
-                            <span>Con lluvia de nuez y crutones a las finas hierbas.</span>
-                        </div>
-                    </div>
-                    <div class="menu-category mt-4">
-                        <h4>Plato Fuerte</h4>
-                        <div class="menu-item">
-                            <strong>Filete en Salsa de Vino Tinto</strong>
-                            <span>Acompañado de puré de papa rústico y espárragos al grill.</span>
-                        </div>
-                    </div>
-                    <div class="menu-category mt-4">
-                        <h4>Postre</h4>
-                        <div class="menu-item">
-                            <strong>Cheesecake de Frutos Rojos</strong>
-                            <span>Con una base crujiente de galleta y coulis de frambuesa.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Menú Bebidas -->
-                <div class="menu-display" id="menu-drinks">
-                    <div class="menu-category">
-                        <h4>Mixología</h4>
-                        <div class="menu-item">
-                            <strong>Margarita de Maracuyá</strong>
-                            <span>Tequila premium, pulpa fresca de maracuyá y un toque de chile ancho.</span>
-                        </div>
-                        <div class="menu-item">
-                            <strong>Gin Tonic Primavera</strong>
-                            <span>Ginebra, frutos rojos, pétalos de rosa y agua tónica.</span>
-                        </div>
-                    </div>
-                    <div class="menu-category mt-4">
-                        <h4>Clásicos</h4>
-                        <div class="menu-item">
-                            <strong>Selección de Vinos</strong>
-                            <span>Tinto, Blanco y Rosado.</span>
-                        </div>
-                        <div class="menu-item">
-                            <strong>Refrescos y Coctelería sin Alcohol</strong>
-                            <span>Surtido de bebidas para todos los gustos.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
 
 
@@ -409,68 +332,7 @@
 
             </div>
         </section>
-        <!-- SECCIÓN 7: COMPARTE TU FOTO -->
-        <section id="fotos" class="photos-section py-5 section-reveal" style="position: relative;">
-            <div class="section-corner-container">
-                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
-                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
-                <img src="esquina1.png" alt="" class="section-corner corner-bl">
-                <img src="esquina2.png" alt="" class="section-corner corner-br">
-            </div>
-            <div class="container text-center reveal">
-                <h2 class="section-title">Comparte tu Foto</h2>
-                <p class="mt-3 text-muted">¡Captura los mejores momentos y compártelos con nosotros!</p>
-                
-                <div class="photo-gallery" id="photo-gallery"></div>
 
-                <div class="photo-upload-area mt-4">
-                    <button class="btn-camera" id="btn-camera" aria-label="Tomar foto">
-                        <i class='bx bx-camera'></i>
-                        <span>Tomar Foto</span>
-                    </button>
-                    <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none;">
-                    
-                    <div class="upload-status" id="upload-status" style="display:none;">
-                        <div class="upload-spinner"></div>
-                        <p>Subiendo foto...</p>
-                    </div>
-                    
-                    <div class="upload-success" id="upload-success" style="display:none;">
-                        <i class='bx bx-check-circle'></i>
-                        <p>¡Foto compartida con éxito!</p>
-                    </div>
-                    <div class="qr-container-wrapper mt-4">
-                        <img id="qr-image" src="qr.png" alt="Código QR para compartir fotos" class="qr-code-img">
-                        <button class="btn-share-qr mt-3" id="btn-share-qr">
-                            <img src="compartir.png" alt="Compartir" class="share-icon-qr-img"> Compartir QR
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- SECCIÓN: CLIMA DEL EVENTO -->
-        <section id="clima" class="weather-section py-5" style="position: relative;">
-            <div class="section-corner-container">
-                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
-                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
-                <img src="esquina1.png" alt="" class="section-corner corner-bl">
-                <img src="esquina2.png" alt="" class="section-corner corner-br">
-            </div>
-            <div class="container text-center reveal">
-                <h2 class="section-title">Clima del Evento</h2>
-                <p class="mt-3 mb-4 text-muted">Consulta el clima para que vengas preparada.</p>
-                <div class="weather-card mt-4 reveal">
-                    <div class="weather-info">
-                        <i class='bx bx-cloud-sun' style="font-size: 3rem; color: var(--primary-color);"></i>
-                        <h3>¿Cómo estará el tiempo?</h3>
-                        <p>Haz clic para ver el pronóstico detallado en Windy.</p>
-                        <a href="https://www.windy.com/18.882/-99.177?18.284,-99.177,8,m:eewac50" target="_blank" class="btn-primary mt-3">
-                            <i class='bx bx-map-alt'></i> Ver Clima del Evento
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- SECCIÓN 7: ASISTENCIA (RSVP) -->
         <section id="rsvp" class="rsvp-section footer-section py-5 bg-dark" style="position: relative; overflow: hidden;">
