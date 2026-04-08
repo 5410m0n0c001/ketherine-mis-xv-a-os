@@ -1084,7 +1084,7 @@ body.ui-visible .floating-nav {
     font-style: italic;
     font-family: var(--font-head);
     color: var(--text-light);
-    font-size: 0.7rem;
+    font-size: 1.1rem;
     margin-top: 35px !important;
     margin-bottom: 5px !important;
 }
