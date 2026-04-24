@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angela - Mis XV Años</title>
+    <title>Zoé - Mis XV Años</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pinyon+Script&family=Montserrat:wght@300;400;500;600&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pinyon+Script&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/styles.css?v=final_robust">
+    <link rel="stylesheet" href="css/styles.css">
     
     <!-- Meta tags SEO / Compartir -->
-    <meta name="description" content="Te invito a celebrar conmigo este día tan especial. ¡Mis XV Años! - Angela Alegría">
-    <meta property="og:title" content="¡Mis XV Años! - Angela Alegría">
+    <meta name="description" content="Te invito a celebrar conmigo este día tan especial. ¡Mis XV Años! - Zoé Roque Díaz">
+    <meta property="og:title" content="¡Mis XV Años! - Zoé Roque Díaz">
     <meta property="og:description" content="Te invito a celebrar conmigo este día tan especial.">
     <meta property="og:image" content="https://5410m0n0c001.github.io/XVangelainvitacion/sobre.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://5410m0n0c001.github.io/XVangelainvitacion/">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Invitación Angela">
+    <meta property="og:site_name" content="Invitación Zoé">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="¡Mis XV Años! - Angela Alegría">
+    <meta name="twitter:title" content="¡Mis XV Años! - Zoé Roque Díaz">
     <meta name="twitter:description" content="Te invito a celebrar conmigo este día tan especial.">
     <meta name="twitter:image" content="https://5410m0n0c001.github.io/XVangelainvitacion/sobre.png">
 
@@ -49,7 +49,7 @@
     <div class="envelope-screen" id="envelope-screen">
         <p class="envelope-hint">Toca para abrir</p>
         <video id="envelope-video" class="envelope-video" muted playsinline preload="auto" poster="sobre.png">
-            <source src="sobre.mp4?v=final_robust" type="video/mp4">
+            <source src="sobre.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -68,7 +68,7 @@
 
     <!-- Reproductor de Audio -->
     <button class="audio-btn" id="audio-btn" aria-label="Reproducir música">
-        <video id="audio-btn-video" src="music2.mp4?v=final_robust" muted loop playsinline></video>
+        <video id="audio-btn-video" src="music2.mp4" muted loop playsinline></video>
     </button>
     
     <!-- Botón Compartir Sticky -->
@@ -109,7 +109,7 @@
                 <p class="date-txt mt-3"><span id="type-line-2" class="typing-container"></span></p>
                 
                 <div class="date-highlight mt-4 mb-3">
-                    <div class="day-num" style="font-size: 3.5rem; font-family: var(--font-head); line-height: 1;">18</div>
+                    <div class="day-num" style="font-size: 3.5rem; font-family: var(--font-head); line-height: 1;">04</div>
                     <div class="month-year" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; text-align: left; line-height: 1.2; border-left: 2px solid var(--primary-color); padding-left: 15px;">
                         Julio<br>2026
                     </div>
@@ -199,6 +199,14 @@
                             </a>
                         </div>
                     </div>
+
+                    <!-- Nueva imagen decorativa K.jpeg -->
+                    <div class="location-photo-container reveal sequence-2">
+                        <div class="premium-frame">
+                            <img src="k.jpeg" alt="Zoé" class="location-photo">
+                            <div class="frame-overlay"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -280,6 +288,12 @@
                 <p class="mt-2 text-muted">Colores libres</p>
                 <p class="mt-1 text-xs" style="color: var(--accent-color); font-weight: 600;">* Se reserva el color rosa para la festejada</p>
                 
+                <!-- Video de Vestimenta VK.mp4 -->
+                <div class="dresscode-video-wrapper mt-4 reveal sequence-2">
+                    <video id="dresscode-video" src="vk.mp4" autoplay muted loop playsinline class="dresscode-video"></video>
+                    <div class="video-accent-border"></div>
+                </div>
+                
 
             </div>
         </section>
@@ -296,25 +310,18 @@
                 <p class="subtitle text-sm mb-4">Con amor y gratitud a quienes me han acompañado en este camino.</p>
 
                 <div class="padrinos-grid">
-                    <!-- Mami -->
+                    <!-- Padres -->
                     <div class="padrino-item reveal sequence-1">
-                        <h4>Mami</h4>
-                        <p>Nancy Becerra Rodriguez</p>
-                    </div>
-
-                    <!-- Abuelos -->
-                    <div class="padrino-item reveal sequence-2">
-                        <h4>Abuelos</h4>
-                        <p>Juan Becerra Castañeda</p>
-                        <p>Elia Rodriguez Suarez</p>
+                        <h4>Mis Padres</h4>
+                        <p>Katherine Díaz</p>
+                        <p>Omar Roque</p>
                     </div>
 
                     <!-- Padrinos -->
                     <div class="padrino-item reveal sequence-3">
-                        <h4>Padrinos</h4>
-                        <p>Edimael Becerra Rodriguez</p>
-                        <p>Guadalupe Becerra Rodriguez</p>
-                        <p>Maximino Quiñonez</p>
+                        <h4>Mis Padrinos</h4>
+                        <p>Etny Itzel Ochoa Tellez</p>
+                        <p>Carlos Enrique Díaz Villegas</p>
                     </div>
                 </div>
              </div>
@@ -359,7 +366,7 @@
             </div>
             <div class="container text-center reveal text-white">
                 <h2 class="section-title title-light">Confirma tu Asistencia</h2>
-                <p class="mt-3 mb-4">Por favor envíanos un mensaje antes del 15 de Mayo del 2026 para confirmar tu lugar.</p>
+                <p class="mt-3 mb-4">Por favor envíanos un mensaje antes del 04 de Junio del 2026 para confirmar tu lugar.</p>
                 
                 <a href="https://rsvpangela.wordpress.com/confirmacion/" target="_blank" class="rsvp-custom-btn reveal">
                     <span class="rsvp-label">Haz clic para confirmar</span>
@@ -380,7 +387,7 @@
     <!-- Smart Landing Overlay for QR -->
     <div id="qr-camera-overlay" class="qr-overlay-screen" style="display:none;">
         <div class="qr-overlay-content">
-            <h1 class="names">Angela</h1>
+            <h1 class="names">Zoé</h1>
             <p>¡Ayúdanos a capturar este momento!</p>
             <button id="btn-qr-take-photo" class="btn-camera mt-4">
                 <i class='bx bx-camera'></i> Abrir Cámara
@@ -393,7 +400,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <!-- JS Scripts -->
-    <script src="js/script.js?v=final_robust"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
 

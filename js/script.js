@@ -43,6 +43,7 @@ const handleEnvelopeClick = () => {
 
                 // Start Butterflies
                 if (typeof initButterflies === 'function') initButterflies();
+                if (typeof initRandomButterflies === 'function') initRandomButterflies();
 
                 // Start Typing
                 if (typeof startHeroTyping === 'function') startHeroTyping();
@@ -82,6 +83,7 @@ const handleEnvelopeClick = () => {
     const bgMusicVideo = document.getElementById('audio-btn-video');
 
     if (bgMusic) {
+        bgMusic.currentTime = 60; // Start at 1 minute
         bgMusic.play().then(() => {
             if (audioBtn) audioBtn.classList.add('playing');
             if (bgMusicVideo) bgMusicVideo.play().catch(e => console.log('Music video play failed:', e));
@@ -181,8 +183,8 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// COUNTDOWN TIMER (Live mode targeting July 18, 2026)
-const targetDate = new Date("2026-07-18T14:30:00").getTime();
+// COUNTDOWN TIMER (Live mode targeting July 04, 2026)
+const targetDate = new Date("2026-07-04T15:00:00").getTime();
 const countdownContainer = document.querySelector('.countdown-container');
 const celebrationSound = document.getElementById('celebration-sound');
 const balloonsContainer = document.getElementById('balloons-container');
@@ -242,7 +244,7 @@ function createPetal(container) {
 
 // HERO TYPING ANIMATION
 async function startHeroTyping() {
-    const nameText = "Ángela Alegría Becerra";
+    const nameText = "Zoé Roque Díaz";
     const line2 = "Te invito a celebrar conmigo este día tan especial";
 
     const namesEl = document.querySelector('.names-cursive');
@@ -268,8 +270,13 @@ function initButterflies() {
         setTimeout(() => createButterfly(container, true), i * 1500);
     }
     
-    // Continuous random spawn
-    setInterval(() => createButterfly(container, false), 10000);
+    // Continuous random spawn with variable timing
+    const spawnLoop = () => {
+        createButterfly(container, false);
+        const nextSpawn = 3000 + Math.random() * 6000;
+        setTimeout(spawnLoop, nextSpawn);
+    };
+    spawnLoop();
 
     // Intersection Observer for Section Corners
     const cornerObserver = new IntersectionObserver((entries) => {
@@ -477,7 +484,7 @@ const shareBtn = document.getElementById('share-btn-sticky');
 if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
         const shareData = {
-            title: 'Invitación a los XV Años de Angela Alegría',
+            title: 'Invitación a los XV Años de Zoé Roque Díaz',
             text: '¡Acompáñame a celebrar mis XV años! Te espero con mucha ilusión.',
             url: window.location.href.split('?')[0] // Clean URL
         };
@@ -513,11 +520,11 @@ if (calendarBtn && calendarOptions) {
     });
 
     const eventDetails = {
-        title: "XV Años de Angela Alegría",
+        title: "XV Años de Zoé Roque Díaz",
         description: "Te invito a celebrar mis XV años en este sueño hecho realidad.",
         location: "Jardín Villa Leona, C. San Luis 100, 62555 Jiutepec, Mor.",
-        start: "20260718T150000",
-        end: "20260719T000000"
+        start: "20260704T150000",
+        end: "20260705T000000"
     };
 
     // Google Calendar Link
@@ -759,9 +766,22 @@ window.addEventListener('load', () => {
     handleUrlActions();
 });
 
-// Horizontal Background Drift on Scroll
+// Global Scroll Effects
 window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
+    
+    // Parallax for k.jpeg (Location Photo)
+    const photo = document.querySelector('.location-photo');
+    if (photo) {
+        const rect = photo.parentElement.getBoundingClientRect();
+        const winHeight = window.innerHeight;
+        // Only animate if visible
+        if (rect.top < winHeight && rect.bottom > 0) {
+            const shift = (rect.top - winHeight / 2) * 0.15;
+            photo.style.transform = `scale(1.1) translateY(${shift}px)`;
+        }
+    }
+
     const speed = 0.08;
     // Drift every section slightly horizontally
     document.querySelectorAll('section').forEach(section => {
@@ -769,6 +789,34 @@ window.addEventListener('scroll', () => {
         section.style.backgroundPosition = `${50 + (xPos * 0.2)}% 50%`;
     });
 });
+
+// RANDOM BUTTERFLY SPAWNING
+function spawnRandomButterfly() {
+    const butterfly = document.createElement('div');
+    butterfly.className = 'butterfly-random';
+    
+    const randomDuration = 8 + Math.random() * 12;
+    const randomX = Math.random() * 100;
+    const randomRotate = (Math.random() - 0.5) * 360;
+    
+    butterfly.style.setProperty('--random-duration', `${randomDuration}s`);
+    butterfly.style.setProperty('--random-x', randomX);
+    butterfly.style.setProperty('--random-rotate', randomRotate);
+    butterfly.style.left = `${Math.random() * 100}%`;
+    
+    const img = document.createElement('img');
+    img.src = 'mariposa.png';
+    butterfly.appendChild(img);
+    
+    document.body.appendChild(butterfly);
+    
+    setTimeout(() => butterfly.remove(), randomDuration * 1000);
+}
+
+// Start random butterflies after initial intro
+function initRandomButterflies() {
+    setInterval(spawnRandomButterfly, 4000);
+}
 
 // TIMELINE ANIMATION (IntersectionObserver)
 const timelineItems = document.querySelectorAll('.timeline-item');
