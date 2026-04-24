@@ -1,21 +1,15 @@
 /* VARIABLES ======================================== */
 :root {
-    --primary-color: #E85D75; /* Vibrant Pink */
-    --primary-soft: #F4A7B9; /* Soft Pink */
-    --primary-peach: #F7B7A3; /* Light Peach */
-    --secondary-color: #2F5D50; /* Deep Green */
-    --secondary-soft: #7A9E8F; /* Soft Green */
-    --accent-color: #D4AF37; /* Satin Gold */
-    --accent-soft: #E6C97A; /* Soft Gold */
-    --bg-color: #F6F1E9; /* Ivory */
-    --bg-beige: #E8D9C5; /* Warm Beige */
-    --text-color: #2F5D50; /* Deep Green for better legibility and elegance */
-    --text-light: #7A9E8F;
-    --white: #ffffff;
+    --primary-color: #E85D75; 
+    --primary-soft: #FBDCE2; 
+    --accent-color: #D4AF37; 
+    --text-color: #4A4A4A;
+    --bg-color: #FFF9F9;
     
-    --font-head: 'Playfair Display', serif;
+    --font-head: 'Cinzel', serif;
     --font-body: 'Montserrat', sans-serif;
     --font-accent: 'Rock Salt', cursive;
+    --font-japanese: 'Zen Kurenaido', sans-serif;
     --font-brush: 'Rock Salt', cursive; /* Uniformity: Use Rock Salt for titles too */
     
     --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -416,6 +410,14 @@ body.ui-visible .floating-nav {
     padding: 0;
     overflow: hidden; /* Clips the video inside */
     background-color: #000; /* Dark background under video */
+}
+
+.location-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: sepia(0.1) saturate(1.1) brightness(1.05); /* Soft anime-style filter */
+    transition: transform 0.5s ease;
 }
 
 #audio-btn-video {
@@ -2536,4 +2538,90 @@ section {
 .butterfly-random img {
     width: 100%;
     animation: wingFlap 0.3s ease-in-out infinite;
+}
+
+/* --- Level Up Design Improvements --- */
+
+/* Japanese Pattern Backgrounds */
+.location-section, .rsvp-section {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='40' viewBox='0 0 80 40'%3E%3Cpath fill='%23e85d75' fill-opacity='0.03' d='M0 40a40 40 0 0 1 40-40 40 40 0 0 1 40 40H78a38 38 0 0 0-76 0H0zm7 0a33 33 0 0 1 33-33 33 33 0 0 1 33 33h-2a31 31 0 0 0-62 0H7zm7 0a26 26 0 0 1 26-26 26 26 0 0 1 26 26h-2a24 24 0 0 0-48 0h-2zm7 0a19 19 0 0 1 19-19 19 19 0 0 1 19 19h-2a17 17 0 0 0-34 0h-2zm7 0a12 12 0 0 1 12-12 12 12 0 0 1 12 12h-2a10 10 0 0 0-20 0h-2zm7 0a5 5 0 0 1 5-5 5 5 0 0 1 5 5h-2a3 3 0 0 0-6 0h-2z'/%3E%3C/svg%3E");
+}
+
+/* Japanese Border for Photos */
+.premium-frame {
+    border: 8px solid white;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2), 0 0 0 2px var(--accent-color);
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    background: white;
+}
+
+.premium-frame::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border: 1px solid var(--accent-color);
+    pointer-events: none;
+    margin: 5px;
+}
+
+/* Decorative Divider */
+.section-divider {
+    width: 100%;
+    height: 60px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" fill="%23D4AF37"><circle cx="50" cy="10" r="3"/><path d="M0 10h40M60 10h40" stroke="%23D4AF37" stroke-width="0.3"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 60px 0;
+    opacity: 0.6;
+}
+
+/* High Contrast Section Titles */
+.section-title {
+    font-size: 3.5rem !important;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
+    margin-bottom: 2rem;
+}
+
+/* Itinerary Highlights */
+.timeline-item.important-event {
+    background: rgba(232, 93, 117, 0.05);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px dashed var(--primary-color);
+}
+
+.timeline-item.important-event .event-title {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+/* RSVP Refinement */
+.rsvp-custom-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    margin-top: 2rem;
+}
+
+.rsvp-label {
+    font-family: var(--font-accent);
+    color: var(--accent-color);
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.rsvp-img-btn {
+    width: 250px !important;
+    height: auto !important;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.rsvp-img-btn:hover {
+    transform: scale(1.1) rotate(2deg);
 }
