@@ -230,7 +230,7 @@ function createPetal(container) {
     const isStar = Math.random() > 0.6; // Mix of petals and stars
     el.className = isStar ? 'falling-star' : 'petal';
     
-    const sizeValue = isStar ? (Math.random() * 10 + 10) : (Math.random() * 10 + 10);
+    const sizeValue = isStar ? (Math.random() * 12 + 20) : (Math.random() * 10 + 12);
     const size = sizeValue + 'px';
     el.style.width = size;
     el.style.height = size;
