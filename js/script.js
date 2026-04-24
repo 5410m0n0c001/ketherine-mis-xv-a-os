@@ -95,12 +95,12 @@ const handleEnvelopeClick = () => {
     // Visual feedback: Hide hint immediately
     if (envelopeHint) envelopeHint.style.display = 'none';
 
-    // FALLBACK: Emergency opening if video is stuck or fails (1.5s)
     const emergencyTimeout = setTimeout(() => {
         if (envelopeScreen && !envelopeScreen.classList.contains('hidden')) {
+            console.log('Emergency fallback triggered');
             openInvitation();
         }
-    }, 1500);
+    }, 6000);
 };
 
 
