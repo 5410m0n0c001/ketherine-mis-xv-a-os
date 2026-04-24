@@ -2625,3 +2625,38 @@ section {
 .rsvp-img-btn:hover {
     transform: scale(1.1) rotate(2deg);
 }
+
+/* --- Mobile Fixes --- */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.2rem !important; /* Smaller titles on mobile */
+        text-align: center !important;
+        width: 100%;
+        display: block;
+    }
+    
+    .rsvp-label {
+        font-size: 1.2rem; /* Smaller RSVP text */
+        line-height: 1.4;
+        text-align: center;
+        display: block;
+    }
+
+    .dresscode-section .section-title {
+        margin-left: 0;
+        margin-right: 0;
+        display: block;
+        text-align: center;
+    }
+
+    .hero-content {
+        padding: 10px 15px !important;
+        min-height: auto !important;
+        width: 90% !important;
+    }
+    
+    .date-highlight {
+        margin-top: 10px !important;
+        margin-bottom: 5px !important;
+    }
+}
