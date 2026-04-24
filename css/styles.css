@@ -248,7 +248,14 @@ ul {
     object-fit: contain;
     background-color: transparent;
     pointer-events: none;
-    /* Removed opacity: 0 to show first frame immediately */
+    clip-path: inset(8% 18% 8% 18% round 15px); /* Mask the checkerboard background */
+    transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1.1); /* Slight zoom to focus on the envelope */
+}
+
+.envelope-screen.video-playing .envelope-video {
+    clip-path: inset(0% 0% 0% 0% round 0);
+    transform: scale(1);
 }
 
 .envelope-hint {
@@ -420,21 +427,38 @@ body.ui-visible .floating-nav {
 
 .share-btn-sticky { 
     top: auto; 
-    bottom: 90px; /* Elevated slightly more for visibility */
-    right: 20px;
+    bottom: 90px;
+    right: 30px;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0;
-    z-index: 9995; /* Just below floating-nav but above content */
-    /* Initial state hidden via shared selector above */
+    z-index: 9995;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    animation: sharePulse 2s ease-in-out infinite;
+}
+
+.share-label {
+    font-family: var(--font-accent);
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    text-shadow: 0 0 10px #fff;
+    font-weight: bold;
+}
+
+@keyframes sharePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
 }
 
 .share-icon-img {
-    width: 60px; 
-    height: 60px;
+    width: 45px;
+    height: 45px;
     object-fit: contain;
-    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5));
+    filter: drop-shadow(0 6px 15px rgba(0,0,0,0.4));
     transition: transform 0.3s ease;
 }
 

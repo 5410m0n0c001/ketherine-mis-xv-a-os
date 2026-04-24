@@ -16,7 +16,9 @@ if (envelopeVideo) {
 const handleEnvelopeClick = () => {
     if (isEnvelopeOpened) return;
     isEnvelopeOpened = true; 
-
+    
+    // Expand mask and play animation
+    if (envelopeScreen) envelopeScreen.classList.add('video-playing');
     // Capture hero video reference for gesture-locked playback
     const heroVideo = document.getElementById('hero-video');
 
@@ -523,8 +525,8 @@ if (calendarBtn && calendarOptions) {
         title: "XV Años de Zoé Roque Díaz",
         description: "Te invito a celebrar mis XV años en este sueño hecho realidad.",
         location: "Jardín Villa Leona, C. San Luis 100, 62555 Jiutepec, Mor.",
-        start: "20260704T150000",
-        end: "20260705T000000"
+        start: "20260604T150000",
+        end: "20260605T000000"
     };
 
     // Google Calendar Link
