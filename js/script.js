@@ -529,7 +529,7 @@ if (calendarBtn && calendarOptions) {
     const eventDetails = {
         title: "XV Años de Zoé Roque Díaz",
         description: "Te invito a celebrar mis XV años en este sueño hecho realidad.",
-        location: "Jardín Villa Leona, C. San Luis 100, 62555 Jiutepec, Mor.",
+        location: "Jardin “Manzanares”, Ignacio Allende 515, Casa Blanca, 62587 Temixco, Mor.",
         start: "20260604T150000",
         end: "20260605T000000"
     };
