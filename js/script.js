@@ -184,7 +184,7 @@ window.addEventListener('scroll', () => {
 });
 
 // COUNTDOWN TIMER (Live mode targeting July 04, 2026)
-const targetDate = new Date("2026-07-04T15:00:00").getTime();
+const targetDate = new Date("2026-06-04T15:00:00").getTime();
 const countdownContainer = document.querySelector('.countdown-container');
 const celebrationSound = document.getElementById('celebration-sound');
 const balloonsContainer = document.getElementById('balloons-container');

@@ -16,7 +16,7 @@
     --font-head: 'Playfair Display', serif;
     --font-body: 'Montserrat', sans-serif;
     --font-accent: 'Rock Salt', cursive;
-    --font-brush: 'Zen Kurenaido', sans-serif;
+    --font-brush: 'Rock Salt', cursive; /* Uniformity: Use Rock Salt for titles too */
     
     --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -1132,8 +1132,8 @@ body.ui-visible .floating-nav {
 
 /* SECTION TITLES */
 .section-title {
-    font-family: var(--font-brush);
-    font-size: 3rem;
+    font-family: var(--font-accent);
+    font-size: 2.2rem; /* Adjusted size for Rock Salt in headers */
     color: var(--primary-color);
     position: relative;
     display: inline-block;
