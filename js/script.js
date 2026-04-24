@@ -226,21 +226,26 @@ function initSakura() {
 }
 
 function createPetal(container) {
-    const petal = document.createElement('div');
-    petal.className = 'petal';
+    const el = document.createElement('div');
+    const isStar = Math.random() > 0.6; // Mix of petals and stars
+    el.className = isStar ? 'falling-star' : 'petal';
     
-    const size = Math.random() * 10 + 10 + 'px';
-    petal.style.width = size;
-    petal.style.height = size;
+    const sizeValue = isStar ? (Math.random() * 10 + 10) : (Math.random() * 10 + 10);
+    const size = sizeValue + 'px';
+    el.style.width = size;
+    el.style.height = size;
     
-    petal.style.left = Math.random() * 100 + '%';
-    petal.style.animationDuration = Math.random() * 3 + 4 + 's';
-    petal.style.animationDelay = Math.random() * 5 + 's';
+    el.style.left = Math.random() * 100 + '%';
+    el.style.animationDuration = Math.random() * 4 + 4 + 's';
+    el.style.animationDelay = Math.random() * 8 + 's';
     
-    container.appendChild(petal);
+    container.appendChild(el);
     
-    petal.addEventListener('animationiteration', () => {
-        petal.style.left = Math.random() * 100 + '%';
+    el.addEventListener('animationiteration', () => {
+        el.style.left = Math.random() * 100 + '%';
+        // Randomly change type on each reset for dynamic feel
+        const newIsStar = Math.random() > 0.6;
+        el.className = newIsStar ? 'falling-star' : 'petal';
     });
 }
 

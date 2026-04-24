@@ -46,7 +46,7 @@ img, video, .corner-img, .hero-video, .gift-logo, .dresscode-icon-img,
 }
 
 /* Decorative non-interactive elements should NOT block scroll or clicks below them */
-.corner-img, .leaf, .balloons-container, .hero-video {
+.corner-img, .balloons-container, .hero-video {
     pointer-events: none !important;
 }
 
@@ -568,6 +568,15 @@ body.ui-visible .floating-nav {
     border-radius: 150% 0 150% 0;
     opacity: 0.7;
     animation: fall linear infinite;
+}
+
+.falling-star {
+    position: absolute;
+    background: #FFD700;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    opacity: 0.8;
+    animation: fall linear infinite;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
 }
 
 @keyframes fall {
@@ -2217,27 +2226,7 @@ section {
 .reveal.sequence-3 { transition-delay: 0.5s; }
 .reveal.sequence-4 { transition-delay: 0.7s; }
 
-/* Floating Leaves */
-.leaf {
-    position: fixed;
-    width: 30px;
-    height: 30px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23556B2F"><path d="M12 2C7.589 2 4 5.589 4 9.995 3.971 16.44 11.696 21.784 12 22c0 0 8.029-5.56 8-12.005C20 5.589 16.411 2 12 2zm0 18.06c-1.353-1.116-6.03-5.286-6-10.065C6.014 6.697 8.691 4 12 4s5.986 2.697 6 5.995c.03 4.779-4.647 8.949-6 10.065z"/></svg>');
-    background-size: cover;
-    opacity: 0.3;
-    pointer-events: none;
-    z-index: 10;
-    animation: drift linear infinite;
-}
 
-.leaf-1 { left: 10%; top: -50px; animation-duration: 15s; animation-delay: 2s; }
-.leaf-2 { left: 50%; top: -50px; animation-duration: 25s; animation-delay: 5s; width: 40px; height: 40px; }
-.leaf-3 { left: 85%; top: -50px; animation-duration: 18s; animation-delay: 0s; }
-
-@keyframes drift {
-    0% { transform: translateY(-50px) rotate(0deg); }
-    100% { transform: translateY(110vh) rotate(360deg); }
-}
 
 /* Celebration Elements - ULTRA CLEAN LOOP */
 .balloons-container {
