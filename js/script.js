@@ -186,7 +186,7 @@ window.addEventListener('scroll', () => {
 });
 
 // COUNTDOWN TIMER (Live mode targeting July 04, 2026)
-const targetDate = new Date("2026-06-04T15:00:00").getTime();
+const targetDate = new Date("2026-07-04T15:00:00").getTime();
 const countdownContainer = document.querySelector('.countdown-container');
 const celebrationSound = document.getElementById('celebration-sound');
 const balloonsContainer = document.getElementById('balloons-container');
@@ -251,7 +251,7 @@ function createPetal(container) {
 
 // HERO TYPING ANIMATION
 async function startHeroTyping() {
-    const nameText = "Zoé Roque Díaz";
+    const nameText = "Katherine Roque Díaz";
     const line2 = "Te invito a celebrar conmigo este día tan especial";
 
     const namesEl = document.querySelector('.names-cursive');
@@ -527,11 +527,11 @@ if (calendarBtn && calendarOptions) {
     });
 
     const eventDetails = {
-        title: "XV Años de Zoé Roque Díaz",
+        title: "XV Años de Katherine Roque Díaz",
         description: "Te invito a celebrar mis XV años en este sueño hecho realidad.",
         location: "Jardin “Manzanares”, Ignacio Allende 515, Casa Blanca, 62587 Temixco, Mor.",
-        start: "20260604T150000",
-        end: "20260605T000000"
+        start: "20260704T150000",
+        end: "20260705T000000"
     };
 
     // Google Calendar Link
