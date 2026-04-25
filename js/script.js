@@ -491,7 +491,7 @@ const shareBtn = document.getElementById('share-btn-sticky');
 if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
         const shareData = {
-            title: 'Invitación a los XV Años de Zoé Roque Díaz',
+            title: 'Invitación a los XV Años de Katherine Roque Díaz',
             text: '¡Acompáñame a celebrar mis XV años! Te espero con mucha ilusión.',
             url: window.location.href.split('?')[0] // Clean URL
         };
