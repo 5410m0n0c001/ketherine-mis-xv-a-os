@@ -16,6 +16,9 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
     
+    <!-- Swiper.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
     <!-- Meta tags SEO / Compartir -->
     <meta name="description" content="Acompáñanos a celebrar los XV Años de Katherine Roque Díaz. Una noche mágica llena de alegría y recuerdos inolvidables.">
     <meta property="og:url" content="https://5410m0n0c001.github.io/ketherine-mis-xv-a-os/">
@@ -98,11 +101,40 @@
         <section id="hero" class="hero-section">
             <div class="paper-texture-top"></div>
             
-            <div class="hero-video-container">
-                <!-- Video de portada (muted for autoplay, strict preloading for GitHub Pages) -->
-                <video id="hero-video" class="hero-video" autoplay loop muted playsinline preload="auto">
-                    <source src="portada.mp4?v=final_robust" type="video/mp4">
-                </video>
+            <!-- 3D ALBUM COVERFLOW -->
+            <div class="hero-album-container">
+                <div class="swiper heroSwiper">
+                    <div class="swiper-wrapper">
+                        <!-- Slide 1: Main Photo -->
+                        <div class="swiper-slide">
+                            <div class="hero-album-item">
+                                <img src="vkfoto.jpeg" alt="Katherine - Foto Principal">
+                                <div class="item-overlay"></div>
+                            </div>
+                        </div>
+                        <!-- Slide 2: Portrait Video -->
+                        <div class="swiper-slide">
+                            <div class="hero-album-item video-item">
+                                <video class="hero-video-item" muted loop playsinline poster="sobre.png">
+                                    <source src="vk.mp4" type="video/mp4">
+                                </video>
+                                <div class="item-overlay"></div>
+                                <div class="video-play-hint"><i class='bx bx-play-circle'></i></div>
+                            </div>
+                        </div>
+                        <!-- Slide 3: Portrait Photo -->
+                        <div class="swiper-slide">
+                            <div class="hero-album-item">
+                                <img src="k.jpeg" alt="Katherine - Retrato">
+                                <div class="item-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Navigation -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
             </div>
 
             <div class="hero-content text-center">
@@ -419,6 +451,9 @@
     
     <!-- QR Code Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- Swiper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
     <!-- JS Scripts -->
     <script src="js/script.js"></script>

@@ -102,7 +102,7 @@ const handleEnvelopeClick = () => {
             console.log('Emergency fallback triggered');
             openInvitation();
         }
-    }, 6000);
+    }, 3000);
 };
 
 
@@ -858,3 +858,54 @@ if (btnFoods && btnDrinks) {
         menuFoods.classList.remove('active');
     });
 }
+
+
+// SWIPER 3D ALBUM INIT
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof Swiper !== 'undefined') {
+        const heroSwiper = new Swiper('.heroSwiper', {
+            effect: 'coverflow',
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            loop: true,
+            coverflowEffect: {
+                rotate: 25,
+                stretch: 0,
+                depth: 150,
+                modifier: 1,
+                slideShadows: true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true
+            },
+            on: {
+                init: function () {
+                    // Auto-play video in active slide if any
+                    const activeVideo = this.slides[this.activeIndex].querySelector('video');
+                    if (activeVideo) activeVideo.play().catch(e => console.log(e));
+                },
+                slideChangeTransitionEnd: function () {
+                    // Pause all videos
+                    this.slides.forEach(slide => {
+                        const vid = slide.querySelector('video');
+                        if (vid) vid.pause();
+                    });
+                    // Play video in active slide
+                    const activeVideo = this.slides[this.activeIndex].querySelector('video');
+                    if (activeVideo) activeVideo.play().catch(e => console.log(e));
+                }
+            }
+        });
+    }
+});
