@@ -49,6 +49,7 @@ const handleEnvelopeClick = () => {
 
                 // Start Typing
                 if (typeof startHeroTyping === 'function') startHeroTyping();
+                if (window.heroSwiper) { window.heroSwiper.slideToLoop(0, 0); window.heroSwiper.autoplay.start(); }
             }, 1000);
         }
         
@@ -863,7 +864,7 @@ if (btnFoods && btnDrinks) {
 // SWIPER 3D ALBUM INIT
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof Swiper !== 'undefined') {
-        const heroSwiper = new Swiper('.heroSwiper', {
+        window.heroSwiper = new Swiper('.heroSwiper', {
             effect: 'coverflow',
             grabCursor: true,
             centeredSlides: true,
