@@ -6,12 +6,7 @@ const envelopeHint = document.querySelector('.envelope-hint');
 // State control for opening
 let isEnvelopeOpened = false;
 
-// Force first frame rendering
-if (envelopeVideo) {
-    envelopeVideo.addEventListener('loadedmetadata', () => {
-        envelopeVideo.currentTime = 0.1;
-    }, { once: true });
-}
+// First frame rendering relies on poster attribute.
 
 const handleEnvelopeClick = () => {
     if (isEnvelopeOpened) return;
@@ -62,6 +57,7 @@ const handleEnvelopeClick = () => {
 
     // VISUAL PRIORITY: Immediately start envelope animation
     if (envelopeVideo) {
+        envelopeVideo.muted = true; // Ensure muted to bypass Edge autoplay restrictions
         envelopeVideo.play().catch(e => {
             console.log('Envelope animation play failed, opening manually:', e);
             openInvitation();
@@ -86,7 +82,7 @@ const handleEnvelopeClick = () => {
     const bgMusicVideo = document.getElementById('audio-btn-video');
 
     if (bgMusic) {
-        bgMusic.currentTime = 60; // Start at 1 minute
+        // Edge fix: don't manipulate currentTime before play(). Let HTML #t=60 handle it.
         bgMusic.play().then(() => {
             if (audioBtn) audioBtn.classList.add('playing');
             if (bgMusicVideo) bgMusicVideo.play().catch(e => console.log('Music video play failed:', e));
