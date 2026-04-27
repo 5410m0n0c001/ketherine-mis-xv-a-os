@@ -102,7 +102,7 @@ const handleEnvelopeClick = () => {
             console.log('Emergency fallback triggered');
             openInvitation();
         }
-    }, 3000);
+    }, 7000);
 };
 
 
