@@ -907,6 +907,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (activeVideo) activeVideo.play().catch(e => console.log(e));
                 }
             }
-        });
+        }); window.heroSwiper.autoplay.stop();
     }
 });
