@@ -496,6 +496,9 @@
     <!-- QR Code Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
+    <!-- Excel Library (SheetJS) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
     <!-- Swiper.js -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -504,7 +507,42 @@
         <div class="modal-content glass">
             <span class="close-modal" id="close-admin">&times;</span>
             <h2 class="section-title">Panel de Administración</h2>
+            
+            <!-- Dashboard Stats -->
+            <div class="admin-dashboard mb-4">
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-total">0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-confirmed">0</span>
+                    <span class="stat-label">Confirmados</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-num" id="stat-pending">0</span>
+                    <span class="stat-label">Pendientes</span>
+                </div>
+            </div>
+
+            <div class="admin-actions mb-4">
+                <button id="btn-select-guest" class="btn-primary w-100 mb-2">
+                    <i class='bx bx-user-check'></i> Seleccionar Invitado
+                </button>
+                <div style="display: flex; gap: 10px;">
+                    <button id="btn-import-excel" class="btn-secondary w-50">
+                        <i class='bx bx-file-blank'></i> Importar Excel
+                    </button>
+                    <button id="btn-check-status" class="btn-secondary w-50">
+                        <i class='bx bx-list-ul'></i> Ver Listado
+                    </button>
+                </div>
+                <input type="file" id="excel-input" accept=".xlsx, .xls" style="display: none;">
+            </div>
+
+            <hr class="my-4" style="opacity: 0.2;">
+
             <form id="admin-form">
+                <h3 style="font-size: 1rem; margin-bottom: 15px; color: var(--primary-color);">Generar Nuevo (Manual)</h3>
                 <div class="form-group">
                     <label for="guest-name">Nombre del Invitado:</label>
                     <input type="text" id="guest-name" required placeholder="Ej. Familia Pérez">
@@ -516,8 +554,36 @@
                 <button type="submit" class="btn-primary">Generar Boleto</button>
                 <button type="button" class="btn-secondary mt-2 w-100 close-modal-btn">Cerrar Panel</button>
             </form>
-            </form>
             <div id="admin-status" class="status-msg"></div>
+        </div>
+    </div>
+
+    <!-- GUEST SELECTION MODAL -->
+    <div id="selection-modal" class="modal-premium">
+        <div class="modal-content glass selection-content">
+            <span class="close-modal" id="close-selection">&times;</span>
+            <h2 class="section-title">Seleccionar Invitado</h2>
+            
+            <div class="search-box mb-3">
+                <i class='bx bx-search'></i>
+                <input type="text" id="guest-search" placeholder="Buscar por nombre o familia...">
+            </div>
+
+            <div class="filter-box mb-3">
+                <button class="filter-chip active" data-filter="all">Todos</button>
+                <button class="filter-chip" data-filter="confirmado">Confirmados</button>
+                <button class="filter-chip" data-filter="pendiente">Pendientes</button>
+            </div>
+
+            <div id="guest-list-container" class="guest-list-scroll">
+                <!-- List items injected by JS -->
+                <div class="text-center py-5">
+                    <i class='bx bx-loader-alt bx-spin' style="font-size: 2rem;"></i>
+                    <p>Cargando invitados...</p>
+                </div>
+            </div>
+            
+            <button type="button" class="btn-secondary mt-3 w-100 close-modal-btn">Cerrar</button>
         </div>
     </div>
 

@@ -950,29 +950,30 @@ let supabaseClient = null;
 
 if (typeof supabase !== 'undefined' && supabase.createClient) {
     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-} else {
-    console.warn("Supabase library not loaded yet or invalid global object.");
 }
+
+// Global state for guests
+let allGuests = [];
+let filteredGuests = [];
 
 // 2. SECUENCIA SECRETA DE ADMINISTRADOR
 let adminClickCount = 0;
-const adminTrigger = document.getElementById('admin-trigger'); // El contenedor del nombre
+const adminTrigger = document.getElementById('admin-trigger');
 
 if (adminTrigger) {
     adminTrigger.style.cursor = 'pointer';
     adminTrigger.addEventListener('click', () => {
-        console.log("Click detected on admin trigger:", adminClickCount + 1);
         adminClickCount++;
         if (adminClickCount === 5) {
             adminClickCount = 0;
             document.getElementById('admin-modal').style.display = 'flex';
+            loadDashboardStats();
         }
-        // Reset count if no clicks for 3 seconds
         setTimeout(() => { adminClickCount = 0; }, 3000);
     });
 }
 
-// 3. CERRAR MODALES (Actualizado para botones y exterior)
+// 3. CERRAR MODALES
 document.querySelectorAll('.close-modal, .close-modal-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         const modal = btn.closest('.modal-premium');
@@ -980,72 +981,176 @@ document.querySelectorAll('.close-modal, .close-modal-btn').forEach(btn => {
     });
 });
 
-// Cerrar al hacer clic fuera del contenido
-window.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal-premium')) {
-        e.target.style.display = 'none';
+// 4. DASHBOARD & STATS
+async function loadDashboardStats() {
+    if (!supabaseClient) return;
+    try {
+        const { data, error } = await supabaseClient.from('guests').select('status, total_guests');
+        if (error) throw error;
+
+        const total = data.length;
+        const confirmed = data.filter(g => g.status === 'confirmado').length;
+        const pending = data.filter(g => g.status === 'pendiente').length;
+
+        document.getElementById('stat-total').innerText = total;
+        document.getElementById('stat-confirmed').innerText = confirmed;
+        document.getElementById('stat-pending').innerText = pending;
+    } catch (err) {
+        console.error("Error stats:", err);
     }
-});
+}
 
-// 4. GENERAR INVITADO (ADMIN)
-const adminForm = document.getElementById('admin-form');
-const adminStatus = document.getElementById('admin-status');
+// 5. IMPORTAR EXCEL
+const btnImportExcel = document.getElementById('btn-import-excel');
+const excelInput = document.getElementById('excel-input');
 
-if (adminForm) {
-    adminForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('guest-name').value;
-        const count = document.getElementById('guest-count').value;
-        const id = crypto.randomUUID();
+if (btnImportExcel && excelInput) {
+    btnImportExcel.addEventListener('click', () => excelInput.click());
+    excelInput.addEventListener('change', handleExcelImport);
+}
 
-        adminStatus.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Guardando...';
+async function handleExcelImport(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+        const bstr = evt.target.result;
+        const wb = XLSX.read(bstr, { type: 'binary' });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws);
+
+        // Mapeo de columnas según el Excel del usuario
+        const mappedData = data.map(row => {
+            const total = parseInt(row['Total personas'] || 0);
+            const adults = parseInt(row['Adultos'] || 0);
+            const kids = parseInt(row['Niños'] || 0);
+            
+            return {
+                name: row['Nombre completo'] || 'Invitado Sin Nombre',
+                guest_group: row['Familia / Grupo'] || '',
+                status: row['Confirmación'] === 'Sí' ? 'confirmado' : 'pendiente',
+                adults: adults,
+                kids: kids,
+                total_guests: total,
+                passes_assigned: total,
+                table_number: String(row['Mesa asignada'] || ''),
+                dietary_restrictions: row['Restricción alimenticia'] || '',
+                phone: String(row['Teléfono'] || '')
+            };
+        });
+
+        const adminStatus = document.getElementById('admin-status');
+        adminStatus.innerHTML = `<i class="bx bx-loader-alt bx-spin"></i> Importando ${mappedData.length} invitados...`;
 
         try {
-            if (!supabaseClient) throw new Error("Supabase no está configurado.");
-
-            const { data, error } = await supabaseClient
-                .from('invitados')
-                .insert([
-                    { id: id, nombre: name, cantidad: parseInt(count), estado: 'confirmado' }
-                ]);
-
+            const { error } = await supabaseClient.from('guests').upsert(mappedData, { onConflict: 'name' });
             if (error) throw error;
-
-            adminStatus.innerHTML = `
-                <div style="color: green; margin-bottom: 15px;">¡Guardado con éxito!</div>
-                <p style="font-size: 0.9rem; color: #666;">Enlace para compartir:</p>
-                <div style="background: #f0f0f0; padding: 10px; border-radius: 5px; word-break: break-all; font-size: 0.8rem; margin: 10px 0;">
-                    ${window.location.origin}${window.location.pathname}?id=${id}
-                </div>
-                <button type="button" class="btn-primary" onclick="window.location.search = '?id=${id}'">Ver Mi Invitación</button>
-                <button type="button" class="btn-secondary mt-2 w-100" onclick="document.getElementById('admin-modal').style.display='none'; document.getElementById('admin-status').innerHTML=''">Finalizar</button>
-            `;
-            
-            // Actualizar la invitación en tiempo real (detrás del modal)
-            updateInvitationUI({ id, nombre: name, cantidad: count });
-            
-            // Mostrar boleto modal
-            showTicket(id, name, count);
-            
-            // Reset form
-            adminForm.reset();
-            // No cerramos automáticamente para que el admin vea la URL
+            adminStatus.innerHTML = `<span style="color: green;">¡Importación exitosa! ${mappedData.length} registros procesados.</span>`;
+            loadDashboardStats();
         } catch (err) {
-            console.error("Error al guardar:", err);
+            console.error("Error import:", err);
             adminStatus.innerHTML = `<span style="color: red;">Error: ${err.message}</span>`;
         }
+    };
+    reader.readAsBinaryString(file);
+}
+
+// 6. SELECCIÓN DE INVITADOS (MODAL)
+const btnSelectGuest = document.getElementById('btn-select-guest');
+const selectionModal = document.getElementById('selection-modal');
+const guestListContainer = document.getElementById('guest-list-container');
+const guestSearch = document.getElementById('guest-search');
+
+if (btnSelectGuest) {
+    btnSelectGuest.addEventListener('click', openSelectionModal);
+}
+
+async function openSelectionModal() {
+    selectionModal.style.display = 'flex';
+    guestListContainer.innerHTML = '<div class="text-center py-5"><i class="bx bx-loader-alt bx-spin" style="font-size: 2rem;"></i></div>';
+    
+    try {
+        const { data, error } = await supabaseClient.from('guests').select('*').order('name', { ascending: true });
+        if (error) throw error;
+        allGuests = data;
+        renderGuestList(allGuests);
+    } catch (err) {
+        guestListContainer.innerHTML = `<p style="color: red;">Error: ${err.message}</p>`;
+    }
+}
+
+function renderGuestList(guests) {
+    if (guests.length === 0) {
+        guestListContainer.innerHTML = '<p class="text-center py-4">No se encontraron invitados.</p>';
+        return;
+    }
+
+    guestListContainer.innerHTML = guests.map(g => `
+        <div class="guest-item">
+            <div class="guest-item-info">
+                <h4>${g.name}</h4>
+                <p>${g.guest_group || 'Sin grupo'} • Mesa ${g.table_number || 'S/N'}</p>
+                <div style="margin-top: 5px;">
+                    <span class="badge badge-${g.status}">${g.status}</span>
+                    <span style="font-size: 0.7rem; color: #888; margin-left: 5px;">${g.total_guests} pases</span>
+                </div>
+            </div>
+            <button class="btn-select-action" onclick="selectGuest('${g.id}')">
+                <i class='bx bx-chevron-right'></i>
+            </button>
+        </div>
+    `).join('');
+}
+
+// Filtro y Búsqueda
+if (guestSearch) {
+    guestSearch.addEventListener('input', () => {
+        const term = guestSearch.value.toLowerCase();
+        const filtered = allGuests.filter(g => 
+            g.name.toLowerCase().includes(term) || 
+            (g.guest_group && g.guest_group.toLowerCase().includes(term))
+        );
+        renderGuestList(filtered);
     });
 }
 
-// 5. MOSTRAR BOLETO Y ACTUALIZAR UI DINÁMICA
+document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const filter = chip.dataset.filter;
+        const filtered = filter === 'all' ? allGuests : allGuests.filter(g => g.status === filter);
+        renderGuestList(filtered);
+    });
+});
+
+// 7. ACCIÓN AL SELECCIONAR
+window.selectGuest = async (id) => {
+    const guest = allGuests.find(g => g.id === id);
+    if (!guest) return;
+
+    selectionModal.style.display = 'none';
+    document.getElementById('admin-modal').style.display = 'none';
+    
+    // Inyectar en URL sin recargar para que se vea como si fuera su link
+    const newUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+    
+    updateInvitationUI(guest);
+    showTicket(guest.id, guest.name, guest.total_guests);
+};
+
+// 8. ACTUALIZAR UI DINÁMICA
 function updateInvitationUI(guest) {
-    const { id, nombre, cantidad } = guest;
+    const { id, name, total_guests, table_number, adults, kids, guest_group, dietary_restrictions } = guest;
 
     // Actualizar Hero
     const guestWelcome = document.getElementById('guest-welcome');
     const displayGuestName = document.getElementById('display-guest-name');
     if (guestWelcome && displayGuestName) {
-        displayGuestName.innerText = nombre;
+        displayGuestName.innerText = name;
         guestWelcome.style.display = 'block';
     }
 
@@ -1056,34 +1161,54 @@ function updateInvitationUI(guest) {
     const qrMainContainer = document.getElementById('dynamic-qr-main');
 
     if (guestAccessInfo) {
-        if (displayGuestNameMain) displayGuestNameMain.innerText = nombre;
-        if (displayGuestCount) displayGuestCount.innerText = cantidad;
+        if (displayGuestNameMain) displayGuestNameMain.innerText = name;
+        if (displayGuestCount) displayGuestCount.innerText = total_guests;
+        
+        // Agregar detalles adicionales (Mesa, Adultos, Niños)
+        let detailsHtml = `<p class="pases-count"><span id="display-guest-count">${total_guests}</span> Pases</p>`;
+        detailsHtml += `<p style="font-size: 0.9rem; margin: 5px 0;">Mesa: <strong>${table_number || 'Por asignar'}</strong></p>`;
+        if (adults > 0 || kids > 0) {
+            detailsHtml += `<p style="font-size: 0.75rem; color: #666;">(${adults} Adultos, ${kids} Niños)</p>`;
+        }
+        if (dietary_restrictions) {
+            detailsHtml += `<p style="font-size: 0.75rem; color: #E85D75; font-style: italic;">Nota: ${dietary_restrictions}</p>`;
+        }
+        
+        const detailsContainer = guestAccessInfo.querySelector('.guest-details');
+        if (detailsContainer) {
+            // Reemplazar o añadir pases-count
+            const pasesEl = detailsContainer.querySelector('.pases-count');
+            if (pasesEl) pasesEl.outerHTML = detailsHtml;
+        }
+
         guestAccessInfo.style.display = 'block';
     }
 
-    // Generar QR en el contenedor principal
+    // Generar QR
     if (qrMainContainer && typeof QRCode !== 'undefined') {
         qrMainContainer.innerHTML = '';
-        qrMainContainer.style.background = 'white'; // Asegurar contraste
+        qrMainContainer.style.background = 'white';
         qrMainContainer.style.padding = '10px';
-        
         const ticketUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
         new QRCode(qrMainContainer, {
             text: ticketUrl,
-            width: 150,
-            height: 150,
+            width: 140,
+            height: 140,
             colorDark: "#E85D75",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
         });
-        console.log("Embedded QR generated for:", ticketUrl);
     }
 
-    // Opcional: También mostrar el modal del boleto al inicio
-    showTicket(id, nombre, cantidad);
+    // Actualizar Botón WhatsApp Dinámico
+    const rsvpBtn = document.querySelector('.rsvp-custom-btn');
+    if (rsvpBtn) {
+        const msg = `Hola, confirmo mi asistencia a los XV de Katherine:\n\nNombre: ${name}\nGrupo: ${guest_group || 'Invitado'}\nMesa: ${table_number || 'S/N'}\nPases: ${total_guests}\n\n¿Usaré todos mis pases? (Sí/No)\n\nSi no usaré mis pases, lo indico aquí:`;
+        rsvpBtn.href = `https://wa.me/527772837886?text=${encodeURIComponent(msg)}`;
+    }
 }
 
-// Función para mostrar el modal del boleto (reutilizada)
+// 9. MOSTRAR BOLETO (MODAL)
 function showTicket(id, name, count) {
     const ticketModal = document.getElementById('ticket-modal');
     const qrContainer = document.getElementById('ticket-qr');
@@ -1108,69 +1233,78 @@ function showTicket(id, name, count) {
 
     if (ticketName) ticketName.innerText = name || "Invitado";
     if (ticketCount) ticketCount.innerText = count || "0";
-    
-    console.log("Ticket updated with:", name, count);
     ticketModal.style.display = 'flex';
 }
 
-// 6. CONSULTAR INVITADO POR URL CON MANEJO DE ERRORES
+// 10. CONSULTAR POR URL AL CARGAR
 async function checkGuestFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const guestId = params.get('id');
 
-    if (!guestId) {
-        console.log("No se detectó ID de invitado. Mostrando invitación general.");
-        return;
-    }
-
-    // Mostrar estado de carga (opcional)
-    const adminStatus = document.getElementById('admin-status');
-    if (adminStatus) adminStatus.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Cargando tu invitación...';
+    if (!guestId) return;
 
     if (supabaseClient) {
         try {
             const { data, error } = await supabaseClient
-                .from('invitados')
+                .from('guests')
                 .select('*')
                 .eq('id', guestId)
                 .single();
 
             if (error || !data) {
-                console.error("Invitación no válida:", error);
-                // Nivel PRO: Mostrar mensaje elegante si no existe
-                document.body.innerHTML = `
-                    <section style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: white; text-align: center; font-family: sans-serif; padding: 20px;">
-                        <div>
-                            <h1 style="color: #E85D75;">Invitación No Válida</h1>
-                            <p>Lo sentimos, no pudimos encontrar tu registro en nuestra lista de invitados.</p>
-                            <a href="index.html" style="color: white; text-decoration: underline;">Volver al inicio</a>
-                        </div>
-                    </section>
-                `;
+                // Si no está en 'guests', intentar en la tabla vieja 'invitados' por retrocompatibilidad
+                const oldRes = await supabaseClient.from('invitados').select('*').eq('id', guestId).single();
+                if (oldRes.data) {
+                    updateInvitationUI({
+                        id: oldRes.data.id,
+                        name: oldRes.data.nombre,
+                        total_guests: oldRes.data.cantidad,
+                        status: oldRes.data.estado
+                    });
+                } else {
+                    console.error("Invitado no encontrado.");
+                }
                 return;
             }
 
-            // Éxito: Actualizar UI
             updateInvitationUI(data);
-
         } catch (err) {
-            console.error("Error de conexión con Supabase:", err);
-        } finally {
-            if (adminStatus) adminStatus.innerHTML = '';
+            console.error("Error loading guest:", err);
         }
     }
 }
 
-// Ejecutar al cargar
-window.addEventListener('load', () => {
-    // Pequeño delay para asegurar que todas las librerías estén listas
-    setTimeout(checkGuestFromUrl, 800);
-});
+// 11. FORMULARIO MANUAL (Mantenido para nuevos registros)
+const adminForm = document.getElementById('admin-form');
+if (adminForm) {
+    adminForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('guest-name').value;
+        const count = document.getElementById('guest-count').value;
+        const id = crypto.randomUUID();
 
-// 7. DESCARGAR BOLETO (Simulación)
-const btnDownload = document.getElementById('btn-download-ticket');
-if (btnDownload) {
-    btnDownload.addEventListener('click', () => {
-        alert("Tu boleto se ha guardado en la galería. (Simulación)");
+        const adminStatus = document.getElementById('admin-status');
+        adminStatus.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Guardando...';
+
+        try {
+            const { data, error } = await supabaseClient.from('guests').insert([{
+                id, name, total_guests: parseInt(count), passes_assigned: parseInt(count)
+            }]);
+            if (error) throw error;
+
+            adminStatus.innerHTML = `
+                <div style="color: green; margin-bottom: 15px;">¡Guardado con éxito!</div>
+                <button type="button" class="btn-primary" onclick="window.location.search = '?id=${id}'">Ver Mi Invitación</button>
+            `;
+            loadDashboardStats();
+            showTicket(id, name, count);
+        } catch (err) {
+            adminStatus.innerHTML = `<span style="color: red;">Error: ${err.message}</span>`;
+        }
     });
 }
+
+// Inicializar al cargar
+window.addEventListener('load', () => {
+    setTimeout(checkGuestFromUrl, 800);
+});
