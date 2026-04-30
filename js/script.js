@@ -894,19 +894,45 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             on: {
                 init: function () {
-                    // Auto-play video in active slide if any
-                    const activeVideo = this.slides[this.activeIndex].querySelector('video');
-                    if (activeVideo) activeVideo.play().catch(e => console.log(e));
+                    const swiper = this;
+                    const activeVideo = swiper.slides[swiper.activeIndex].querySelector('video');
+                    if (activeVideo) {
+                        swiper.autoplay.stop();
+                        activeVideo.currentTime = 0;
+                        activeVideo.play().catch(e => console.log(e));
+                        activeVideo.onended = () => {
+                            swiper.slideNext();
+                            swiper.autoplay.start();
+                        };
+                    }
                 },
                 slideChangeTransitionEnd: function () {
-                    // Pause all videos
-                    this.slides.forEach(slide => {
+                    const swiper = this;
+                    // Pausar todos los videos primero
+                    swiper.slides.forEach(slide => {
                         const vid = slide.querySelector('video');
-                        if (vid) vid.pause();
+                        if (vid) {
+                            vid.pause();
+                            vid.onended = null; // Limpiar manejadores previos
+                        }
                     });
-                    // Play video in active slide
-                    const activeVideo = this.slides[this.activeIndex].querySelector('video');
-                    if (activeVideo) activeVideo.play().catch(e => console.log(e));
+
+                    const activeVideo = swiper.slides[swiper.activeIndex].querySelector('video');
+                    if (activeVideo) {
+                        // Si hay video, detenemos el autoplay y esperamos a que termine
+                        swiper.autoplay.stop();
+                        activeVideo.currentTime = 0;
+                        activeVideo.play().catch(e => console.log(e));
+                        activeVideo.onended = () => {
+                            swiper.slideNext();
+                            swiper.autoplay.start();
+                        };
+                    } else {
+                        // Si es imagen, nos aseguramos que el autoplay esté corriendo
+                        if (!swiper.autoplay.running) {
+                            swiper.autoplay.start();
+                        }
+                    }
                 }
             }
         }); window.heroSwiper.autoplay.stop();
