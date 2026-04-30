@@ -1,0 +1,425 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zo├® - Mis XV A├▒os</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Zen+Kurenaido&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Meta tags SEO / Compartir -->
+    <meta name="description" content="Acomp├í├▒anos a celebrar los XV A├▒os de Zo├® Roque D├¡az. Una noche m├ígica llena de alegr├¡a y recuerdos inolvidables.">
+    <meta property="og:url" content="https://5410m0n0c001.github.io/ketherine-mis-xv-a-os/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="┬íMis XV A├▒os! - Zo├® Roque D├¡az">
+    <meta property="og:description" content="Te invito a mi gran fiesta de XV A├▒os. ┬íNo faltes!">
+    <meta property="og:image" content="http://5410m0n0c001.github.io/ketherine-mis-xv-a-os/destacada.png">
+    <meta property="og:image:secure_url" content="https://5410m0n0c001.github.io/ketherine-mis-xv-a-os/destacada.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Invitaci├│n Zo├®">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="┬íMis XV A├▒os! - Zo├® Roque D├¡az">
+    <meta name="twitter:description" content="Acomp├í├▒anos a celebrar este d├¡a especial.">
+    <meta name="twitter:image" content="https://5410m0n0c001.github.io/ketherine-mis-xv-a-os/destacada.png">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#E85D75">
+
+    <!-- Favicon & Theme -->
+    <link rel="icon" type="image/png" href="icono.png">
+    <meta name="theme-color" content="#D18E94">
+</head>
+<body>
+    
+    <!-- Removed global lateral-decoration divs per section-based logic -->    
+    <!-- Inline styles for old lateral logic removed -->
+
+    <!-- Butterflies Container -->
+    <div id="butterflies-container"></div>
+
+    <!-- SOBRE DE CARTA - Pantalla de entrada -->
+    <div class="envelope-screen" id="envelope-screen">
+        <p class="envelope-hint">Toca para <br class="mobile-br">abrir</p>
+        <video id="envelope-video" class="envelope-video" muted playsinline preload="auto" poster="sobre.png">
+            <source src="sobre.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Navegaci├│n Flotante -->
+    <nav class="floating-nav">
+        <ul>
+            <li><a href="#hero" class="active" title="Inicio"><i class='bx bx-home-heart'></i></a></li>
+            <li><a href="#itinerario" title="Itinerario"><i class='bx bx-time-five'></i></a></li>
+            <li><a href="#ubicacion" title="Ubicaci├│n"><i class='bx bx-map'></i></a></li>
+            <li><a href="#codigo-vestimenta" title="C├│digo"><i class='bx bx-closet' ></i></a></li>
+            <li><a href="#padrinos" title="Padrinos"><i class='bx bx-group'></i></a></li>
+            <li><a href="#mesa-regalos" title="Regalos"><i class='bx bx-gift'></i></a></li>
+            <li><a href="#rsvp" title="Asistencia"><i class='bx bx-check-double'></i></a></li>
+        </ul>
+    </nav>
+
+    <!-- Reproductor de Audio -->
+    <button class="audio-btn" id="audio-btn" aria-label="Reproducir m├║sica">
+        <video id="audio-btn-video" src="music2.mp4" muted loop playsinline></video>
+    </button>
+    
+    <!-- Bot├│n Compartir Sticky -->
+    <button class="share-btn-sticky" id="share-btn-sticky" aria-label="Compartir invitaci├│n">
+        <img src="compartir.png" alt="Compartir" class="share-icon-img">
+        <span class="share-label">Compartir</span>
+    </button>
+
+    <audio id="bg-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+
+
+    <!-- Celebration Elements -->
+    <div id="balloons-container" class="balloons-container"></div>
+    <div class="sakura-container" id="sakura-container"></div>
+    <audio id="celebration-sound">
+        <source src="sonido.mp3" type="audio/mpeg">
+    </audio>
+
+    <main>
+        <!-- SECCI├ôN 1: HERO / PORTADA -->
+        <section id="hero" class="hero-section">
+            <div class="paper-texture-top"></div>
+            
+            <div class="hero-video-container">
+                <!-- Video de portada (muted for autoplay, strict preloading for GitHub Pages) -->
+                <video id="hero-video" class="hero-video" autoplay loop muted playsinline preload="auto">
+                    <source src="portada.mp4?v=final_robust" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="hero-content text-center">
+                <h1 class="names-cursive"><span id="type-name" class="typing-container"></span></h1>
+                <p class="date-txt mt-3"><span id="type-line-2" class="typing-container"></span></p>
+                
+                <div class="date-highlight mt-4 mb-3">
+                    <div class="day-num">04</div>
+                    <div class="month-year">
+                        Junio<br>2026
+                    </div>
+                </div>
+            </div>
+            
+            <div class="paper-texture-bottom"></div>
+        </section>
+
+        <!-- Removed hero framing per user request -->
+
+        <!-- SECCI├ôN 2: CUENTA REGRESIVA -->
+        <section id="fecha" class="countdown-section py-5" style="position: relative;">
+            <div class="section-corner-container">
+                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
+                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
+                <img src="esquina1.png" alt="" class="section-corner corner-bl">
+                <img src="esquina2.png" alt="" class="section-corner corner-br">
+            </div>
+            <div class="container text-center reveal">
+                <h2 class="section-title text-reveal">Faltan</h2>
+                <div class="countdown-container reveal">
+                    <div class="time-box">
+                        <span id="days" class="number">00</span>
+                        <span class="label">D├¡as</span>
+                    </div>
+                    <span class="colon">:</span>
+                    <div class="time-box">
+                        <span id="hours" class="number">00</span>
+                        <span class="label">Horas</span>
+                    </div>
+                    <span class="colon">:</span>
+                    <div class="time-box">
+                        <span id="minutes" class="number">00</span>
+                        <span class="label">Minutos</span>
+                    </div>
+                    <span class="colon">:</span>
+                    <div class="time-box">
+                        <span id="seconds" class="number">00</span>
+                        <span class="label">Segundos</span>
+                    </div>
+                </div>
+
+                <div class="calendar-dropdown-container mt-4 reveal">
+                    <button class="btn-primary btn-add-calendar btn-zoom-pulse" id="calendar-btn">
+                        <i class='bx bx-calendar-plus'></i> Agendar D├¡a
+                    </button>
+                    <div class="calendar-options" id="calendar-options">
+                        <a href="#" id="cal-google" class="cal-opt"><i class='bx bxl-google'></i> Google Calendar</a>
+                        <a href="#" id="cal-outlook" class="cal-opt"><i class='bx bxl-windows'></i> Outlook</a>
+                        <a href="#" id="cal-apple" class="cal-opt"><i class='bx bxl-apple'></i> Apple Calendar</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="section-divider"></div>
+
+        <!-- SECCI├ôN 3: UBICACI├ôN -->
+        <section id="ubicacion" class="location-section py-5" style="position: relative;">
+            <div class="section-corner-container">
+                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
+                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
+                <img src="esquina1.png" alt="" class="section-corner corner-bl">
+                <img src="esquina2.png" alt="" class="section-corner corner-br">
+            </div>
+            <div class="container text-center reveal">
+                <h2 class="section-title text-reveal">D├│nde y Cu├índo</h2>
+                
+                <div class="location-cards mt-4">
+                    <div class="card event-card card-flip-up slide-in-right">
+                        <div class="card-icon"><i class='bx bx-party'></i></div>
+                        <h3 class="text-reveal">Recepci├│n</h3>
+                        <p class="time text-reveal">15:00 a 00:00 HRS</p>
+                        <p class="place text-reveal">Jardin ÔÇ£ManzanaresÔÇØ</p>
+                        <p class="address text-reveal">Ignacio Allende 515, Casa Blanca, 62587 Temixco, Mor.</p>
+                        
+                        <!-- Botones de Acci├│n Claros -->
+                        <div class="location-actions mt-4">
+                            <!-- Mapa Google Maps -->
+                            <a href="https://maps.app.goo.gl/j8yRGrz59NEFqxZM7" target="_blank" class="location-btn-img reveal">
+                                <span class="btn-legend mb-2">Toca para ver direcci├│n</span>
+                                <img src="ubica.png" alt="Ver Ubicaci├│n" class="zoom-hover">
+                            </a>
+    
+                            <!-- Ubica tu mesa -->
+                            <a href="mapa.html" class="btn-secondary btn-zoom-pulse reveal">
+                                <i class='bx bx-cube-alt'></i> Ubica tu mesa
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Nueva imagen decorativa K.jpeg -->
+                    <div class="location-photo-container reveal sequence-2">
+                        <div class="premium-frame">
+                            <img src="k.jpeg" alt="Zo├®" class="location-photo">
+                            <div class="frame-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCI├ôN DIVISORA: VIDEO RETRATO -->
+        <div class="section-divider"></div>
+        <section class="featured-video-section py-4">
+            <div class="container text-center reveal">
+                <div class="premium-frame" style="max-width: 320px; margin: 0 auto; border-radius: 20px;">
+                    <video class="featured-portrait-video" autoplay loop muted playsinline style="width: 100%; display: block; border-radius: 12px;">
+                        <source src="vk.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <p class="mt-3" style="font-family: var(--font-accent); color: var(--primary-color); font-size: 1.2rem;">Momentos que duran para siempre Ô£¿</p>
+            </div>
+        </section>
+        <div class="section-divider"></div>
+
+        <!-- SECCI├ôN: ITINERARIO -->
+        <section id="itinerario" class="itinerario-section py-5" style="position: relative;">
+            <div class="section-corner-container">
+                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
+                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
+                <img src="esquina1.png" alt="" class="section-corner corner-bl">
+                <img src="esquina2.png" alt="" class="section-corner corner-br">
+            </div>
+            <div class="container text-center reveal">
+                <h2 class="section-title">Minuto a Minuto</h2>
+                <p class="mt-3 mb-5 text-muted">Acomp├í├▒anos en cada momento especial de nuestro gran d├¡a.</p>
+                
+                <div class="timeline">
+                    <!-- Item 1 -->
+                    <div class="timeline-item important-event">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <i class='bx bx-church event-icon'></i>
+                            <span class="time-tag">15:00 HRS</span>
+                            <h3 class="event-title">Ceremonia Religiosa</h3>
+                            <p class="event-desc">Misa de Acci├│n de Gracias. Puntualidad recomendada.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <i class='bx bx-glass event-icon'></i>
+                            <span class="time-tag">16:00 HRS</span>
+                            <h3 class="event-title">C├│ctel de Bienvenida</h3>
+                            <p class="event-desc">Recepci├│n y brindis de bienvenida en Jardin ÔÇ£ManzanaresÔÇØ.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="timeline-item important-event">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <i class='bx bx-restaurant event-icon'></i>
+                            <span class="time-tag">17:00 HRS</span>
+                            <h3 class="event-title">Banquete</h3>
+                            <p class="event-desc">Degustaci├│n de nuestro men├║ seleccionado.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <i class='bx bx-party event-icon'></i>
+                            <span class="time-tag">00:00 HRS</span>
+                            <h3 class="event-title">Fin del Evento</h3>
+                            <p class="event-desc">Agradecemos habernos acompa├▒ado en esta noche m├ígica.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="section-divider"></div>
+
+        <!-- SECCI├ôN 4: C├ôDIGO DE VESTIMENTA -->
+        <section id="codigo-vestimenta" class="dresscode-section py-5" style="position: relative;">
+            <div class="section-corner-container">
+                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
+                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
+                <img src="esquina1.png" alt="" class="section-corner corner-bl">
+                <img src="esquina2.png" alt="" class="section-corner corner-br">
+            </div>
+            <div class="container text-center reveal">
+                <h2 class="section-title text-reveal">C├│digo de Vestimenta</h2>
+                <div class="dresscode-icon animate-dresscode-icon slide-in-left">
+                    <img src="icono.png" alt="C├│digo de Vestimenta" class="dresscode-icon-img scale-pulse">
+                </div>
+                <h3 class="dresscode-type mt-2">Formal (no etiqueta rigurosa)</h3>
+                <p class="mt-2 text-muted">Colores libres</p>
+                <p class="mt-1 text-xs" style="color: var(--accent-color); font-weight: 600;">* Se reserva el color rosa para la festejada</p>
+                
+                <!-- Video de Vestimenta VK.mp4 -->
+                <div class="dresscode-video-wrapper mt-4 reveal sequence-2">
+                    <video id="dresscode-video" src="vk.mp4" autoplay muted loop playsinline class="dresscode-video"></video>
+                    <div class="video-accent-border"></div>
+                </div>
+                
+
+            </div>
+        </section>
+
+        <!-- SECCI├ôN: FAMILIA Y PADRINOS -->
+        <section id="padrinos" class="padrinos-section py-5 section-fold" style="position: relative;">
+            <div class="section-corner-container">
+                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
+                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
+                <img src="esquina1.png" alt="" class="section-corner corner-bl">
+                <img src="esquina2.png" alt="" class="section-corner corner-br">
+            </div>
+             <div class="container text-center reveal-fold">
+                <p class="subtitle text-sm mb-4">Con amor y gratitud a quienes me han acompa├▒ado en este camino.</p>
+
+                <div class="padrinos-grid">
+                    <!-- Padres -->
+                    <div class="padrino-item reveal sequence-1">
+                        <h4>Mis Padres</h4>
+                        <p>Katherine D├¡az</p>
+                        <p>Omar Roque</p>
+                    </div>
+
+                    <!-- Padrinos -->
+                    <div class="padrino-item reveal sequence-3">
+                        <h4>Mis Padrinos</h4>
+                        <p>Etny Itzel Ochoa Tellez</p>
+                        <p>Carlos Enrique D├¡az Villegas</p>
+                    </div>
+                </div>
+             </div>
+        </section>
+        <div class="section-divider"></div>
+
+
+
+        <!-- SECCI├ôN 6: MESA DE REGALOS -->
+        <section id="mesa-regalos" class="gifts-section py-5 text-center" style="position: relative;">
+            <div class="section-corner-container">
+                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
+                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
+                <img src="esquina1.png" alt="" class="section-corner corner-bl">
+                <img src="esquina2.png" alt="" class="section-corner corner-br">
+            </div>
+            <div class="container reveal">
+                <div class="icon-large mb-3 slide-in-right">
+                    <img id="gift-icon-png" src="regalo.png" alt="Regalo" class="scale-pulse" style="width: 100px; height: auto; animation: pulseLogo 3s infinite;">
+                </div>
+                <h2 class="section-title">Mesa de Regalos</h2>
+                <p class="mt-3">Su presencia es nuestro mejor regalo, pero si desean tener un detalle con nosotros:</p>
+                
+                <div class="gift-options mt-4" style="display: flex; justify-content: center;">
+                    <div class="gift-card reveal" style="max-width: 500px; width: 100%; border: 1px solid var(--secondary-color); background: rgba(255,255,255,0.6); backdrop-filter: blur(5px);">
+                        <i class='bx bx-envelope' style="font-size: 3rem; color: var(--accent-color); margin-bottom: 15px; display: block;"></i>
+                        <h4 style="font-family: var(--font-head); color: var(--primary-color); font-size: 1.8rem; margin-bottom: 10px;">Regalos peque├▒os o $obres</h4>
+                        <p class="text-muted">Agradecemos de coraz├│n cualquier detalle con el que deseen acompa├▒ar mi felicidad.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <div class="section-divider"></div>
+
+
+        <!-- SECCI├ôN 7: ASISTENCIA (RSVP) -->
+        <section id="rsvp" class="rsvp-section footer-section py-5 bg-dark" style="position: relative; overflow: hidden;">
+            <div class="section-corner-container">
+                <img src="esquinasuperiorizquierda.png" alt="" class="section-corner corner-tl">
+                <img src="esquinasuperiorderecha.png" alt="" class="section-corner corner-tr">
+                <img src="esquina1.png" alt="" class="section-corner corner-bl">
+                <img src="esquina2.png" alt="" class="section-corner corner-br">
+            </div>
+            <div class="container text-center reveal text-white">
+                <h2 class="section-title title-light">Confirma tu Asistencia</h2>
+                <p class="mt-3 mb-4">Por favor env├¡anos un mensaje antes del 04 de Junio del 2026 para confirmar tu lugar.</p>
+                
+                <a href="https://rsvpangela.wordpress.com/confirmacion/" target="_blank" class="rsvp-custom-btn reveal">
+                    <span class="rsvp-label">┬íConfirma tu lugar<br>y acomp├í├▒ame! Ô£¿</span>
+                    <img src="confirma.png" alt="Confirmar Asistencia" class="rsvp-img-btn zoom-hover">
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Album Visor (Modal) -->
+    <div id="album-visor" class="album-visor-container">
+        <span class="visor-close" id="visor-close">&times;</span>
+        <img class="visor-content" id="visor-img">
+        <div id="visor-caption"></div>
+    </div>
+
+    <!-- Smart Landing Overlay for QR -->
+    <div id="qr-camera-overlay" class="qr-overlay-screen" style="display:none;">
+        <div class="qr-overlay-content">
+            <h1 class="names">Zo├®</h1>
+            <p>┬íAy├║danos a capturar este momento!</p>
+            <button id="btn-qr-take-photo" class="btn-camera mt-4">
+                <i class='bx bx-camera'></i> Abrir C├ímara
+            </button>
+            <button id="btn-qr-skip" class="btn-skip mt-3">Ver Invitaci├│n</button>
+        </div>
+    </div>
+    
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- JS Scripts -->
+    <script src="js/script.js"></script>
+</body>
+</html>
+

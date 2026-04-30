@@ -145,9 +145,14 @@
             </div>
 
             <div class="hero-content text-center">
-                <h1 class="names-cursive"><span id="type-name" class="typing-container"></span></h1>
+                <h1 id="admin-trigger" class="names-cursive"><span id="type-name" class="typing-container"></span></h1>
                 <p class="date-txt mt-3"><span id="type-line-2" class="typing-container"></span></p>
                 
+                <div id="guest-welcome" class="guest-personalization mt-1" style="display:none;">
+                    <p class="names-cursive" style="font-size: 1.1rem; color: var(--accent-color);">Especialmente para:</p>
+                    <h2 id="display-guest-name" style="font-family: var(--font-head); color: var(--primary-color); font-size: 1.5rem; margin-top: 5px;"></h2>
+                </div>
+
                 <div class="date-highlight mt-4 mb-3">
                     <div class="day-num">04</div>
                     <div class="month-year">
@@ -424,14 +429,43 @@
                 <img src="esquina1.png" alt="" class="section-corner corner-bl">
                 <img src="esquina2.png" alt="" class="section-corner corner-br">
             </div>
+
             <div class="container text-center reveal text-white">
                 <h2 class="section-title title-light">Confirma tu Asistencia</h2>
                 <p class="mt-3 mb-4">Por favor envíanos un mensaje antes del 04 de Junio del 2026 para confirmar tu lugar.</p>
                 
-                <a href="javascript:void(0)" class="rsvp-custom-btn reveal">
-                    <span class="rsvp-label">¡Confirma tu lugar<br>y acompáñame! ✨</span>
-                    <img src="confirma.png" alt="Confirmar Asistencia" class="rsvp-img-btn zoom-hover">
-                </a>
+                <!-- BOLETO INCRUSTADO DINÁMICO -->
+                <div id="guest-access-info" class="embedded-ticket-container mt-5" style="display:none;">
+                    <div class="embedded-ticket">
+                        <div class="ticket-stub">
+                            <div class="stub-content">
+                                <h4 class="names-cursive">Katherine</h4>
+                                <p class="event-type">Mis XV Años</p>
+                            </div>
+                        </div>
+                        <div class="ticket-main">
+                            <div class="ticket-body">
+                                <div id="dynamic-qr-main" class="qr-code"></div>
+                                <div class="guest-details">
+                                    <h2 id="display-guest-name-main">Invitado</h2>
+                                    <p class="pases-count"><span id="display-guest-count">0</span> Pases</p>
+                                    <p class="event-date">04 . JULIO . 2026</p>
+                                </div>
+                            </div>
+                            <div class="ticket-footer-text">
+                                <p>Este es tu acceso personal. Por favor preséntalo en la entrada.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-4" style="color: var(--accent-color); font-style: italic;">¡Te esperamos con mucha emoción! ✨</p>
+                </div>
+                
+                <div class="mt-5">
+                    <a href="javascript:void(0)" class="rsvp-custom-btn reveal">
+                        <span class="rsvp-label">¡Confirma tu lugar<br>y acompáñame! ✨</span>
+                        <img src="confirma.png" alt="Confirmar Asistencia" class="rsvp-img-btn zoom-hover">
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -456,11 +490,60 @@
         </div>
     </div>
     
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <!-- QR Code Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <!-- Swiper.js -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- ADMIN MODAL -->
+    <div id="admin-modal" class="modal-premium">
+        <div class="modal-content glass">
+            <span class="close-modal" id="close-admin">&times;</span>
+            <h2 class="section-title">Panel de Administración</h2>
+            <form id="admin-form">
+                <div class="form-group">
+                    <label for="guest-name">Nombre del Invitado:</label>
+                    <input type="text" id="guest-name" required placeholder="Ej. Familia Pérez">
+                </div>
+                <div class="form-group">
+                    <label for="guest-count">Cantidad de Personas:</label>
+                    <input type="number" id="guest-count" required min="1" value="1">
+                </div>
+                <button type="submit" class="btn-primary">Generar Boleto</button>
+                <button type="button" class="btn-secondary mt-2 w-100 close-modal-btn">Cerrar Panel</button>
+            </form>
+            </form>
+            <div id="admin-status" class="status-msg"></div>
+        </div>
+    </div>
+
+    <!-- TICKET MODAL -->
+    <div id="ticket-modal" class="modal-premium">
+        <div class="modal-content ticket-glass">
+            <span class="close-modal" id="close-ticket">&times;</span>
+            <div class="ticket-header">
+                <h3 class="names-cursive">Katherine</h3>
+                <p>Mis XV Años</p>
+            </div>
+            <div class="ticket-body">
+                <div id="ticket-qr" class="qr-container"></div>
+                <div class="ticket-info">
+                    <h4 id="ticket-name">Invitado</h4>
+                    <p><span id="ticket-count">0</span> Pases</p>
+                </div>
+            </div>
+            <div class="ticket-footer">
+                <p>04 de Julio, 2026</p>
+                <button id="btn-download-ticket" class="btn-secondary">Descargar Imagen</button>
+                <button type="button" class="btn-primary mt-2 w-100 close-modal-btn">Cerrar y Ver Invitación</button>
+            </div>
+            </div>
+        </div>
+    </div>
     
     <!-- JS Scripts -->
     <script src="js/script.js"></script>

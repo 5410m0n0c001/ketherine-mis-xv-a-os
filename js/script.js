@@ -11,6 +11,7 @@ let isEnvelopeOpened = false;
 const handleEnvelopeClick = () => {
     if (isEnvelopeOpened) return;
     isEnvelopeOpened = true; 
+    let emergencyTimeout;
     
     // Expand mask and play animation
     if (envelopeScreen) envelopeScreen.classList.add('video-playing');
@@ -94,7 +95,7 @@ const handleEnvelopeClick = () => {
     // Visual feedback: Hide hint immediately
     if (envelopeHint) envelopeHint.style.display = 'none';
 
-    const emergencyTimeout = setTimeout(() => {
+    emergencyTimeout = setTimeout(() => {
         if (envelopeScreen && !envelopeScreen.classList.contains('hidden')) {
             console.log('Emergency fallback triggered');
             openInvitation();
@@ -487,10 +488,15 @@ const shareBtn = document.getElementById('share-btn-sticky');
 
 if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
+        const guestName = document.getElementById('display-guest-name')?.innerText || '';
+        const personalizedMsg = guestName 
+            ? `¡Hola ${guestName}! Te invito a mis XV años. Aquí tienes tu pase digital:` 
+            : '¡Acompáñame a celebrar mis XV años! Te espero con mucha ilusión.';
+
         const shareData = {
-            title: 'Invitación a los XV Años de Katherine Roque Díaz',
-            text: '¡Acompáñame a celebrar mis XV años! Te espero con mucha ilusión.',
-            url: window.location.href.split('?')[0] // Clean URL
+            title: 'Invitación a los XV Años de Katherine',
+            text: personalizedMsg,
+            url: window.location.href // Incluye el ?id= si está presente
         };
 
         if (navigator.share) {
@@ -906,3 +912,239 @@ document.addEventListener('DOMContentLoaded', () => {
         }); window.heroSwiper.autoplay.stop();
     }
 });
+
+/* ============================================================
+   SISTEMA DE INVITACIONES & BOLETOS (Supabase + QR)
+   ============================================================ */
+
+// 1. CONFIGURACIÓN SUPABASE
+const SUPABASE_URL = 'https://fhnnqmbbeeobassvfeox.supabase.co'; 
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobm5xbWJiZWVvYmFzc3ZmZW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzUyMzIsImV4cCI6MjA5MjA1MTIzMn0.7LrT_oGYH0cSMjLggJKo8y4s4NX5pLH-cGHBhjvXEW4';
+let supabaseClient = null;
+
+if (typeof supabase !== 'undefined' && supabase.createClient) {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else {
+    console.warn("Supabase library not loaded yet or invalid global object.");
+}
+
+// 2. SECUENCIA SECRETA DE ADMINISTRADOR
+let adminClickCount = 0;
+const adminTrigger = document.getElementById('admin-trigger'); // El contenedor del nombre
+
+if (adminTrigger) {
+    adminTrigger.style.cursor = 'pointer';
+    adminTrigger.addEventListener('click', () => {
+        console.log("Click detected on admin trigger:", adminClickCount + 1);
+        adminClickCount++;
+        if (adminClickCount === 5) {
+            adminClickCount = 0;
+            document.getElementById('admin-modal').style.display = 'flex';
+        }
+        // Reset count if no clicks for 3 seconds
+        setTimeout(() => { adminClickCount = 0; }, 3000);
+    });
+}
+
+// 3. CERRAR MODALES (Actualizado para botones y exterior)
+document.querySelectorAll('.close-modal, .close-modal-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const modal = btn.closest('.modal-premium');
+        if (modal) modal.style.display = 'none';
+    });
+});
+
+// Cerrar al hacer clic fuera del contenido
+window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-premium')) {
+        e.target.style.display = 'none';
+    }
+});
+
+// 4. GENERAR INVITADO (ADMIN)
+const adminForm = document.getElementById('admin-form');
+const adminStatus = document.getElementById('admin-status');
+
+if (adminForm) {
+    adminForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('guest-name').value;
+        const count = document.getElementById('guest-count').value;
+        const id = crypto.randomUUID();
+
+        adminStatus.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Guardando...';
+
+        try {
+            if (!supabaseClient) throw new Error("Supabase no está configurado.");
+
+            const { data, error } = await supabaseClient
+                .from('invitados')
+                .insert([
+                    { id: id, nombre: name, cantidad: parseInt(count), estado: 'confirmado' }
+                ]);
+
+            if (error) throw error;
+
+            adminStatus.innerHTML = `
+                <div style="color: green; margin-bottom: 15px;">¡Guardado con éxito!</div>
+                <p style="font-size: 0.9rem; color: #666;">Enlace para compartir:</p>
+                <div style="background: #f0f0f0; padding: 10px; border-radius: 5px; word-break: break-all; font-size: 0.8rem; margin: 10px 0;">
+                    ${window.location.origin}${window.location.pathname}?id=${id}
+                </div>
+                <button type="button" class="btn-primary" onclick="window.location.search = '?id=${id}'">Ver Mi Invitación</button>
+                <button type="button" class="btn-secondary mt-2 w-100" onclick="document.getElementById('admin-modal').style.display='none'; document.getElementById('admin-status').innerHTML=''">Finalizar</button>
+            `;
+            
+            // Actualizar la invitación en tiempo real (detrás del modal)
+            updateInvitationUI({ id, nombre: name, cantidad: count });
+            
+            // Mostrar boleto modal
+            showTicket(id, name, count);
+            
+            // Reset form
+            adminForm.reset();
+            // No cerramos automáticamente para que el admin vea la URL
+        } catch (err) {
+            console.error("Error al guardar:", err);
+            adminStatus.innerHTML = `<span style="color: red;">Error: ${err.message}</span>`;
+        }
+    });
+}
+
+// 5. MOSTRAR BOLETO Y ACTUALIZAR UI DINÁMICA
+function updateInvitationUI(guest) {
+    const { id, nombre, cantidad } = guest;
+
+    // Actualizar Hero
+    const guestWelcome = document.getElementById('guest-welcome');
+    const displayGuestName = document.getElementById('display-guest-name');
+    if (guestWelcome && displayGuestName) {
+        displayGuestName.innerText = nombre;
+        guestWelcome.style.display = 'block';
+    }
+
+    // Actualizar RSVP / Accesos (Embedded Ticket)
+    const guestAccessInfo = document.getElementById('guest-access-info');
+    const displayGuestNameMain = document.getElementById('display-guest-name-main');
+    const displayGuestCount = document.getElementById('display-guest-count');
+    const qrMainContainer = document.getElementById('dynamic-qr-main');
+
+    if (guestAccessInfo) {
+        if (displayGuestNameMain) displayGuestNameMain.innerText = nombre;
+        if (displayGuestCount) displayGuestCount.innerText = cantidad;
+        guestAccessInfo.style.display = 'block';
+    }
+
+    // Generar QR en el contenedor principal
+    if (qrMainContainer && typeof QRCode !== 'undefined') {
+        qrMainContainer.innerHTML = '';
+        qrMainContainer.style.background = 'white'; // Asegurar contraste
+        qrMainContainer.style.padding = '10px';
+        
+        const ticketUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+        new QRCode(qrMainContainer, {
+            text: ticketUrl,
+            width: 150,
+            height: 150,
+            colorDark: "#E85D75",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        console.log("Embedded QR generated for:", ticketUrl);
+    }
+
+    // Opcional: También mostrar el modal del boleto al inicio
+    showTicket(id, nombre, cantidad);
+}
+
+// Función para mostrar el modal del boleto (reutilizada)
+function showTicket(id, name, count) {
+    const ticketModal = document.getElementById('ticket-modal');
+    const qrContainer = document.getElementById('ticket-qr');
+    const ticketName = document.getElementById('ticket-name');
+    const ticketCount = document.getElementById('ticket-count');
+
+    if (!ticketModal || !qrContainer) return;
+
+    qrContainer.innerHTML = '';
+    const ticketUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+
+    if (typeof QRCode !== 'undefined') {
+        new QRCode(qrContainer, {
+            text: ticketUrl,
+            width: 180,
+            height: 180,
+            colorDark: "#E85D75",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    }
+
+    if (ticketName) ticketName.innerText = name || "Invitado";
+    if (ticketCount) ticketCount.innerText = count || "0";
+    
+    console.log("Ticket updated with:", name, count);
+    ticketModal.style.display = 'flex';
+}
+
+// 6. CONSULTAR INVITADO POR URL CON MANEJO DE ERRORES
+async function checkGuestFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const guestId = params.get('id');
+
+    if (!guestId) {
+        console.log("No se detectó ID de invitado. Mostrando invitación general.");
+        return;
+    }
+
+    // Mostrar estado de carga (opcional)
+    const adminStatus = document.getElementById('admin-status');
+    if (adminStatus) adminStatus.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Cargando tu invitación...';
+
+    if (supabaseClient) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('invitados')
+                .select('*')
+                .eq('id', guestId)
+                .single();
+
+            if (error || !data) {
+                console.error("Invitación no válida:", error);
+                // Nivel PRO: Mostrar mensaje elegante si no existe
+                document.body.innerHTML = `
+                    <section style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #1a1a1a; color: white; text-align: center; font-family: sans-serif; padding: 20px;">
+                        <div>
+                            <h1 style="color: #E85D75;">Invitación No Válida</h1>
+                            <p>Lo sentimos, no pudimos encontrar tu registro en nuestra lista de invitados.</p>
+                            <a href="index.html" style="color: white; text-decoration: underline;">Volver al inicio</a>
+                        </div>
+                    </section>
+                `;
+                return;
+            }
+
+            // Éxito: Actualizar UI
+            updateInvitationUI(data);
+
+        } catch (err) {
+            console.error("Error de conexión con Supabase:", err);
+        } finally {
+            if (adminStatus) adminStatus.innerHTML = '';
+        }
+    }
+}
+
+// Ejecutar al cargar
+window.addEventListener('load', () => {
+    // Pequeño delay para asegurar que todas las librerías estén listas
+    setTimeout(checkGuestFromUrl, 800);
+});
+
+// 7. DESCARGAR BOLETO (Simulación)
+const btnDownload = document.getElementById('btn-download-ticket');
+if (btnDownload) {
+    btnDownload.addEventListener('click', () => {
+        alert("Tu boleto se ha guardado en la galería. (Simulación)");
+    });
+}
