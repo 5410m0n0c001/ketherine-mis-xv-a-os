@@ -981,6 +981,12 @@ document.querySelectorAll('.close-modal, .close-modal-btn').forEach(btn => {
     });
 });
 
+// 3.1 BOTÓN VER LISTADO (Admin)
+const btnCheckStatus = document.getElementById('btn-check-status');
+if (btnCheckStatus) {
+    btnCheckStatus.addEventListener('click', openSelectionModal);
+}
+
 // 4. DASHBOARD & STATS
 async function loadDashboardStats() {
     if (!supabaseClient) return;
@@ -1017,37 +1023,60 @@ async function handleExcelImport(e) {
     reader.onload = async (evt) => {
         const bstr = evt.target.result;
         const wb = XLSX.read(bstr, { type: 'binary' });
-        const wsname = wb.SheetNames[0];
+        
+        // Buscar la hoja de invitados específica o usar la primera
+        const wsname = wb.SheetNames.find(n => n.includes('Invitados')) || wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
+        
+        // Leer como matriz para detectar el encabezado real
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+        
+        // Encontrar la fila que contiene los encabezados reales (Nombre completo)
+        let headerIndex = rows.findIndex(r => r && r.some(c => String(c).includes('Nombre completo')));
+        if (headerIndex === -1) headerIndex = 0; // Fallback al inicio
 
-        // Mapeo de columnas según el Excel del usuario
-        const mappedData = data.map(row => {
-            const total = parseInt(row['Total personas'] || 0);
-            const adults = parseInt(row['Adultos'] || 0);
-            const kids = parseInt(row['Niños'] || 0);
-            
-            return {
-                name: row['Nombre completo'] || 'Invitado Sin Nombre',
-                guest_group: row['Familia / Grupo'] || '',
-                status: row['Confirmación'] === 'Sí' ? 'confirmado' : 'pendiente',
-                adults: adults,
-                kids: kids,
-                total_guests: total,
-                passes_assigned: total,
-                table_number: String(row['Mesa asignada'] || ''),
-                dietary_restrictions: row['Restricción alimenticia'] || '',
-                phone: String(row['Teléfono'] || '')
-            };
-        });
+        const dataRows = rows.slice(headerIndex + 1);
+        const headers = rows[headerIndex];
+
+        // Mapeo dinámico basado en nombres de columnas
+        const getCol = (name) => headers.findIndex(h => String(h).toLowerCase().includes(name.toLowerCase()));
+        
+        const idxName = getCol('Nombre completo');
+        const idxGroup = getCol('Familia / Grupo');
+        const idxStatus = getCol('Confirmación');
+        const idxAdults = getCol('Adultos');
+        const idxKids = getCol('Niños');
+        const idxTotal = getCol('Total personas');
+        const idxTable = getCol('Mesa asignada');
+        const idxDietary = getCol('Restricción alimenticia');
+        const idxPhone = getCol('Teléfono');
+
+        const mappedData = dataRows
+            .filter(row => row[idxName] && String(row[idxName]).trim() !== '' && !String(row[idxName]).includes('Total')) // Filtrar vacíos y filas de resumen
+            .map(row => {
+                const total = parseInt(row[idxTotal]) || (parseInt(row[idxAdults] || 0) + parseInt(row[idxKids] || 0));
+                return {
+                    name: String(row[idxName]).trim(),
+                    guest_group: idxGroup !== -1 ? String(row[idxGroup] || '').trim() : '',
+                    status: String(row[idxStatus]).toLowerCase().includes('sí') ? 'confirmado' : 'pendiente',
+                    adults: parseInt(row[idxAdults]) || 0,
+                    kids: parseInt(row[idxKids]) || 0,
+                    total_guests: total || 1,
+                    passes_assigned: total || 1,
+                    table_number: idxTable !== -1 ? String(row[idxTable] || '').replace('Mesa ', '').trim() : '',
+                    dietary_restrictions: idxDietary !== -1 ? String(row[idxDietary] || '').trim() : '',
+                    phone: idxPhone !== -1 ? String(row[idxPhone] || '').trim() : ''
+                };
+            });
 
         const adminStatus = document.getElementById('admin-status');
-        adminStatus.innerHTML = `<i class="bx bx-loader-alt bx-spin"></i> Importando ${mappedData.length} invitados...`;
+        adminStatus.innerHTML = `<i class="bx bx-loader-alt bx-spin"></i> Procesando ${mappedData.length} invitados de la hoja "${wsname}"...`;
 
         try {
+            if (!supabaseClient) throw new Error("Supabase no conectado");
             const { error } = await supabaseClient.from('guests').upsert(mappedData, { onConflict: 'name' });
             if (error) throw error;
-            adminStatus.innerHTML = `<span style="color: green;">¡Importación exitosa! ${mappedData.length} registros procesados.</span>`;
+            adminStatus.innerHTML = `<span style="color: green;">¡Éxito! ${mappedData.length} invitados importados correctamente.</span>`;
             loadDashboardStats();
         } catch (err) {
             console.error("Error import:", err);
@@ -1087,21 +1116,25 @@ function renderGuestList(guests) {
         return;
     }
 
-    guestListContainer.innerHTML = guests.map(g => `
-        <div class="guest-item">
-            <div class="guest-item-info">
-                <h4>${g.name}</h4>
-                <p>${g.guest_group || 'Sin grupo'} • Mesa ${g.table_number || 'S/N'}</p>
-                <div style="margin-top: 5px;">
-                    <span class="badge badge-${g.status}">${g.status}</span>
-                    <span style="font-size: 0.7rem; color: #888; margin-left: 5px;">${g.total_guests} pases</span>
+    guestListContainer.innerHTML = guests.map(g => {
+        return `
+            <div class="guest-item">
+                <div class="guest-item-info">
+                    <h4>${g.name}</h4>
+                    <p>${g.guest_group || 'Sin grupo'} • Mesa ${g.table_number || 'S/N'}</p>
+                    <div style="margin-top: 5px; display: flex; align-items: center; gap: 10px;">
+                        <span class="badge badge-${g.status}">${g.status}</span>
+                        <span style="font-size: 0.7rem; color: #888;">${g.total_guests} pases</span>
+                    </div>
+                </div>
+                <div class="guest-item-actions">
+                    <button class="btn-select-action" onclick="selectGuest('${g.id}')" title="Ver Invitación">
+                        <i class='bx bx-show'></i>
+                    </button>
                 </div>
             </div>
-            <button class="btn-select-action" onclick="selectGuest('${g.id}')">
-                <i class='bx bx-chevron-right'></i>
-            </button>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Filtro y Búsqueda
@@ -1157,47 +1190,83 @@ function updateInvitationUI(guest) {
     // Actualizar RSVP / Accesos (Embedded Ticket)
     const guestAccessInfo = document.getElementById('guest-access-info');
     const displayGuestNameMain = document.getElementById('display-guest-name-main');
-    const displayGuestCount = document.getElementById('display-guest-count');
-    const qrMainContainer = document.getElementById('dynamic-qr-main');
-
+    
     if (guestAccessInfo) {
         if (displayGuestNameMain) displayGuestNameMain.innerText = name;
-        if (displayGuestCount) displayGuestCount.innerText = total_guests;
         
-        // Agregar detalles adicionales (Mesa, Adultos, Niños)
-        let detailsHtml = `<p class="pases-count"><span id="display-guest-count">${total_guests}</span> Pases</p>`;
-        detailsHtml += `<p style="font-size: 0.9rem; margin: 5px 0;">Mesa: <strong>${table_number || 'Por asignar'}</strong></p>`;
-        if (adults > 0 || kids > 0) {
-            detailsHtml += `<p style="font-size: 0.75rem; color: #666;">(${adults} Adultos, ${kids} Niños)</p>`;
-        }
-        if (dietary_restrictions) {
-            detailsHtml += `<p style="font-size: 0.75rem; color: #E85D75; font-style: italic;">Nota: ${dietary_restrictions}</p>`;
-        }
-        
+        // Actualizar detalles dentro del contenedor de forma segura
         const detailsContainer = guestAccessInfo.querySelector('.guest-details');
         if (detailsContainer) {
-            // Reemplazar o añadir pases-count
-            const pasesEl = detailsContainer.querySelector('.pases-count');
-            if (pasesEl) pasesEl.outerHTML = detailsHtml;
+            // Buscamos o creamos los elementos específicos para no destruir el DOM
+            let pasesEl = detailsContainer.querySelector('.pases-count');
+            if (!pasesEl) {
+                pasesEl = document.createElement('p');
+                pasesEl.className = 'pases-count';
+                detailsContainer.appendChild(pasesEl);
+            }
+            pasesEl.innerHTML = `<span>${total_guests}</span> Pases`;
+
+            // Mesa
+            let mesaEl = detailsContainer.querySelector('.ticket-mesa-info');
+            if (!mesaEl) {
+                mesaEl = document.createElement('p');
+                mesaEl.className = 'ticket-mesa-info';
+                mesaEl.style.cssText = 'font-size: 0.9rem; margin: 5px 0; font-weight: bold;';
+                detailsContainer.appendChild(mesaEl);
+            }
+            mesaEl.innerHTML = `Mesa: ${table_number || 'Por asignar'}`;
+
+            // Adultos/Niños
+            let subDetailsEl = detailsContainer.querySelector('.ticket-sub-details');
+            if (!subDetailsEl) {
+                subDetailsEl = document.createElement('p');
+                subDetailsEl.className = 'ticket-sub-details';
+                subDetailsEl.style.cssText = 'font-size: 0.75rem; color: #666; margin: 0;';
+                detailsContainer.appendChild(subDetailsEl);
+            }
+            subDetailsEl.innerHTML = (adults > 0 || kids > 0) ? `(${adults} Adultos, ${kids} Niños)` : '';
+
+            // Restricciones
+            let dietaryEl = detailsContainer.querySelector('.ticket-dietary');
+            if (!dietaryEl) {
+                dietaryEl = document.createElement('p');
+                dietaryEl.className = 'ticket-dietary';
+                dietaryEl.style.cssText = 'font-size: 0.75rem; color: #E85D75; font-style: italic; margin-top: 5px;';
+                detailsContainer.appendChild(dietaryEl);
+            }
+            dietaryEl.innerHTML = dietary_restrictions ? `Nota: ${dietary_restrictions}` : '';
         }
 
         guestAccessInfo.style.display = 'block';
-    }
 
-    // Generar QR
-    if (qrMainContainer && typeof QRCode !== 'undefined') {
-        qrMainContainer.innerHTML = '';
-        qrMainContainer.style.background = 'white';
-        qrMainContainer.style.padding = '10px';
+        // Generar QR en la invitación principal
+        const qrMainContainer = document.getElementById('dynamic-qr-main');
+        const generalQrContainer = document.getElementById('qrcode');
         const ticketUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
-        new QRCode(qrMainContainer, {
-            text: ticketUrl,
-            width: 140,
-            height: 140,
-            colorDark: "#E85D75",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
+
+        if (qrMainContainer && typeof QRCode !== 'undefined') {
+            qrMainContainer.innerHTML = '';
+            new QRCode(qrMainContainer, {
+                text: ticketUrl,
+                width: 140,
+                height: 140,
+                colorDark: "#E85D75",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        if (generalQrContainer && typeof QRCode !== 'undefined') {
+            generalQrContainer.innerHTML = '';
+            new QRCode(generalQrContainer, {
+                text: ticketUrl,
+                width: 200,
+                height: 200,
+                colorDark: "#333",
+                colorLight: "#fff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
     }
 
     // Actualizar Botón WhatsApp Dinámico
@@ -1234,6 +1303,60 @@ function showTicket(id, name, count) {
     if (ticketName) ticketName.innerText = name || "Invitado";
     if (ticketCount) ticketCount.innerText = count || "0";
     ticketModal.style.display = 'flex';
+
+    // Funcionalidad de Compartir
+    const btnShare = document.getElementById('btn-share-ticket');
+    if (btnShare) {
+        btnShare.onclick = () => {
+            const shareData = {
+                title: 'Invitación Mis XV - Katherine',
+                text: `¡Hola ${name}! Te invito a mis XV años. Mira tu invitación aquí:`,
+                url: ticketUrl
+            };
+            
+            if (navigator.share) {
+                navigator.share(shareData).catch(err => console.log('Error sharing:', err));
+            } else {
+                // Fallback: Copiar al portapapeles
+                navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+                alert("Enlace copiado al portapapeles");
+            }
+        };
+    }
+
+    // Funcionalidad de descarga
+    const btnDownload = document.getElementById('btn-download-ticket');
+    if (btnDownload && typeof html2canvas !== 'undefined') {
+        // Eliminar listener previo para evitar duplicados
+        const newBtn = btnDownload.cloneNode(true);
+        btnDownload.parentNode.replaceChild(newBtn, btnDownload);
+        
+        newBtn.addEventListener('click', () => {
+            const ticketElement = document.querySelector('.ticket-glass');
+            const originalTransform = ticketElement.style.transform;
+            ticketElement.style.transform = 'none'; // Evitar distorsión por animación
+            
+            newBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Generando...';
+            
+            html2canvas(ticketElement, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `boleto-${name.replace(/\s+/g, '-').toLowerCase()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                newBtn.innerHTML = 'Descargar Imagen';
+                ticketElement.style.transform = originalTransform;
+            }).catch(err => {
+                console.error("Error al generar imagen:", err);
+                newBtn.innerHTML = 'Error al descargar';
+                setTimeout(() => { newBtn.innerHTML = 'Descargar Imagen'; }, 2000);
+            });
+        });
+    }
 }
 
 // 10. CONSULTAR POR URL AL CARGAR
