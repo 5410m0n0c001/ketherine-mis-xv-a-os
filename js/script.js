@@ -100,7 +100,7 @@ const handleEnvelopeClick = () => {
             console.log('Emergency fallback triggered');
             openInvitation();
         }
-    }, 12000); // Aumentado a 12s para permitir la transición de 9s
+    }, 7000);
 };
 
 
