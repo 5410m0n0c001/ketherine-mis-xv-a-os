@@ -2960,6 +2960,97 @@ section {
     color: #bbb;
 }
 
+/* GUEST STATUS ACTIONS */
+.rsvp-actions {
+    margin-top: 15px;
+}
+
+.btn-status-confirm {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    box-shadow: 0 4px 10px rgba(232, 93, 117, 0.2);
+}
+
+.btn-status-confirm:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-status-decline {
+    background: transparent;
+    color: #888;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-status-decline:hover {
+    background: #f8f8f8;
+    color: #444;
+    border-color: #bbb;
+}
+
+.status-confirmed-msg {
+    color: #2F5D50;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(47, 93, 80, 0.05);
+    padding: 10px 20px;
+    border-radius: 30px;
+    width: 100%;
+}
+
+.status-declined-msg {
+    color: #E85D75;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(232, 93, 117, 0.05);
+    padding: 10px 20px;
+    border-radius: 30px;
+    width: 100%;
+}
+
+.btn-change-status {
+    font-size: 0.7rem;
+    color: #888;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 2px 5px;
+}
+
+.btn-change-status:hover {
+    color: var(--primary-color);
+}
+
+
 @media (max-width: 600px) {
     .embedded-ticket {
         flex-direction: column;

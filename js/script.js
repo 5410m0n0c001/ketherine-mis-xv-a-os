@@ -1235,6 +1235,41 @@ function updateInvitationUI(guest) {
                 detailsContainer.appendChild(dietaryEl);
             }
             dietaryEl.innerHTML = dietary_restrictions ? `Nota: ${dietary_restrictions}` : '';
+
+            // 7.1 Botones de Confirmación / RSVP
+            let rsvpActionsEl = detailsContainer.querySelector('.rsvp-actions');
+            if (!rsvpActionsEl) {
+                rsvpActionsEl = document.createElement('div');
+                rsvpActionsEl.className = 'rsvp-actions mt-3';
+                rsvpActionsEl.style.cssText = 'display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;';
+                detailsContainer.appendChild(rsvpActionsEl);
+            }
+
+            const currentStatus = (guest.status || 'pendiente').toLowerCase();
+            if (currentStatus === 'pendiente') {
+                rsvpActionsEl.innerHTML = `
+                    <button class="btn-status-confirm" onclick="updateGuestStatus('${id}', 'confirmado')">
+                        <i class='bx bx-check'></i> Confirmar Asistencia
+                    </button>
+                    <button class="btn-status-decline" onclick="updateGuestStatus('${id}', 'cancelado')">
+                        No asistiré
+                    </button>
+                `;
+            } else if (currentStatus === 'confirmado') {
+                rsvpActionsEl.innerHTML = `
+                    <div class="status-confirmed-msg">
+                        <i class='bx bx-check-circle'></i> ¡Confirmado!
+                        <button class="btn-change-status" onclick="updateGuestStatus('${id}', 'pendiente')">Cambiar</button>
+                    </div>
+                `;
+            } else if (currentStatus === 'cancelado' || currentStatus === 'rechazado') {
+                rsvpActionsEl.innerHTML = `
+                    <div class="status-declined-msg">
+                        <i class='bx bx-x-circle'></i> No asistirá
+                        <button class="btn-change-status" onclick="updateGuestStatus('${id}', 'pendiente')">Cambiar</button>
+                    </div>
+                `;
+            }
         }
 
         guestAccessInfo.style.display = 'block';
@@ -1425,6 +1460,47 @@ if (adminForm) {
             adminStatus.innerHTML = `<span style="color: red;">Error: ${err.message}</span>`;
         }
     });
+}
+
+// 12. ACTUALIZAR ESTADO DEL INVITADO (RSVP)
+async function updateGuestStatus(id, newStatus) {
+    if (!supabaseClient) return;
+
+    const rsvpActions = document.querySelector('.rsvp-actions');
+    const originalContent = rsvpActions ? rsvpActions.innerHTML : '';
+    
+    if (rsvpActions) {
+        rsvpActions.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Actualizando...';
+    }
+
+    try {
+        const { error } = await supabaseClient
+            .from('guests')
+            .update({ status: newStatus })
+            .eq('id', id);
+
+        if (error) throw error;
+
+        // Recargar datos actualizados
+        const { data: updatedGuest, error: fetchError } = await supabaseClient
+            .from('guests')
+            .select('*')
+            .eq('id', id)
+            .single();
+            
+        if (fetchError) throw fetchError;
+        
+        updateInvitationUI(updatedGuest);
+        
+        // Disparar confeti si confirma
+        if (newStatus === 'confirmado' && typeof triggerCelebration === 'function') {
+            triggerCelebration();
+        }
+    } catch (err) {
+        console.error("Error updating status:", err);
+        if (rsvpActions) rsvpActions.innerHTML = originalContent;
+        alert("Hubo un error al actualizar tu asistencia. Por favor intenta de nuevo.");
+    }
 }
 
 // Inicializar al cargar
