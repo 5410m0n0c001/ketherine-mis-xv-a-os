@@ -3333,30 +3333,35 @@ section {
 .badge-confirmado { background: #e6fffa; color: #2d3748; border: 1px solid #b2f5ea; }
 .badge-pendiente { background: #fffaf0; color: #744210; border: 1px solid #feebc8; }
 
-.btn-select-action {
+.btn-select-action, .btn-edit-action {
     background: var(--primary-color);
     color: white;
     border: none;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: var(--transition);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-decoration: none;
 }
 
-.btn-select-action:hover {
+.btn-select-action:hover, .btn-edit-action:hover {
     transform: scale(1.1);
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.btn-edit-action {
+    background: var(--accent-color) !important;
 }
 
 .btn-select-action.wa-btn {
     background: #25D366 !important;
 }
+
 
 /* Custom Scrollbar for list */
 .guest-list-scroll::-webkit-scrollbar {

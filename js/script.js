@@ -1131,6 +1131,9 @@ function renderGuestList(guests) {
                     <button class="btn-select-action" onclick="selectGuest('${g.id}')" title="Ver Invitación">
                         <i class='bx bx-show'></i>
                     </button>
+                    <button class="btn-edit-action" onclick="openEditGuest('${g.id}')" title="Editar" style="background: var(--accent-color); color: white;">
+                        <i class='bx bx-edit'></i>
+                    </button>
                 </div>
             </div>
         `;
@@ -1430,6 +1433,64 @@ async function checkGuestFromUrl() {
             console.error("Error loading guest:", err);
         }
     }
+}
+
+// 13. PANEL DE EDICIÓN DE INVITADOS (Admin)
+window.openEditGuest = (id) => {
+    const guest = allGuests.find(g => g.id === id);
+    if (!guest) return;
+
+    document.getElementById('edit-guest-id').value = guest.id;
+    document.getElementById('edit-guest-name').value = guest.name;
+    document.getElementById('edit-guest-group').value = guest.guest_group || '';
+    document.getElementById('edit-guest-passes').value = guest.total_guests || 1;
+    document.getElementById('edit-guest-table').value = guest.table_number || '';
+    document.getElementById('edit-guest-status').value = guest.status || 'pendiente';
+    document.getElementById('edit-guest-dietary').value = guest.dietary_restrictions || '';
+
+    document.getElementById('edit-guest-modal').style.display = 'flex';
+};
+
+const editGuestForm = document.getElementById('edit-guest-form');
+if (editGuestForm) {
+    editGuestForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('edit-guest-id').value;
+        const name = document.getElementById('edit-guest-name').value;
+        const group = document.getElementById('edit-guest-group').value;
+        const passes = parseInt(document.getElementById('edit-guest-passes').value);
+        const table = document.getElementById('edit-guest-table').value;
+        const status = document.getElementById('edit-guest-status').value;
+        const dietary = document.getElementById('edit-guest-dietary').value;
+
+        const editStatus = document.getElementById('edit-status');
+        editStatus.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Guardando...';
+
+        try {
+            const { error } = await supabaseClient.from('guests').update({
+                name,
+                guest_group: group,
+                total_guests: passes,
+                passes_assigned: passes,
+                table_number: table,
+                status,
+                dietary_restrictions: dietary
+            }).eq('id', id);
+
+            if (error) throw error;
+
+            editStatus.innerHTML = '<span style="color: green;">¡Actualizado con éxito!</span>';
+            setTimeout(() => {
+                document.getElementById('edit-guest-modal').style.display = 'none';
+                editStatus.innerHTML = '';
+                openSelectionModal(); // Refrescar lista
+                loadDashboardStats(); // Refrescar stats
+            }, 1000);
+        } catch (err) {
+            console.error("Error editing guest:", err);
+            editStatus.innerHTML = `<span style="color: red;">Error: ${err.message}</span>`;
+        }
+    });
 }
 
 // 11. FORMULARIO MANUAL (Mantenido para nuevos registros)
